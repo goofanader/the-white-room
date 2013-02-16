@@ -265,14 +265,8 @@ void Draw() {
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
     currState->draw();
-
-    current = root;
-
-    while (current != NULL) {
-        current->draw(playerCamera->trans, camLookAt, gc.lightPos,
-                gc.lightColor, &gc);
-        current = current->next;
-    }
+    
+    
 
     glfwSwapBuffers();
     printOpenGLError();
@@ -416,6 +410,17 @@ glfwSwapBuffers();
 //Draw();
 }
 
+std::string printVec3Coordinates(glm::vec3 coordinates) {
+    std::string out = "(";
+    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.x) )->str();
+    out += ", ";
+    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.y) )->str();;
+    out += ", ";
+    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.z) )->str();;
+    out += ")";
+    return out;
+}
+
 void Reshape(int width, int height) {
     windowWidth = width;
     windowHeight = height;
@@ -437,7 +442,33 @@ void Keyboard(int key, int state) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
             break;
-
+        case GLFW_KEY_LEFT:
+            gc.lightPos = glm::vec3(gc.lightPos.x - .1, gc.lightPos.y, gc.lightPos.z);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case GLFW_KEY_RIGHT:
+            gc.lightPos = glm::vec3(gc.lightPos.x + .1, gc.lightPos.y, gc.lightPos.z);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case GLFW_KEY_UP:
+            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y + .1, gc.lightPos.z);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case GLFW_KEY_DOWN:
+            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y - .1, gc.lightPos.z);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case 'I':
+            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z + .1);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case 'K':
+            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z - .1);
+            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            break;
+        case 'R':
+            gc.lightPos = glm::vec3(0,9,0);
+            std::cout << "Reset lightPos to " << printVec3Coordinates(gc.lightPos) << std::endl;
             // Quit program
         case 'Q':
             exit(EXIT_SUCCESS);
@@ -535,8 +566,8 @@ void gameLoop() {
         }
 
         
-        //Draw();
-        Shadow();
+        Draw();
+        //Shadow();
         oldTime = curTime;
         //don't calculate time based off of how long we slept
         //base it off of when the next loop starts
@@ -553,7 +584,7 @@ void initializeShaderVariables() {
     //initialize openGL and shader variables
     gc.shader = ShadeProg;
     gc.aspectRatio = (float) windowWidth / windowHeight;
-    gc.lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    gc.lightPos = glm::vec3(0.0f, 9.0f, 0.0f);
     gc.lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     gc.h_aPosition = aPosition;
     gc.h_aNormal = aNormal;

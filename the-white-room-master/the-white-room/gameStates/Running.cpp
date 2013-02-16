@@ -8,16 +8,42 @@
 #include "Running.h"
 #include "objects/AllObjects.h"
 #include "objects/MeshLoader.h"
-
+#include "GeometryCreator.h"
 #include "events/ObjectCreation.h"
 
 #define HARDCODE_OBJECTS_IN 0
-#define MAX_EVENTS 1
+#define MAX_EVENTS 0
 
 #define MOVE_SPEED 8.f
 #define PI 3.14159f
 
 #define MAX_MOUSE_CLICKS 0
+
+Running::Running() {
+    initializeCamera();
+    initializeLight();
+    camAlpha = 0.f;
+    camBeta = PI;
+    camLookAt = glm::vec3(0.f);
+
+    eventNum = 1;
+
+    objects.insert(new Room());
+    
+    printf("try the sound\n");
+    soundPlayer = new SoundPlayer();
+    printf("loaded the sound player\n");
+    //currEvent = new Event(eventNum, soundPlayer);
+    //loadObjectsFromEvent();
+    //set mouse cursor to invisible
+    glfwDisable(GLFW_MOUSE_CURSOR);
+    
+    mouseClicks = MAX_MOUSE_CLICKS;
+    
+    //printf("woof\n");
+    
+    //printf("nya\n");
+}
 
 void Running::initializeCamera() {
     //initialize camera
@@ -34,28 +60,18 @@ void Running::initializeCamera() {
     camPrevTrans = playerCamera->trans;
 }
 
-Running::Running() {
-    initializeCamera();
-    camAlpha = 0.f;
-    camBeta = PI;
-    camLookAt = glm::vec3(0.f);
-
-    eventNum = 1;
-
-    //objects.insert(new Room());
-    printf("try the sound\n");
-    soundPlayer = new SoundPlayer();
-    printf("loaded the sound player\n");
-    currEvent = new Event(eventNum, soundPlayer);
-    loadObjectsFromEvent();
-    //set mouse cursor to invisible
-    glfwDisable(GLFW_MOUSE_CURSOR);
+void Running::initializeLight() {
+    Mesh *globe = GeometryCreator::CreateSphere(glm::vec3(1), 32, 32);
+    lightPos = new GameObject();
+    lightPos->IBO = globe->IndexHandle;
+    lightPos->NBO = globe->NormalHandle;
+    lightPos->VBO = globe->PositionHandle;
+    lightPos->IBOlen = globe->IndexBufferLength;
+    lightPos->color = glm::vec3(1.f,0.f,0.f);
     
-    mouseClicks = MAX_MOUSE_CLICKS;
-    
-    //printf("woof\n");
-    
-    //printf("nya\n");
+    lightPos->AABBmin = glm::vec3(-.5);
+    lightPos->AABBmax = glm::vec3(.5);
+    lightPos->doTranslate(getGC()->lightPos);
 }
 
 void Running::loadObjectsFromEvent() {
@@ -84,6 +100,8 @@ void Running::draw() {
                 getGC()->lightColor, getGC());
     }
     //camBeta += .1;
+    lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+            getGC()->lightColor, getGC());
 }
 
 void Running::update(float dt) {
@@ -91,6 +109,8 @@ void Running::update(float dt) {
         playerCamera->update(dt);
         playerCamera->AABBmin = playerCamera->trans - .5f;
         playerCamera->AABBmax = playerCamera->trans + .5f;
+        
+        lightPos->trans = getGC()->lightPos;
         GameObject* curr;
 
         for (std::set<GameObject*>::iterator iter = objects.begin();

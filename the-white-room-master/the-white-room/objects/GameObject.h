@@ -5,9 +5,11 @@
 #include "../GeometryCreator.h"
 #include "../audio/audio.h"
 
+
 #include <string>
 
-#define ROOM_SIZE 20.f
+#define ROOM_SIZE 25.f
+#define ROOM_HEIGHT_DIVISION 1.5f
 
 using glm::ivec2;
 using glm::vec2;
@@ -36,7 +38,7 @@ typedef struct GameConstants {
     GLuint h_uSpecStrength;
     GLuint h_uCamTrans;
 } GameConstants;
-
+#include "../Main.h"
 class GameObject {
     public:
     GameObject(GLuint VBO, GLuint IBO, int IBOlen);

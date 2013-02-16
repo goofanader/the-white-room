@@ -44,7 +44,7 @@ public:
 
     void printObjects();
 private:
-    GameObject* playerCamera;
+    GameObject* playerCamera, *lightPos;
     Room* room;
     WhiteDoor* door;
     std::set<GameObject*> objects;
@@ -59,6 +59,7 @@ private:
     Event* currEvent;
     
     void initializeCamera();
+    void initializeLight();
     void updateLookAt();
     void loadObjectsFromEvent();
 };
