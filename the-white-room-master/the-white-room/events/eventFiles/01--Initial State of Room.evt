@@ -1,0 +1,12 @@
+ordered: no
+timed: no
+numItems: 8
+# list of items to be created
+skipCreate Room
+skipCreate WhiteDoor
+skipCreate Book1
+skipCreate Book2
+skipCreate Book3
+skipCreate Bookshelf
+skipCreate Clock
+skipCreate Safe

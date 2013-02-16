@@ -1,0 +1,10 @@
+Click:audio/click.wav
+GameStart:audio/gameStart.wav
+TryDoor:audio/tryDoor.wav
+SafeAppear:audio/safeAppear.wav
+TrySafe:audio/trySafe.wav
+BooksAppear:audio/booksAppear.wav
+TryBook:audio/tryBook.wav
+RadioAppear:audio/radioAppear.wav
+TryRadio:audio/tryRadio.wav
+RadioStatic:audio/radioStatic.wav

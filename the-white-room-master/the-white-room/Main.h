@@ -1,0 +1,18 @@
+/* 
+ * File:   Main.h
+ * Author: goofanader
+ *
+ * Created on January 30, 2013, 10:56 AM
+ */
+
+#ifndef MAIN_H
+#define	MAIN_H
+
+#include "objects/GameObject.h"
+
+GameConstants* getGC();
+unsigned int getWindowWidth();
+unsigned int getWindowHeight();
+
+#endif	/* MAIN_H */
+
