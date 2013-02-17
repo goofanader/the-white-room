@@ -65,12 +65,15 @@ GLuint uModelMatrix;
 GLuint uNormalMatrix;
 GLuint uViewMatrix;
 GLuint uProjMatrix;
-GLuint uColor;
+GLuint uAmbColor, uSpecColor, uDiffColor;
 GLuint uLightPos;
+GLuint aTexCoord;
+GLuint uTexUnit;
 GLuint uLightColor;
 GLuint uShininess;
 GLuint uSpecStrength;
 GLuint uCamTrans;
+GLuint uUseTex;
 
 // Shader Handle
 GLuint ShadeProg;
@@ -181,7 +184,9 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
     aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
 
-    uColor = safe_glGetUniformLocation(ShadeProg, "uColor");
+    uAmbColor = safe_glGetUniformLocation(ShadeProg, "uAmbColor");
+    uSpecColor = safe_glGetUniformLocation(ShadeProg, "uSpecColor");
+    uDiffColor = safe_glGetUniformLocation(ShadeProg, "uDiffColor");
     uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
     uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
     uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
@@ -192,6 +197,10 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     uShininess = safe_glGetUniformLocation(ShadeProg, "uShininess");
     uSpecStrength = safe_glGetUniformLocation(ShadeProg, "uSpecStrength");
     uCamTrans = safe_glGetUniformLocation(ShadeProg, "uCamTrans");
+
+    aTexCoord = safe_glGetAttribLocation(ShadeProg, "aTexCoord");
+    uTexUnit = safe_glGetUniformLocation(ShadeProg, "uTexUnit");
+    uUseTex = safe_glGetUniformLocation(ShadeProg, "uUseTex");
 
     std::cout << "Successfully installed shader " << ShadeProg << std::endl;
     return true;
@@ -209,6 +218,7 @@ void Initialize() {
     glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapSize,
             shadowMapSize, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+    glEnable(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -584,11 +594,13 @@ void initializeShaderVariables() {
     //initialize openGL and shader variables
     gc.shader = ShadeProg;
     gc.aspectRatio = (float) windowWidth / windowHeight;
-    gc.lightPos = glm::vec3(0.0f, 9.0f, 0.0f);
-    gc.lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    gc.lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    gc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
     gc.h_aPosition = aPosition;
     gc.h_aNormal = aNormal;
-    gc.h_uColor = uColor;
+    gc.h_uAmbColor = uAmbColor;
+    gc.h_uDiffColor = uDiffColor;
+    gc.h_uSpecColor = uSpecColor;
     gc.h_uProjMatrix = uProjMatrix;
     gc.h_uViewMatrix = uViewMatrix;
     gc.h_uModelMatrix = uModelMatrix;
@@ -598,6 +610,9 @@ void initializeShaderVariables() {
     gc.h_uShininess = uShininess;
     gc.h_uSpecStrength = uSpecStrength;
     gc.h_uCamTrans = uCamTrans;
+    gc.h_aTexCoord = aTexCoord;
+    gc.h_uTexUnit = uTexUnit;
+    gc.h_uUseTex = uUseTex;
 }
 
 int main(int argc, char *argv[]) {

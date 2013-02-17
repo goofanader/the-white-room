@@ -10,20 +10,29 @@
 Armchair::Armchair() {
     GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/armchair/chair.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
-    color = vec3(1.f);
+    ambColor = vec3(1.f);
+    diffColor = vec3(.5f);
+    specColor = vec3(.5f);
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    color = glm::vec3(1.f);
+    
+    isClicked = false;
     
     doScale(glm::vec3(3.f));
     doTranslate(glm::vec3(0.f,-3.f,-7.f));
     //this->doScale(glm::vec3(3.f));
+
+
+ texNum = numTextures++;
+    LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
+    hasTex = true;
+   
 }
 
 Armchair::Armchair(const Armchair& orig) {

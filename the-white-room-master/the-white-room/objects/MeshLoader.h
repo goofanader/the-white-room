@@ -40,7 +40,7 @@ public:
 
     static bool loadVertexBufferObjectFromMesh(std::string const &fileName,
             int &triangleCount, GLuint &positionBuff, GLuint &indexBuff,
-            GLuint &vertexNormalBuff, GLuint &faceNormalBuff, glm::vec3 &AABBmin,
+            GLuint &vertexNormalBuff, GLuint &textureBuff, glm::vec3 &AABBmin,
             glm::vec3 &AABBmax);
 };
 

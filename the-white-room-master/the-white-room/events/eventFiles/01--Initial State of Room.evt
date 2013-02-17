@@ -1,6 +1,6 @@
 ordered: no
 timed: no
-numItems: 8
+numItems: 9
 # list of items to be created
 skipCreate Room
 skipCreate WhiteDoor
@@ -10,3 +10,4 @@ skipCreate Book3
 skipCreate Bookshelf
 skipCreate Clock
 skipCreate Safe
+skipCreate Armchair

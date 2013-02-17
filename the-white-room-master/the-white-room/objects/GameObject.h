@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include "../GeometryCreator.h"
 #include "../audio/audio.h"
+#include "../Texture.h"
 
 
 #include <string>
@@ -20,6 +21,10 @@ using glm::mat2;
 using glm::mat3;
 using glm::mat4;
 
+
+static int numTextures = 0;
+
+
 typedef struct GameConstants {
     GLuint shader;
     float aspectRatio;
@@ -27,16 +32,21 @@ typedef struct GameConstants {
     glm::vec3 lightColor;
     GLuint h_aPosition;
     GLuint h_aNormal;
-    GLuint h_uColor;
+    GLuint h_aTexCoord;
+    GLuint h_uAmbColor;
+    GLuint h_uSpecColor;
+    GLuint h_uDiffColor;
     GLuint h_uProjMatrix;
     GLuint h_uViewMatrix;
     GLuint h_uModelMatrix;
     GLuint h_uNormalMatrix;
     GLuint h_uLightPos;
+    GLuint h_uTexUnit;
     GLuint h_uLightColor;
     GLuint h_uShininess;
     GLuint h_uSpecStrength;
     GLuint h_uCamTrans;
+    GLuint h_uUseTex;
 } GameConstants;
 #include "../Main.h"
 class GameObject {
@@ -64,6 +74,7 @@ class GameObject {
     float speed;
     glm::vec3 rotAxis;
     float rotSpeed;
+    bool hasTex;
 
     // TODO: matrix transforms (orientation!)
     glm::vec3 AABBmin; //bounding box, I think
@@ -72,8 +83,12 @@ class GameObject {
     int IBOlen;
     GLuint VBO;
     GLuint NBO;
+    GLuint TBO;
+    int texNum;
 
-    glm::vec3 color;
+    glm::vec3 ambColor;
+    glm::vec3 specColor;
+    glm::vec3 diffColor;
     float shininess;
     float specStrength;
     int tag; //Misc information goes here

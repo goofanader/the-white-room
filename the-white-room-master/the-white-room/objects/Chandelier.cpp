@@ -16,14 +16,15 @@ Chandelier::Chandelier() {
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
-    color = vec3(1.f);
+    ambColor = vec3(1.f);
+    diffColor = vec3(.5f);
+    specColor = vec3(.5f);
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    color = glm::vec3(1.f);
-    
+    isClicked = false;
     doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f,-3.f,-7.f));
+    doTranslate(glm::vec3(0.f, ROOM_SIZE - ((AABBmin.y + AABBmax.y) / 2.f), 0.f));
     //this->doScale(glm::vec3(3.f));
 }
 

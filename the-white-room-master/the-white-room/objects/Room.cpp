@@ -43,33 +43,39 @@ Room::Room() {
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallSouth2.obj",
             room[5].IBOlen, room[5].VBO, room[5].IBO, room[5].NBO, faceNBO,
             room[5].AABBmin, room[5].AABBmax);
-    
+
     int startIndex = 0;
     for (int i = startIndex; i < NUM_WALLS; i++) {
         room[i].dir = vec3(1.f, 0.f, 0.f);
         room[i].speed = 0.f;
         room[i].rotSpeed = 0.f;
         room[i].rotAxis = vec3(0.f, 1.f, 0.f);
-        room[i].color = vec3(1.f, 1.f, 1.f);
-        room[i].shininess = 5;
-        room[i].specStrength = 1.f;
+        if (i < 2) {
+            room[i].ambColor = vec3(1.f, 1.f, 1.f);
+        } else {
+            room[i].ambColor = vec3(.8f, .8f, .8f);
+        }
+        room[i].diffColor = vec3(.35f);
+        room[i].specColor = vec3(.5f);
+        room[i].shininess = .1000;
+        room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
     }
-    
+
     //east wall
     room[2].doScale(vec3(1.f, ROOM_SIZE / ROOM_HEIGHT_DIVISION, ROOM_SIZE));
     room[2].doTranslate(vec3(-ROOM_SIZE, 0.f, 0.f));
-    
+
     //west wall
     room[3].doScale(vec3(1.f, ROOM_SIZE / ROOM_HEIGHT_DIVISION, ROOM_SIZE));
     room[3].doTranslate(vec3(ROOM_SIZE, 0.f, 0.f));
-    
+
     //north wall
     room[4].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
     std::cout << "north - Min: " << printVec3Coordinates(room[4].AABBmin);
     std::cout << "; Max: " << printVec3Coordinates(room[4].AABBmax) << std::endl;
     room[4].doTranslate(vec3(-(room[4].AABBmax.x + room[4].AABBmin.x) / 2.f, -(room[4].AABBmax.y + room[4].AABBmin.y) / 2.f, ROOM_SIZE));
-    
+
     //south wall
     room[5].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
     room[5].doTranslate(vec3(0.f, 0.f, -ROOM_SIZE));
@@ -79,7 +85,7 @@ Room::Room() {
     std::cout << "ceiling - Min: " << printVec3Coordinates(room[0].AABBmin);
     std::cout << "; Max: " << printVec3Coordinates(room[0].AABBmax) << std::endl;
     room[0].doTranslate(vec3(0.f, room[3].AABBmax.y, 0.f));
-    
+
     //the floor
     room[1].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
     room[1].doTranslate(vec3(0.f, room[3].AABBmin.y, 0.f));

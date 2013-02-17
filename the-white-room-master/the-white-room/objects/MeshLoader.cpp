@@ -183,7 +183,7 @@ bool MeshLoader::loadVertexBufferObjectFromMesh(std::string const &fileName,
 
 bool MeshLoader::loadVertexBufferObjectFromMesh(std::string const &fileName,
         int &triangleCount, GLuint &positionBuff, GLuint &indexBuff,
-        GLuint &vertexNormalBuff, GLuint &faceNormalBuff, glm::vec3 &AABBmin,
+        GLuint &vertexNormalBuff, GLuint &textureBuff, glm::vec3 &AABBmin,
         glm::vec3 &AABBmax) {
 
     CMesh *mesh = loadObjMesh(fileName);
@@ -212,74 +212,99 @@ bool MeshLoader::loadVertexBufferObjectFromMesh(std::string const &fileName,
 
         //build normals per vertex
         for (int i = 0; i < mesh->vertexFaces.size(); i++) {
-            SVector3 a = mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position -
-                    mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position;
-            SVector3 b = mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position -
-                    mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position;
+            SVector3 a = mesh->vertices[
+                mesh->vertexFaces[i].vertexIndex2].position -
+                mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position;
+            SVector3 b = mesh->vertices[
+                mesh->vertexFaces[i].vertexIndex3].position -
+                mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position;
 
             SVector3 cross = a.crossProduct(b);
 
-            normVertArr[mesh->vertexFaces[i].vertexIndex1] += cross / (float) cross.length();
-            normVertArr[mesh->vertexFaces[i].vertexIndex2] += cross / (float) cross.length();
-            normVertArr[mesh->vertexFaces[i].vertexIndex3] += cross / (float) cross.length();
+            normVertArr[mesh->vertexFaces[i].vertexIndex1] += 
+                cross / (float) cross.length();
+            normVertArr[mesh->vertexFaces[i].vertexIndex2] += 
+                cross / (float) cross.length();
+            normVertArr[mesh->vertexFaces[i].vertexIndex3] += 
+                cross / (float) cross.length();
         }
 
 
         //build the VBO and Normals (which is in the color buffer. I should change that)
         for (int i = 0; i < mesh->vertexFaces.size() * 3 * 4; i++) {
-            SVector3 a = mesh->vertices[mesh->vertexFaces[count].vertexIndex2].position -
-                    mesh->vertices[mesh->vertexFaces[count].vertexIndex1].position;
-            SVector3 b = mesh->vertices[mesh->vertexFaces[count].vertexIndex3].position -
-                    mesh->vertices[mesh->vertexFaces[count].vertexIndex1].position;
+            SVector3 a = mesh->vertices[
+              mesh->vertexFaces[count].vertexIndex2].position - 
+              mesh->vertices[mesh->vertexFaces[count].vertexIndex1].position;
+            SVector3 b = mesh->vertices[
+              mesh->vertexFaces[count].vertexIndex3].position -
+              mesh->vertices[mesh->vertexFaces[count].vertexIndex1].position;
 
             SVector3 cross = a.crossProduct(b);
 
             normFaceArr[i] = cross.x / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex1].x;
+            smoothArr[i] = 
+                normVertArr[mesh->vertexFaces[count].vertexIndex1].x;
             colArr[i] = mesh->vertexFaces.at(count).color.red;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex1).position.x;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex1).position.x;
 
             normFaceArr[i] = cross.y / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex1].y;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex1].y;
             colArr[i] = mesh->vertexFaces.at(count).color.green;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex1).position.y;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex1).position.y;
 
             normFaceArr[i] = cross.z / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex1].z;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex1].z;
             colArr[i] = mesh->vertexFaces.at(count).color.blue;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex1).position.z;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex1).position.z;
 
             normFaceArr[i] = smoothArr[i] = 0.0;
             colArr[i] = posArr[i++] = 1.0;
 
 
             normFaceArr[i] = cross.x / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex2].x;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex2).position.x;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex2].x;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex2).position.x;
 
             normFaceArr[i] = cross.y / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex2].y;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex2).position.y;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex2].y;
+            posArr[i++] = mesh->vertices.at(
+                mesh->vertexFaces.at(count).vertexIndex2).position.y;
 
             normFaceArr[i] = cross.z / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex2].z;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex2).position.z;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex2].z;
+            posArr[i++] = mesh->vertices.at(
+                mesh->vertexFaces.at(count).vertexIndex2).position.z;
 
             normFaceArr[i] = smoothArr[i] = 0.0;
             colArr[i] = posArr[i++] = 1.0;
 
 
             normFaceArr[i] = cross.x / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex3].x;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex3).position.x;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex3].x;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex3).position.x;
 
             normFaceArr[i] = cross.y / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex3].y;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count).vertexIndex3).position.y;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex3].y;
+            posArr[i++] = mesh->vertices.at(
+                    mesh->vertexFaces.at(count).vertexIndex3).position.y;
 
             normFaceArr[i] = cross.z / (float) cross.length();
-            smoothArr[i] = normVertArr[mesh->vertexFaces[count].vertexIndex3].z;
-            posArr[i++] = mesh->vertices.at(mesh->vertexFaces.at(count++).vertexIndex3).position.z;
+            smoothArr[i] = normVertArr[
+                mesh->vertexFaces[count].vertexIndex3].z;
+            posArr[i++] = mesh->vertices.at(
+                mesh->vertexFaces.at(count++).vertexIndex3).position.z;
 
             normFaceArr[i] = smoothArr[i] = 0.0;
             colArr[i] = posArr[i] = 1.0;
@@ -288,96 +313,137 @@ bool MeshLoader::loadVertexBufferObjectFromMesh(std::string const &fileName,
     unsigned short indexArr[mesh->vertexFaces.size() * 3];
     float fixNormArr[mesh->vertexFaces.size() * 3 * 3];
     float fixVertexArr[mesh->vertexFaces.size() * 3 * 3];
+    float texArr[mesh->vertexFaces.size() * 3 * 2];
     
     SVector3 min, max;
     
     //redo the IBO so the VBO and NBO are linked correctly
-    int arrIndex = 0, indexCounter = 0;
+    int arrIndex = 0, indexCounter = 0, texIndex = 0;
     for (int i = 0; i < mesh->vertexFaces.size(); i++) {
         if (i == 0) {
-            max.x = min.x = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.x;
-            max.y = min.y = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.y;
-            max.z = min.z = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.z;
+            max.x = min.x = mesh->vertices[
+                mesh->vertexFaces[i].vertexIndex1].position.x;
+            max.y = min.y = mesh->vertices[
+                mesh->vertexFaces[i].vertexIndex1].position.y;
+            max.z = min.z = mesh->vertices[
+                mesh->vertexFaces[i].vertexIndex1].position.z;
         }
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.x;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.x;
         if (min.x > fixVertexArr[arrIndex])
             min.x = fixVertexArr[arrIndex];
         if (max.x < fixVertexArr[arrIndex])
             max.x = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex1].position.x;
+        texArr[texIndex++] = 
+                mesh->textures[mesh->vertexFaces[i].textureIndex1].position.x;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex1].position.x;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.y;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.y;
         if (min.y > fixVertexArr[arrIndex])
             min.y = fixVertexArr[arrIndex];
         if (max.y < fixVertexArr[arrIndex])
             max.y = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex1].position.y;
+        texArr[texIndex++] = mesh->textures[
+            mesh->vertexFaces[i].textureIndex1].position.y;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex1].position.y;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.z;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex1].position.z;
         if (min.z > fixVertexArr[arrIndex])
             min.z = fixVertexArr[arrIndex];
         if (max.z < fixVertexArr[arrIndex])
             max.z = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex1].position.z;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex1].position.z;
         indexArr[indexCounter++] = indexCounter;
         //-------------
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.x;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.x;
         if (min.x > fixVertexArr[arrIndex])
             min.x = fixVertexArr[arrIndex];
         if (max.x < fixVertexArr[arrIndex])
             max.x = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex2].position.x;
+        texArr[texIndex++] = mesh->textures[
+            mesh->vertexFaces[i].textureIndex2].position.x;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex2].position.x;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.y;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.y;
         if (min.y > fixVertexArr[arrIndex])
             min.y = fixVertexArr[arrIndex];
         if (max.y < fixVertexArr[arrIndex])
             max.y = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex2].position.y;
+        texArr[texIndex++] = mesh->textures[
+            mesh->vertexFaces[i].textureIndex2].position.y;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex2].position.y;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.z;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex2].position.z;
         if (min.z > fixVertexArr[arrIndex])
             min.z = fixVertexArr[arrIndex];
         if (max.z < fixVertexArr[arrIndex])
             max.z = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex2].position.z;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex2].position.z;
         indexArr[indexCounter++] = indexCounter;
         //-------------
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.x;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.x;
         if (min.x > fixVertexArr[arrIndex])
             min.x = fixVertexArr[arrIndex];
         if (max.x < fixVertexArr[arrIndex])
             max.x = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex3].position.x;
+        texArr[texIndex++] = mesh->textures[
+            mesh->vertexFaces[i].textureIndex3].position.x;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex3].position.x;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.y;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.y;
         if (min.y > fixVertexArr[arrIndex])
             min.y = fixVertexArr[arrIndex];
         if (max.y < fixVertexArr[arrIndex])
             max.y = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex3].position.y;
+        texArr[texIndex++] = 
+                mesh->textures[mesh->vertexFaces[i].textureIndex3].position.y;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex3].position.y;
         
-        fixVertexArr[arrIndex] = mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.z;
+        fixVertexArr[arrIndex] = 
+            mesh->vertices[mesh->vertexFaces[i].vertexIndex3].position.z;
         if (min.z > fixVertexArr[arrIndex])
             min.z = fixVertexArr[arrIndex];
         if (max.z < fixVertexArr[arrIndex])
             max.z = fixVertexArr[arrIndex];
-        fixNormArr[arrIndex++] = mesh->normals[mesh->vertexFaces[i].normalIndex3].position.z;
+        fixNormArr[arrIndex++] = 
+            mesh->normals[mesh->vertexFaces[i].normalIndex3].position.z;
         indexArr[indexCounter++] = indexCounter;
     }
     
     glGenBuffers(1, &positionBuff);
     glBindBuffer(GL_ARRAY_BUFFER, positionBuff);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(fixVertexArr), fixVertexArr, GL_STATIC_DRAW);
+    glBufferData(
+        GL_ARRAY_BUFFER, sizeof(fixVertexArr), fixVertexArr, GL_STATIC_DRAW);
     
     glGenBuffers(1, &indexBuff);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuff);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexArr), indexArr, GL_STATIC_DRAW);
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER, sizeof(indexArr), indexArr, GL_STATIC_DRAW);
     
     glGenBuffers(1, &vertexNormalBuff);
     glBindBuffer(GL_ARRAY_BUFFER, vertexNormalBuff);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(fixNormArr), fixNormArr, GL_STATIC_DRAW);
+    glBufferData(
+        GL_ARRAY_BUFFER, sizeof(fixNormArr), fixNormArr, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &textureBuff);
+    glBindBuffer(GL_ARRAY_BUFFER, textureBuff);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texArr), texArr, GL_STATIC_DRAW);
     
     float buffer = 0.f;//.9f;
     AABBmin.x = min.x + buffer;
@@ -450,7 +516,6 @@ CMesh * const MeshLoader::loadObjMesh(std::string const &fileName) {
             SVector3 texturePosition;
             stream >> texturePosition.x;
             stream >> texturePosition.y;
-            stream >> texturePosition.z;
 
             SVertex texture;
             texture.position = texturePosition;

@@ -69,13 +69,15 @@ WhiteDoor::WhiteDoor() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    color = glm::vec3(1.f);
+    ambColor = glm::vec3(.75f);
+    diffColor = glm::vec3(.5f);
+    specColor = glm::vec3(.5f);
     isClicked = false;
     
     doScale(glm::vec3(ROOM_SIZE / 5.f));
     
     doRotate(glm::vec3(0, 1, 0), 180);
-    doTranslate(glm::vec3(-3.25f, -3.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - 0.0f));
+    doTranslate(glm::vec3(-3.25f, -3.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
@@ -115,7 +117,7 @@ void WhiteDoor::onEvent(SoundPlayer *soundPlayer){
     door->color = (glm::vec3(1.f, 0.f, 0.f));
     knob->color = (glm::vec3(1.f, 0.f, 0.f));
 #endif
-    color = glm::vec3(1.f, 0.f, 0.f);
+    ambColor = glm::vec3(1.f, 0.f, 0.f);
 }
 
 std::string WhiteDoor::className() {

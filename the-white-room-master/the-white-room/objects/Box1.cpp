@@ -19,7 +19,7 @@ Box1::Box1() {
     cube->speed = 0.f;
     cube->rotSpeed = 0.f;
     cube->rotAxis = vec3(0.f, 1.f, 0.f);
-    cube->color = vec3(1.f, 1.f, 1.f);
+    cube->ambColor = vec3(1.f, 1.f, 1.f);
     cube->shininess = 5;
     cube->specStrength = 0.f;
     cube->scale = glm::vec3(1.f);
@@ -32,7 +32,7 @@ Box1::Box1() {
     AABBmax = cube->AABBmax;
     //setTrans(vec3(4.f,-1.f,4.f));
     
-    this->color = cube->color;
+    this->ambColor = cube->ambColor;
 }
 
 Box1::Box1(const Box1& orig) {
@@ -47,9 +47,9 @@ void Box1::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
 }
 
 void Box1::update(float dt){
-    if(this->color != this->cube->color){
-        this->cube->color = vec3(1.f, 0.f, 0.f);
-        this->color = this->cube->color;
+    if(this->ambColor != this->cube->ambColor){
+        this->cube->ambColor = vec3(1.f, 0.f, 0.f);
+        this->ambColor = this->cube->ambColor;
     }
 }
 
@@ -63,11 +63,11 @@ std::string Box1::className() {
 
 void Box1::onEvent(SoundPlayer* soundPlayer) {
     soundPlayer->playSound("tryRadio");
-    this->cube->color = vec3(1.f, 0.f, 0.f);
-    this->color = this->cube->color;
+    this->cube->ambColor = vec3(1.f, 0.f, 0.f);
+    this->ambColor = this->cube->ambColor;
 }
 
 void Box1::resetEvent(SoundPlayer *soundPlayer) {
-    this->cube->color = vec3(1.f);
-    this->color = this->cube->color;
+    this->cube->ambColor = vec3(1.f);
+    this->ambColor = this->cube->ambColor;
 }

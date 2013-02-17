@@ -34,7 +34,7 @@ Clock::Clock() {
     body->shininess = 5;
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
-    body->color = glm::vec3(1.f);
+    body->ambColor = glm::vec3(1.f);
     body->isClicked = false;
 
     weight1->dir = vec3(1.f, 0.f, 0.f);
@@ -44,7 +44,7 @@ Clock::Clock() {
     weight1->shininess = 5;
     weight1->specStrength = 0.f;
     weight1->scale = glm::vec3(1.f);
-    weight1->color = glm::vec3(1.f, 0.f, 0.f);
+    weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
     weight1->isClicked = false;
 
     weight2->dir = vec3(1.f, 0.f, 0.f);
@@ -54,7 +54,7 @@ Clock::Clock() {
     weight2->shininess = 5;
     weight2->specStrength = 0.f;
     weight2->scale = glm::vec3(1.f);
-    weight2->color = glm::vec3(0.f, 1.f, 0.f);
+    weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
     weight2->isClicked = false;
 
     weight3->dir = vec3(1.f, 0.f, 0.f);
@@ -64,7 +64,7 @@ Clock::Clock() {
     weight3->shininess = 5;
     weight3->specStrength = 0.f;
     weight3->scale = glm::vec3(1.f);
-    weight3->color = glm::vec3(0.f, 0.f, 1.f);
+    weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
     weight3->isClicked = false;
     
     //body->doScale(glm::vec3(10.f));
@@ -111,5 +111,5 @@ std::string Clock::className() {
 }
 
 void Clock::onEvent(SoundPlayer *soundPlayer) {
-    body->color = glm::vec3(1.f, 0.f, 0.f);
+    body->ambColor = glm::vec3(1.f, 0.f, 0.f);
 }

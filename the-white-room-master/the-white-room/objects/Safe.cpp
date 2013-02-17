@@ -76,7 +76,7 @@ Safe::Safe() {
     body->shininess = 5;
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
-    body->color = glm::vec3(1.f);
+    body->ambColor = glm::vec3(1.f);
     body->isClicked = false;
     
     door->dir = vec3(1.f, 0.f, 0.f);
@@ -86,7 +86,7 @@ Safe::Safe() {
     door->shininess = 5;
     door->specStrength = 0.f;
     door->scale = glm::vec3(1.f);
-    door->color = glm::vec3(1.f);
+    door->ambColor = glm::vec3(1.f);
     door->isClicked = false;
     
     AABBmin = body->AABBmin;
@@ -128,8 +128,8 @@ void Safe::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
 }
 
 void Safe::update(float dt){
-    if(this->color != this->body->color){
-        this->body->color = this->color;
+    if(this->ambColor != this->body->ambColor){
+        this->body->ambColor = this->ambColor;
     }
 }
 
@@ -141,9 +141,9 @@ void Safe::onEvent(SoundPlayer *soundPlayer){
     soundPlayer->playSound("TrySafe");
    // soundPlayer->playContinuous("Tick");
     
-    body->color = glm::vec3(1.f, 0.f, 0.f);
-    door->color = body->color;
-    color = glm::vec3(1.f, 0.f, 0.f);
+    body->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    door->ambColor = body->ambColor;
+    ambColor = glm::vec3(1.f, 0.f, 0.f);
 }
 
 std::string Safe::className() { return "Safe";}

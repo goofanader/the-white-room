@@ -28,7 +28,7 @@ Running::Running() {
 
     eventNum = 1;
 
-    objects.insert(new Room());
+    //objects.insert(new Room());
     
     printf("try the sound\n");
     soundPlayer = new SoundPlayer();
@@ -67,7 +67,7 @@ void Running::initializeLight() {
     lightPos->NBO = globe->NormalHandle;
     lightPos->VBO = globe->PositionHandle;
     lightPos->IBOlen = globe->IndexBufferLength;
-    lightPos->color = glm::vec3(1.f,0.f,0.f);
+    lightPos->ambColor = glm::vec3(.75f,0.f,0.f);
     
     lightPos->AABBmin = glm::vec3(-.5);
     lightPos->AABBmax = glm::vec3(.5);

@@ -27,12 +27,20 @@ GameObject::GameObject() {
     IBOlen = -1;
     VBO = -1;
     NBO = -1;
+    TBO = -1;
     scale = glm::vec3(1.f);
     rotate = glm::mat4(1.f);
     this->doRotate(vec3(0,1,0),0);
     trans = glm::vec3(0.f);
     tag = 0;
     isClicked = false;
+    
+    texNum = -1;
+    hasTex = false;
+    
+    ambColor = glm::vec3(.75f);
+    specColor = glm::vec3(.1f);
+    diffColor = glm::vec3(.1f);
 }
 
 GameObject::~GameObject() {
@@ -70,20 +78,42 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     glBindBuffer(GL_ARRAY_BUFFER, NBO);
     safe_glVertexAttribPointer(gc->h_aNormal, 3, GL_FLOAT, GL_TRUE, 0, 0);
 
+    if (hasTex) {
+        glEnable(GL_TEXTURE_2D);
+        
+        safe_glUniform1i(gc->h_uTexUnit, texNum);
+
+        safe_glEnableVertexAttribArray(gc->h_aTexCoord);
+        glBindBuffer(GL_ARRAY_BUFFER, TBO);
+        safe_glVertexAttribPointer(
+                gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texNum);
+
+        glDisable(GL_TEXTURE_2D);
+    }
+    safe_glUniform1i(gc->h_uUseTex, hasTex ? 1 : 0);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
+    printOpenGLError();
     //pass colors, camera position, and light info to GPU
-    glUniform3f(gc->h_uColor, color.x, color.y, color.z);
+    glUniform3f(gc->h_uAmbColor, ambColor.x, ambColor.y, ambColor.z);
+    glUniform3f(gc->h_uSpecColor, specColor.x, specColor.y, specColor.z);
+    glUniform3f(gc->h_uDiffColor, diffColor.x, diffColor.y, diffColor.z);
     glUniform1f(gc->h_uShininess, shininess);
     glUniform1f(gc->h_uSpecStrength, specStrength);
     glUniform3f(gc->h_uLightPos, lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z);
     glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
+    printOpenGLError();
 
     glDrawElements(GL_TRIANGLES, IBOlen, GL_UNSIGNED_SHORT, 0);
 
     safe_glDisableVertexAttribArray(gc->h_aNormal);
     safe_glDisableVertexAttribArray(gc->h_aPosition);
+    safe_glDisableVertexAttribArray(gc->h_aTexCoord);
     glUseProgram(0);
 }
 
@@ -169,7 +199,7 @@ void GameObject::setTrans(glm::vec3 t) {
 }
 
 void GameObject::changeColor(glm::vec3 c) {
-    this->color = c;
+    this->ambColor = c;
 }
 
 std::string GameObject::className() {
@@ -185,5 +215,5 @@ void GameObject::onEvent(SoundPlayer *soundPlayer){
 }
 
 void GameObject::resetEvent(SoundPlayer *soundPlayer) {
-    this->color = glm::vec3(1.f);
+    this->ambColor = glm::vec3(1.f);
 }

@@ -17,11 +17,14 @@ Book1::Book1() {
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
-    color = vec3(1.f);
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    color = glm::vec3(1.f, 0.f, 0.f);
+    ambColor = glm::vec3(1.f, 0.f, 0.f);
+    diffColor = vec3(.5f);
+    specColor = vec3(.5f);
+    
+    isClicked = false;
     
     doScale(glm::vec3(1.25f));
     //doScale(glm::vec3(ROOM_SIZE / 5.f));
@@ -44,5 +47,5 @@ std::string Book1::className() {
 
 void Book1::onEvent(SoundPlayer* soundPlayer) {
     soundPlayer->playSound("TryBook");
-    color = glm::vec3(0.f);
+    ambColor = glm::vec3(0.f);
 }
