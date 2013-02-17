@@ -20,6 +20,7 @@ varying vec3 normals;
 varying vec3 vLightDir;
 varying vec3 vThePosition;
 varying vec2 vTexCoord;
+varying float lDist;
 
 void main() {
   vec4 vPosition;
@@ -29,8 +30,9 @@ void main() {
   /* First model transforms */
   vPosition = uModelMatrix * vec4(aPosition, 1);
   vThePosition = vPosition.xyz;
+  lDist = length(-vThePosition + uLightPos);
   normals = aNormal;
-  vLightDir = uLightPos - vec3(vPosition);
+  vLightDir = uLightPos - vThePosition;
   vNormal = normalize(uNormalMatrix * vec4(normals, 1)).xyz;
 
   vPosition = uViewMatrix * vPosition;

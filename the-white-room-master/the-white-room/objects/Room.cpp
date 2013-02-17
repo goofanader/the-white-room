@@ -53,12 +53,12 @@ Room::Room() {
         if (i < 2) {
             room[i].ambColor = vec3(1.f, 1.f, 1.f);
         } else {
-            room[i].ambColor = vec3(.8f, .8f, .8f);
+            room[i].ambColor = vec3(1.f, 1.f, 1.f);
         }
-        room[i].diffColor = vec3(.35f);
-        room[i].specColor = vec3(.5f);
-        room[i].shininess = .1000;
-        room[i].specStrength = 3.f;
+        room[i].diffColor = vec3(.8f);
+        room[i].specColor = vec3(.8f);
+        room[i].shininess = 1;
+        room[i].specStrength = .24f;
         room[i].scale = glm::vec3(1.f);
     }
 

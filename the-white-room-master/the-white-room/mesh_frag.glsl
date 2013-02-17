@@ -14,6 +14,7 @@ varying vec3 vNormal;
 varying vec3 vLightDir;
 varying vec3 vThePosition;
 varying vec2 vTexCoord;
+varying float lDist;
 
 void main() {
     //gl_FragColor = vec4(uColor, 1.0);
@@ -23,17 +24,14 @@ void main() {
   vec3 specL = cross(uSpecColor, uLightColor);
   //vec3 specL = uSpecColor * uLightColor;
   vec3 V;
-  V.x = uCamTrans.x - vThePosition.x; //Camera at (0, 0, 0)?
-  V.y = uCamTrans.y - vThePosition.y;
-  V.z = uCamTrans.z - vThePosition.z;
-  V = normalize(V);
-  /*if (dot(vNormal, vLightDir) < 0.0)
-    specL = vec3(0.0);
-  else {*/
-      vec3 R = 2.0 * clamp(dot(vNormal, normalize(vLightDir/* - vThePosition*/)), 0.0, 1.0) * vNormal - vLightDir;
-      //vec3 R = -vLightDir + 2.0 * dot(vNormal, vLightDir) * vNormal;
-      //R = normalize(R);
-      float VdotR = pow(clamp(dot(normalize(R), normalize(V)), 0.0, 1.0), uShininess);
+  V = normalize(uCamTrans - vThePosition);
+      vec3 R = 
+        2.0 * max(dot(normalize(vNormal), normalize(vLightDir)), 0.0) * 
+        normalize(vNormal) - normalize(vLightDir);
+
+
+      float VdotR = clamp(
+        pow(max(dot(normalize(R), normalize(V)), 0.0), uShininess), 0.0, 1.0);
       /*specL.x *= VdotR;
       specL.y *= VdotR;
       specL.z *= VdotR;*/
@@ -48,14 +46,13 @@ void main() {
   //}
 
   vec3 diffL = uDiffColor;
-  float NdotL = clamp(dot(normalize(vNormal), normalize(vLightDir/* - vThePosition*/)), 0.0, 1.0);
+  float NdotL = max(dot(normalize(vNormal), normalize(vLightDir)), 0.0);
   diffL *= NdotL * uLightColor;
 
   vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
 
-  //ambL = vec3(0.75, 0.75, 0.75);
-  vec3 finColor = diffL + specL + ambL;
-  //vec3 finColor = uLightColor;
+  vec3 finColor = (diffL * 0.7 + specL * 0.7) /
+    (1 + lDist * lDist * 0.0007) + ambL * 0.85;
   gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
 
   //testing if this variable is even being set

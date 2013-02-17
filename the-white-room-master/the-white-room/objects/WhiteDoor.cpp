@@ -69,9 +69,9 @@ WhiteDoor::WhiteDoor() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    ambColor = glm::vec3(.75f);
-    diffColor = glm::vec3(.5f);
-    specColor = glm::vec3(.5f);
+    ambColor = glm::vec3(1.f);
+    diffColor = glm::vec3(.8f);
+    specColor = glm::vec3(.8f);
     isClicked = false;
     
     doScale(glm::vec3(ROOM_SIZE / 5.f));

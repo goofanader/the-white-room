@@ -17,6 +17,7 @@ public:
     Chandelier(const Chandelier& orig);
     virtual ~Chandelier();
     std::string className();
+    bool doesCollide(GameObject *other);
 private:
 
 };

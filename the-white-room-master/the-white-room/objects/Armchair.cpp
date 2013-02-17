@@ -29,10 +29,11 @@ Armchair::Armchair() {
     //this->doScale(glm::vec3(3.f));
 
 
- texNum = numTextures++;
+ texNum = numTextures();
     LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
     hasTex = true;
    
+    printf("%d\n", texNum);
 }
 
 Armchair::Armchair(const Armchair& orig) {

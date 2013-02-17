@@ -22,8 +22,6 @@ using glm::mat3;
 using glm::mat4;
 
 
-static int numTextures = 0;
-
 
 typedef struct GameConstants {
     GLuint shader;
@@ -104,5 +102,6 @@ class GameObject {
     bool isClicked;
     
     void printTrans();
+    unsigned int numTextures();
 };
 #endif

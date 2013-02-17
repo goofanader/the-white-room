@@ -8,6 +8,7 @@
 #include "Chandelier.h"
 
 Chandelier::Chandelier() {
+    
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/chandelier/Chandelier.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
@@ -26,10 +27,11 @@ Chandelier::Chandelier() {
             ROOM_SIZE / ROOM_HEIGHT_DIVISION - AABBmax.y, 0.f));
     //this->doScale(glm::vec3(3.f));
 
-    texNum = numTextures++;
+    texNum = numTextures();
     LoadTexture((char *) "objects/meshes/chandelier/chandUV.bmp", texNum);
     hasTex = true;
 
+    printf("%d\n", texNum);
     printf("finished Chandelier\n");
 }
 

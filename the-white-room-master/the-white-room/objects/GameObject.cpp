@@ -217,3 +217,8 @@ void GameObject::onEvent(SoundPlayer *soundPlayer){
 void GameObject::resetEvent(SoundPlayer *soundPlayer) {
     this->ambColor = glm::vec3(1.f);
 }
+
+unsigned int GameObject::numTextures() {
+    static int counter = 0;
+    return counter++;
+}
