@@ -8,8 +8,8 @@
 
 #include <string>
 
-#define ROOM_SIZE 25.f
-#define ROOM_HEIGHT_DIVISION 1.5f
+#define ROOM_SIZE 30.f
+#define ROOM_HEIGHT_DIVISION 3.f
 
 using glm::ivec2;
 using glm::vec2;

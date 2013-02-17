@@ -14,7 +14,7 @@
 #define HARDCODE_OBJECTS_IN 0
 #define MAX_EVENTS 0
 
-#define MOVE_SPEED 8.f
+#define MOVE_SPEED 20.f
 #define PI 3.14159f
 
 #define MAX_MOUSE_CLICKS 0
@@ -33,8 +33,8 @@ Running::Running() {
     printf("try the sound\n");
     soundPlayer = new SoundPlayer();
     printf("loaded the sound player\n");
-    //currEvent = new Event(eventNum, soundPlayer);
-    //loadObjectsFromEvent();
+    currEvent = new Event(eventNum, soundPlayer);
+    loadObjectsFromEvent();
     //set mouse cursor to invisible
     glfwDisable(GLFW_MOUSE_CURSOR);
     
@@ -277,12 +277,13 @@ void Running::mouseClicked(int button, int action) {
             }
 
 
-
-            /*printf("AABBmins = %f, %f, %f\n",
+            /*
+            printf("AABBmins = %f, %f, %f\n",
             curr->AABBmin.x, curr->AABBmin.y, curr->AABBmin.z);
 
             printf("AABBmaxes = %f, %f, %f\n",
-            curr->AABBmax.x, curr->AABBmax.y, curr->AABBmax.z);*/
+            curr->AABBmax.x, curr->AABBmax.y, curr->AABBmax.z);
+            */
 
         }
     } else mouseClicks++;

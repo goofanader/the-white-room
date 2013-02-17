@@ -23,9 +23,12 @@ Bookshelf::Bookshelf() {
     color = glm::vec3(1.f);
     isClicked = false;
     
-    doScale(glm::vec3(8.f));
+    //doScale(glm::vec3(8.f));
+    doScale(glm::vec3(ROOM_SIZE / 5.f));
+
     doRotate(glm::vec3(0,1,0), -270);
-    doTranslate(glm::vec3(-15.5f,-8.f,0.f));
+    //doTranslate(glm::vec3(-15.5f,-8.f,0.f));
+    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
     
     AABBmin = glm::vec3(-200, -200, -200);
     AABBmax = glm::vec3(-200, -200, -200);

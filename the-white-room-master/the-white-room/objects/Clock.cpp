@@ -67,15 +67,23 @@ Clock::Clock() {
     weight3->color = glm::vec3(0.f, 0.f, 1.f);
     weight3->isClicked = false;
     
-    body->doScale(glm::vec3(10.f));
+    //body->doScale(glm::vec3(10.f));
+    body->doScale(glm::vec3(ROOM_SIZE/5.f));
     weight1->scale = weight2->scale = weight3->scale = body->scale / 3.f;
-    body->doRotate(glm::vec3(0,1,0), 225);
-    body->doTranslate(glm::vec3(ROOM_SIZE - 5.f, -ROOM_SIZE + 14.5f,
-            ROOM_SIZE - AABBmax.z - 5));
+    //body->doTranslate(glm::vec3(ROOM_SIZE - 5.f, -ROOM_SIZE + 14.5f,
+            //ROOM_SIZE - AABBmax.z - 5));
+    //body->doRotate(glm::vec3(0,1,0), 225);
+    body->doRotate(glm::vec3(0,1,0), 180);
+    body->doTranslate(glm::vec3(-3.25f - 8.f, -2.f, ROOM_SIZE - 2.f));
     
-    weight1->doTranslate(glm::vec3(-2,0,0) + body->trans);
-    weight2->trans += body->trans;
-    weight3->doTranslate(glm::vec3(2,0,0) + body->trans);
+    weight1->doTranslate(body->trans);
+    weight2->doTranslate(body->trans);
+    weight2->doTranslate(glm::vec3(-1.f, 0.f, -0.5f));
+    weight3->doTranslate(body->trans);
+    weight3->doTranslate(glm::vec3(1.f, 0.f, 0.5f));
+    //weight1->doTranslate(glm::vec3(-2,0,0) + body->trans);
+    //weight2->trans += body->trans;
+    //weight3->doTranslate(glm::vec3(2,0,0) + body->trans);
 }
 
 Clock::Clock(const Clock& orig) {

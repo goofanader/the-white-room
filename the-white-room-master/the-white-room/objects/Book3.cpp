@@ -24,9 +24,15 @@ Book3::Book3() {
     color = glm::vec3(0.f, 0.f, 1.f);
     isClicked = false;
     
-    doScale(glm::vec3(2.f));
+    doScale(glm::vec3(1.25f));
+
     doRotate(glm::vec3(0,1,0), 90);
-    doTranslate(glm::vec3(-15.5f,-8.f + 4.5f,-1.f));
+
+    //doTranslate(glm::vec3(-15.5f,-8.f + 4.5f,-1.f));
+    //translate to Book1's pos
+    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
+    //translate to its own pos
+    doTranslate(glm::vec3(0.f, 3.f, -1.f));
 }
 
 Book3::Book3(const Book3& orig) {

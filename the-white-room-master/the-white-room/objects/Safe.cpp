@@ -96,11 +96,16 @@ Safe::Safe() {
     std::cout << AABBmin.z << "). max=(" << AABBmax.x << ", " << AABBmax.y;
     std::cout << ", " << AABBmax.z << ")" << std::endl;
     
-    body->doScale(glm::vec3(ROOM_SIZE / 2.f));
+    //body->doScale(glm::vec3(ROOM_SIZE / 2.f));
+    body->doScale(glm::vec3(ROOM_SIZE / 10.f));
     door->doScale(1.f * body->scale);
+    
     //doRotate(glm::vec3(0, 1, 0), 180);
-    body->doTranslate(glm::vec3(0.f, -ROOM_SIZE / 2.f + 3, -ROOM_SIZE));
-    door->doTranslate(glm::vec3(3.5f,0.f,7.f) + body->trans);
+    //body->doTranslate(glm::vec3(0.f, -ROOM_SIZE / 2.f + 3, -ROOM_SIZE));
+    body->doTranslate(glm::vec3(0.f, -5.f, -ROOM_SIZE + 3.f));
+    //door->doTranslate(glm::vec3(3.5f,0.f,7.f) + body->trans);
+    door->doTranslate(body->trans);
+    door->doTranslate(glm::vec3(1.f, -0.1f, 2.f));
     
     AABBmin = body->AABBmin;
     AABBmax = body->AABBmax;

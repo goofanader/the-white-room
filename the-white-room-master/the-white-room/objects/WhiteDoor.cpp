@@ -7,7 +7,7 @@
 #include <iostream>
 #include "WhiteDoor.h"
 
-#define GROUND_POS -.5f
+#define GROUND_POS -0.5f
 
 WhiteDoor::WhiteDoor() {
     GLuint faceNBO;
@@ -72,10 +72,10 @@ WhiteDoor::WhiteDoor() {
     color = glm::vec3(1.f);
     isClicked = false;
     
-    doScale(glm::vec3(ROOM_SIZE / 2.f + 1));
+    doScale(glm::vec3(ROOM_SIZE / 5.f));
     
     doRotate(glm::vec3(0, 1, 0), 180);
-    doTranslate(glm::vec3(-3.5f, -ROOM_SIZE / 2.f + 4, ROOM_SIZE - 2.0f));
+    doTranslate(glm::vec3(-3.25f, -3.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - 0.0f));
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
