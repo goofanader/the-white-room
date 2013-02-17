@@ -35,6 +35,8 @@ Clock::Clock() {
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
     body->ambColor = glm::vec3(1.f);
+    body->specColor = glm::vec3(.5f);
+    body->diffColor = glm::vec3(.5f);
     body->isClicked = false;
 
     weight1->dir = vec3(1.f, 0.f, 0.f);
@@ -45,6 +47,8 @@ Clock::Clock() {
     weight1->specStrength = 0.f;
     weight1->scale = glm::vec3(1.f);
     weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    weight1->specColor = glm::vec3(.5f);
+    weight1->diffColor = glm::vec3(.5f);
     weight1->isClicked = false;
 
     weight2->dir = vec3(1.f, 0.f, 0.f);
@@ -55,6 +59,8 @@ Clock::Clock() {
     weight2->specStrength = 0.f;
     weight2->scale = glm::vec3(1.f);
     weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
+    weight2->specColor = glm::vec3(.5f);
+    weight2->diffColor = glm::vec3(.5f);
     weight2->isClicked = false;
 
     weight3->dir = vec3(1.f, 0.f, 0.f);
@@ -65,6 +71,8 @@ Clock::Clock() {
     weight3->specStrength = 0.f;
     weight3->scale = glm::vec3(1.f);
     weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
+    weight3->specColor = glm::vec3(.5f);
+    weight3->diffColor = glm::vec3(.5f);
     weight3->isClicked = false;
     
     //body->doScale(glm::vec3(10.f));
