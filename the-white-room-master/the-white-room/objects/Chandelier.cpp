@@ -8,10 +8,8 @@
 #include "Chandelier.h"
 
 Chandelier::Chandelier() {
-    
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/chandelier/Chandelier.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -24,14 +22,25 @@ Chandelier::Chandelier() {
     scale = glm::vec3(1.f);
     isClicked = false;
     doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f, ROOM_SIZE - ((AABBmin.y + AABBmax.y) / 2.f), 0.f));
+    doTranslate(glm::vec3(0.f,
+            ROOM_SIZE / ROOM_HEIGHT_DIVISION - AABBmax.y, 0.f));
     //this->doScale(glm::vec3(3.f));
+
+    texNum = numTextures++;
+    LoadTexture((char *) "objects/meshes/chandelier/chandUV.bmp", texNum);
+    hasTex = true;
+
+    printf("finished Chandelier\n");
 }
 
 Chandelier::Chandelier(const Chandelier& orig) {
 }
 
 Chandelier::~Chandelier() {
+}
+
+bool Chandelier::doesCollide(GameObject* other) {
+    return false;
 }
 
 std::string Chandelier::className() {
