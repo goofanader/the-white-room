@@ -34,9 +34,10 @@ Clock::Clock() {
     body->shininess = 5;
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
-    body->ambColor = glm::vec3(1.f);
-    body->specColor = glm::vec3(.5f);
-    body->diffColor = glm::vec3(.5f);
+    body->ambColor = glm::vec3(.75f);
+    body->specColor = glm::vec3(.75f);
+    //body->diffColor = glm::vec3(.5f);
+    body->diffColor = glm::vec3(.42f, .22f, .08f);
     body->isClicked = false;
 
     weight1->dir = vec3(1.f, 0.f, 0.f);
@@ -46,9 +47,11 @@ Clock::Clock() {
     weight1->shininess = 5;
     weight1->specStrength = 0.f;
     weight1->scale = glm::vec3(1.f);
-    weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    //weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    weight1->ambColor = glm::vec3(0.75f);
     weight1->specColor = glm::vec3(.5f);
-    weight1->diffColor = glm::vec3(.5f);
+    weight1->diffColor = glm::vec3(0.94f, 0.90f, 0.55f);
+
     weight1->isClicked = false;
 
     weight2->dir = vec3(1.f, 0.f, 0.f);
@@ -58,9 +61,11 @@ Clock::Clock() {
     weight2->shininess = 5;
     weight2->specStrength = 0.f;
     weight2->scale = glm::vec3(1.f);
-    weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
+    //weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
+    weight2->ambColor = glm::vec3(0.75f);
     weight2->specColor = glm::vec3(.5f);
-    weight2->diffColor = glm::vec3(.5f);
+    //weight2->diffColor = glm::vec3(1.0, 0.85, 0.0);
+    weight2->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
     weight2->isClicked = false;
 
     weight3->dir = vec3(1.f, 0.f, 0.f);
@@ -70,9 +75,12 @@ Clock::Clock() {
     weight3->shininess = 5;
     weight3->specStrength = 0.f;
     weight3->scale = glm::vec3(1.f);
-    weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
+    //weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
+    weight3->ambColor = glm::vec3(0.75f);
     weight3->specColor = glm::vec3(.5f);
-    weight3->diffColor = glm::vec3(.5f);
+    weight3->diffColor = glm::vec3(1.0, 0.85, 0.0);
+
+    //weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
     weight3->isClicked = false;
     
     //body->doScale(glm::vec3(10.f));
