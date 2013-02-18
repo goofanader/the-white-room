@@ -24,8 +24,8 @@ Armchair::Armchair() {
     
     isClicked = false;
     
-    doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f,-3.f,-7.f));
+    doScale(glm::vec3(6.f));
+    doTranslate(glm::vec3(20.f,-5.f, -25.f));
     //this->doScale(glm::vec3(3.f));
 
 
