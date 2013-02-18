@@ -25,10 +25,7 @@ void main() {
   //vec3 specL = uSpecColor * uLightColor;
   vec3 V;
   V = normalize(uCamTrans - vThePosition);
-      vec3 R = 
-        2.0 * max(dot(normalize(vNormal), normalize(vLightDir)), 0.0) * 
-        normalize(vNormal) - normalize(vLightDir);
-
+      vec3 R = 2.0 * max(dot(normalize(vNormal), normalize(vLightDir)), 0.0) * normalize(vNormal) - normalize(vLightDir);
 
       float VdotR = clamp(
         pow(max(dot(normalize(R), normalize(V)), 0.0), uShininess), 0.0, 1.0);
@@ -52,7 +49,7 @@ void main() {
   vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
 
   vec3 finColor = (diffL * 0.7 + specL * 0.7) /
-    (1 + lDist * lDist * 0.0007) + ambL * 0.85;
+    (1.0 + lDist * lDist * 0.0007) + ambL * 0.85;
   gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
 
   //testing if this variable is even being set

@@ -28,12 +28,12 @@ void main() {
   vTexCoord = aTexCoord;
 
   /* First model transforms */
-  vPosition = uModelMatrix * vec4(aPosition, 1);
+  vPosition = uModelMatrix * vec4(aPosition, 1.0);
   vThePosition = vPosition.xyz;
   lDist = length(-vThePosition + uLightPos);
   normals = aNormal;
   vLightDir = uLightPos - vThePosition;
-  vNormal = normalize(uNormalMatrix * vec4(normals, 1)).xyz;
+  vNormal = normalize(uNormalMatrix * vec4(normals, 1.0)).xyz;
 
   vPosition = uViewMatrix * vPosition;
   gl_Position = uProjMatrix * vPosition;

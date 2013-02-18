@@ -21,7 +21,7 @@
 #include "ObjectCreation.h"
 #include "../audio/audio.h"
 
-#define MAX_SWITCHES 10
+#define MAX_SWITCHES 20
 
 using namespace std;
 

@@ -22,6 +22,7 @@ Book2::Book2() {
     scale = glm::vec3(1.f);
     //ambColor = glm::vec3(0.f, 1.f, 0.f);
     ambColor = glm::vec3(0.75f);
+    initAmbColor = ambColor;
     diffColor = glm::vec3(0.94f, 0.90f, 0.55f); 
     specColor = vec3(.5f);
     isClicked = false;

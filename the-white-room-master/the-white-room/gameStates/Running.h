@@ -18,6 +18,7 @@
 #include "../objects/WhiteDoor.h"
 
 #include "../events/Event.h"
+#include "../events/EventSwitch.h"
 #include "../audio/audio.h"
 
 class Running : public State {
@@ -57,6 +58,7 @@ private:
     
     int eventNum, mouseClicks;
     Event* currEvent;
+    EventSwitch switches[MAX_SWITCHES];
     
     void initializeCamera();
     void initializeLight();

@@ -22,7 +22,6 @@ using glm::mat3;
 using glm::mat4;
 
 
-
 typedef struct GameConstants {
     GLuint shader;
     float aspectRatio;
@@ -47,20 +46,22 @@ typedef struct GameConstants {
     GLuint h_uUseTex;
 } GameConstants;
 #include "../Main.h"
+
 class GameObject {
-    public:
+public:
+    //static float roomHeight = 0.f;
     GameObject(GLuint VBO, GLuint IBO, int IBOlen);
     GameObject();
     ~GameObject();
     virtual void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-        glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
+            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
     virtual void update(float dt);
     virtual std::string className();
     virtual bool doesCollide(GameObject *other);
     void doTranslate(glm::vec3 trans);
     void doRotate(glm::vec3 axis, float deg);
     void doScale(glm::vec3 scale);
-    
+
     void setTrans(glm::vec3 t);
     void changeColor(glm::vec3 c);
     void fixBoundingBoxes();
@@ -85,6 +86,7 @@ class GameObject {
     int texNum;
 
     glm::vec3 ambColor;
+    glm::vec3 initAmbColor;
     glm::vec3 specColor;
     glm::vec3 diffColor;
     float shininess;
@@ -98,9 +100,9 @@ class GameObject {
     glm::mat4 rotate;
     glm::vec3 trans;
     //glm::mat4 trans;
-    
+
     bool isClicked;
-    
+
     void printTrans();
     unsigned int numTextures();
 };

@@ -29,19 +29,29 @@ Running::Running() {
     eventNum = 1;
 
     //objects.insert(new Room());
-    
+
     printf("try the sound\n");
-    soundPlayer = new SoundPlayer();
+    //soundPlayer = new SoundPlayer();
     printf("loaded the sound player\n");
+    
+    switches[0].setClassName("Book1");
+    switches[1].setClassName("Book2");
+    switches[2].setClassName("Book3");
+    for (int i = 0; i < 3; i++) {
+        switches[i].setIsEmpty(false);
+        switches[i].setSwitch(false);
+    }
+    
     currEvent = new Event(eventNum, soundPlayer);
     loadObjectsFromEvent();
+
     //set mouse cursor to invisible
-    glfwDisable(GLFW_MOUSE_CURSOR);
-    
+    //glfwDisable(GLFW_MOUSE_CURSOR);
+
     mouseClicks = MAX_MOUSE_CLICKS;
-    
+
     //printf("woof\n");
-    
+
     //printf("nya\n");
 }
 
@@ -56,7 +66,7 @@ void Running::initializeCamera() {
     playerCamera->rotSpeed = 0.f;
     playerCamera->doTranslate(vec3(-8.f, -.7f, 0.f));
     playerCamera->scale = vec3(1.f);
-    
+
     camPrevTrans = playerCamera->trans;
 }
 
@@ -67,8 +77,8 @@ void Running::initializeLight() {
     lightPos->NBO = globe->NormalHandle;
     lightPos->VBO = globe->PositionHandle;
     lightPos->IBOlen = globe->IndexBufferLength;
-    lightPos->ambColor = glm::vec3(.75f,0.f,0.f);
-    
+    lightPos->ambColor = glm::vec3(.75f, 0.f, 0.f);
+
     lightPos->AABBmin = glm::vec3(-.5);
     lightPos->AABBmax = glm::vec3(.5);
     lightPos->doTranslate(getGC()->lightPos);
@@ -82,6 +92,16 @@ void Running::loadObjectsFromEvent() {
         if (newObject) {
             objects.insert(newObject);
             arr->setGameObject(newObject);
+            
+            if (newObject->className() == "Book1") {
+                switches[0].setGameObject(newObject);
+            }
+            if (newObject->className() == "Book2") {
+                switches[1].setGameObject(newObject);
+            }
+            if (newObject->className() == "Book3") {
+                switches[2].setGameObject(newObject);
+            }
         }
     }
 }
@@ -109,7 +129,7 @@ void Running::update(float dt) {
         playerCamera->update(dt);
         playerCamera->AABBmin = playerCamera->trans - .5f;
         playerCamera->AABBmax = playerCamera->trans + .5f;
-        
+
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
 
@@ -118,17 +138,17 @@ void Running::update(float dt) {
             curr = (*iter);
 
             curr->update(dt);
-            
+
             /*std::cout << "Item " << curr->className() << ": AABBmin = (";
             std::cout << curr->AABBmin.x << ", " << curr->AABBmin.y << ", " << curr->AABBmin.z;
             std::cout << "). AABBmax=(" << curr->AABBmax.x << ", " << curr->AABBmax.y;
             std::cout << ", " << curr->AABBmax.z << ")\n==============" << std::endl;*/
-            
+
             if (curr->doesCollide(playerCamera)) {
                 //we need to stop player movement as well AKA
                 //don't go through objects :<
                 playerCamera->trans = camPrevTrans;
-                
+
                 //cout << "colliding with " << curr->className() << endl;
             } else {
                 //cout << "not colliding with " << curr->className() << endl;
@@ -143,9 +163,9 @@ void Running::mouseClicked(int button, int action) {
     glm::vec3 translatedCam, reach;
 
     float nx, ny, nz,
-          px, py, pz,
-          ox, oy, oz,
-          dx, dy, dz;
+            px, py, pz,
+            ox, oy, oz,
+            dx, dy, dz;
 
     float t;
 
@@ -157,7 +177,7 @@ void Running::mouseClicked(int button, int action) {
         mouseClicks = 0;
         //Sound code
         //soundPlayer->playSound("Click");
-       
+
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
             curr = (*iter);
@@ -171,7 +191,7 @@ void Running::mouseClicked(int button, int action) {
             ox = playerCamera->trans.x;
             oy = playerCamera->trans.y;
             oz = playerCamera->trans.z;
-            
+
             x = playerCamera->trans.x - curr->trans.x;
             y = playerCamera->trans.y - curr->trans.y;
             z = playerCamera->trans.z - curr->trans.z;
@@ -181,11 +201,11 @@ void Running::mouseClicked(int button, int action) {
             //printf("mag = %f\n",mag);
 
             mag = sqrt(x * x + y * y + z * z);
-            
+
             //intersection b/n view vector and planes
-            
-            for(int i = 0; i < 6; i++){
-                if(i == 0){
+
+            for (int i = 0; i < 6; i++) {
+                if (i == 0) {
                     nx = 0.f;
                     ny = 0.f;
                     nz = 1.f;
@@ -193,7 +213,7 @@ void Running::mouseClicked(int button, int action) {
                     px = curr->AABBmax.x;
                     py = curr->AABBmax.y;
                     pz = curr->AABBmax.z;
-                }else if(i == 1){
+                } else if (i == 1) {
                     nx = 1.f;
                     ny = 0.f;
                     nz = 0.f;
@@ -201,7 +221,7 @@ void Running::mouseClicked(int button, int action) {
                     px = curr->AABBmax.x;
                     py = curr->AABBmax.y;
                     pz = curr->AABBmax.z;
-                }else if(i == 2){
+                } else if (i == 2) {
                     nx = 0.f;
                     ny = 1.f;
                     nz = 0.f;
@@ -209,7 +229,7 @@ void Running::mouseClicked(int button, int action) {
                     px = curr->AABBmax.x;
                     py = curr->AABBmax.y;
                     pz = curr->AABBmax.z;
-                }else if(i == 3){
+                } else if (i == 3) {
                     nx = 0.f;
                     ny = 0.f;
                     nz = -1.f;
@@ -217,7 +237,7 @@ void Running::mouseClicked(int button, int action) {
                     px = curr->AABBmin.x;
                     py = curr->AABBmin.y;
                     pz = curr->AABBmin.z;
-                }else if(i == 4){
+                } else if (i == 4) {
                     nx = -1.f;
                     ny = 0.f;
                     nz = 0.f;
@@ -225,7 +245,7 @@ void Running::mouseClicked(int button, int action) {
                     px = curr->AABBmin.x;
                     py = curr->AABBmin.y;
                     pz = curr->AABBmin.z;
-                }else if(i == 5){
+                } else if (i == 5) {
                     nx = 0.f;
                     ny = -1.f;
                     nz = 0.f;
@@ -235,25 +255,25 @@ void Running::mouseClicked(int button, int action) {
                     pz = curr->AABBmin.z;
                 }
 
-                t = (nx*px + ny*py + nz*pz - nx*ox - ny*oy - nz*oz)/
-                    (nx*dx + ny*dy + nz*dz);
+                t = (nx * px + ny * py + nz * pz - nx * ox - ny * oy - nz * oz) /
+                        (nx * dx + ny * dy + nz * dz);
 
                 reach.x = ox + dx * t;
                 reach.y = oy + dy * t;
                 reach.z = oz + dz * t;
 
-            //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
+                //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
 
-          
+
                 if (reach.x >= curr->AABBmin.x && reach.x <= curr->AABBmax.x &&
-                    reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
-                    reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z) {
+                        reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
+                        reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z) {
 
                     //curr->onEvent(soundPlayer);
                     sound = 1;
                     //curr->changeColor(glm::vec3(1.0f, 0.f, 0.f));
                     //curr->update(0.f);
-
+#if 0
                     //if true, want to switch out to the next event
                     if (eventNum <= MAX_EVENTS && currEvent->getEventNum() == eventNum &&
                             currEvent->setSwitch(curr->className())) {
@@ -266,13 +286,38 @@ void Running::mouseClicked(int button, int action) {
                             break;
                         }
                     }
+#endif
+                    if (curr->className() == "Book1") {
+                        printf("clicked on Book1\n");
+                        switches[0].setSwitch(true);
+                        curr->changeColor(glm::vec3(0.f));
+                    } else if (curr->className() == "Book2" && switches[0].isSwitchOn()) {
+                        printf("clicked on Book2 in order\n");
+                        switches[1].setSwitch(true);
+                        curr->changeColor(glm::vec3(0.f));
+                    } else if (curr->className() == "Book3" && switches[0].isSwitchOn() &&
+                            switches[1].isSwitchOn()) {
+                        printf("clicked on Book3 in order\n");
+                        switches[2].setSwitch(true);
+                        curr->changeColor(glm::vec3(0.f));
+                        //change to winning condition here
+                        //with a function call
+                    } else if ((curr->className() == "Book2" && !switches[0].isSwitchOn()) ||
+                            curr->className() == "Book3" && !(switches[0].isSwitchOn() &&
+                            switches[1].isSwitchOn())) {
+                        for (int i = 0; i < 3; i++) {
+                            switches[i].setSwitch(false);
+                            switches[i].getGameObject()->changeColor(switches[i].getGameObject()->initAmbColor);
+                        }
+                        printf("oh no! out of order :(\n");
+                    }
                 }
 
             }
 
-            if(!sound){
-                soundPlayer->playSound("Click");
-            }else{
+            if (!sound) {
+                //soundPlayer->playSound("Click");
+            } else {
                 sound = 0;
             }
 
@@ -283,7 +328,7 @@ void Running::mouseClicked(int button, int action) {
 
             printf("AABBmaxes = %f, %f, %f\n",
             curr->AABBmax.x, curr->AABBmax.y, curr->AABBmax.z);
-            */
+             */
 
         }
     } else mouseClicks++;
@@ -330,7 +375,7 @@ void Running::keyPressed(float dt, int keyDown[]) {
         glfwEnable(GLFW_MOUSE_CURSOR);
     } else if (keyDown['P'] && isPaused()) {
         resume();
-        glfwDisable(GLFW_MOUSE_CURSOR);
+        //glfwDisable(GLFW_MOUSE_CURSOR);
     }
 }
 
