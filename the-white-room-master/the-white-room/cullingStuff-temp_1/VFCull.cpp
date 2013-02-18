@@ -82,7 +82,7 @@ static void ExtractPlanesGL(Plane *p_planes, Matrix4x4 *comboMatrix, bool normal
 }
 
 static bool Cull(Plane *p_planes, Point pt) {
-        bool left, right, top, bot, near, far;
+        bool left, right, top, bot, near, far;  // true = point in viewable side
 
         if (ClassifyPoint(p_planes[0], pt) != NEGATIVE)
             left = true;
@@ -114,6 +114,7 @@ static bool Cull(Plane *p_planes, Point pt) {
         else
             far = false;
 
+        // true = point in view
         if (left && right && top && bot && near && far)
             return false;
         else

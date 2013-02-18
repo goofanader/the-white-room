@@ -43,3 +43,10 @@ enum Halfspace {
    ON_PLANE = 0,
    POSITIVE = 1
 };
+
+void NormalizePlane(Plane plane);
+float DistanceToPoint(Plane plane, Point pt);
+Halfspace ClassifyPoint(Plane plane Point pt);
+ExtractPlanesGL(Plane *p_planes, Matrix4x4 *comboMatrix, bool normalize);
+bool Cull(Plane *p_planes, Point pt);
+
