@@ -55,10 +55,10 @@ Room::Room() {
         } else {
             room[i].ambColor = vec3(1.f, 1.f, 1.f);
         }
-        room[i].diffColor = vec3(.8f);
-        room[i].specColor = vec3(.8f);
-        room[i].shininess = 1;
-        room[i].specStrength = .24f;
+        room[i].diffColor = vec3(.35f);
+        room[i].specColor = vec3(.5f);
+        room[i].shininess = 1.f;
+        room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
     }
 
@@ -89,6 +89,8 @@ Room::Room() {
     //the floor
     room[1].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
     room[1].doTranslate(vec3(0.f, room[3].AABBmin.y, 0.f));
+    
+    //GameObject::roomHeight = room[3].AABBmax.y;
 }
 
 Room::Room(const Room& orig) {
@@ -112,7 +114,7 @@ void Room::update(float dt) {
 }
 
 bool Room::doesCollide(GameObject* other) {
-#if 0
+#if 1
     for (int i = 2; i < NUM_WALLS; i++) {
         //printf("room %d:\n", i);
 #if 0
