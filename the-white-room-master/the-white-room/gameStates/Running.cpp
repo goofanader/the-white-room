@@ -353,7 +353,8 @@ void Running::keyPressed(float dt, int keyDown[]) {
         //handleFirstPersonMovement(dt, keyDown);
         // Camera movement
         glm::vec3 up = glm::vec3(0, 1, 0);
-        glm::vec3 forward = glm::normalize(camLookAt - playerCamera->trans);
+        glm::vec3 forward = glm::normalize(vec3(camLookAt.x - playerCamera->trans.x, 0.0,
+                                            camLookAt.z - playerCamera->trans.z));
         glm::vec3 right = glm::normalize(glm::cross(forward, up));
 
         //bind player to the floor so they can't fly through the scene :)
