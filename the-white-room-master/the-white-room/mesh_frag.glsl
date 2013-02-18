@@ -48,8 +48,8 @@ void main() {
 
   vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
 
-  vec3 finColor = (diffL * 0.7 + specL * 0.7) /
-    (1.0 + lDist * lDist * 0.0007) + ambL * 0.85;
+  vec3 finColor = (diffL * 1.3 + specL * 1.3) /
+    (.7 + lDist * 0.004 + lDist * lDist * 0.0004) + ambL * 0.85;
   gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
 
   //testing if this variable is even being set

@@ -85,6 +85,8 @@ public:
     GLuint TBO;
     int texNum;
 
+    GLenum textureMaps[39];
+
     glm::vec3 ambColor;
     glm::vec3 initAmbColor;
     glm::vec3 specColor;

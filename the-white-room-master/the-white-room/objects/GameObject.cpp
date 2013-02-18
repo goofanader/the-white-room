@@ -41,6 +41,26 @@ GameObject::GameObject() {
     ambColor = glm::vec3(.75f);
     specColor = glm::vec3(.1f);
     diffColor = glm::vec3(.1f);
+
+    textureMaps[0] = GL_TEXTURE0;
+    textureMaps[1] = GL_TEXTURE1;
+    textureMaps[2] = GL_TEXTURE2;
+    textureMaps[3] = GL_TEXTURE3;
+    textureMaps[4] = GL_TEXTURE4;
+    textureMaps[5] = GL_TEXTURE5;
+    textureMaps[6] = GL_TEXTURE6;
+    textureMaps[7] = GL_TEXTURE7;
+    textureMaps[8] = GL_TEXTURE8;
+    textureMaps[9] = GL_TEXTURE9;
+    textureMaps[10] = GL_TEXTURE10;
+    textureMaps[11] = GL_TEXTURE11;
+    textureMaps[12] = GL_TEXTURE12;
+    textureMaps[13] = GL_TEXTURE13;
+    textureMaps[14] = GL_TEXTURE14;
+    textureMaps[15] = GL_TEXTURE15;
+    textureMaps[16] = GL_TEXTURE16;
+    textureMaps[17] = GL_TEXTURE17;
+
 }
 
 GameObject::~GameObject() {
@@ -88,7 +108,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
         safe_glVertexAttribPointer(
                 gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(textureMaps[texNum]);
         glBindTexture(GL_TEXTURE_2D, texNum);
 
         glDisable(GL_TEXTURE_2D);

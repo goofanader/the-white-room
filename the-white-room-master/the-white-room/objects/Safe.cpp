@@ -77,6 +77,8 @@ Safe::Safe() {
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
     body->ambColor = glm::vec3(1.f);
+    body->diffColor = glm::vec3(0.5f);
+    body->specColor = glm::vec3(0.f);
     body->isClicked = false;
     
     door->dir = vec3(1.f, 0.f, 0.f);

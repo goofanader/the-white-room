@@ -575,6 +575,11 @@ void gameLoop() {
             timeAccumulator -= timeDelta;
         }
 
+        if (timeAccumulator) {
+            currState->update(timeAccumulator);
+            timeAccumulator = 0;
+        }
+
         
         Draw();
         //Shadow();

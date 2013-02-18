@@ -16,6 +16,7 @@ Plant6::Plant6() {
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
     ambColor = vec3(1.f);
+    diffColor = vec3(0.1, 0.74, 0.32);
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
