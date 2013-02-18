@@ -31,7 +31,7 @@ Running::Running() {
     //objects.insert(new Room());
 
     printf("try the sound\n");
-    //soundPlayer = new SoundPlayer();
+    soundPlayer = new SoundPlayer();
     printf("loaded the sound player\n");
     
     switches[0].setClassName("Book1");
@@ -290,18 +290,18 @@ void Running::mouseClicked(int button, int action) {
                     if (curr->className() == "Book1") {
                         printf("clicked on Book1\n");
                         switches[0].setSwitch(true);
-                        curr->changeColor(glm::vec3(0.f));
+                        curr->onEvent(soundPlayer);
                     } else if (curr->className() == "Book2" && switches[0].isSwitchOn()) {
                         printf("clicked on Book2 in order\n");
                         switches[1].setSwitch(true);
-                        curr->changeColor(glm::vec3(0.f));
+                        curr->onEvent(soundPlayer);
                     } else if (curr->className() == "Book3" && switches[0].isSwitchOn() &&
                             switches[1].isSwitchOn()) {
                         printf("clicked on Book3 in order\n");
                         switches[2].setSwitch(true);
-                        curr->changeColor(glm::vec3(0.f));
-                        //change to winning condition here
-                        //with a function call
+                        curr->onEvent(soundPlayer);
+                        
+                        
                     } else if ((curr->className() == "Book2" && !switches[0].isSwitchOn()) ||
                             curr->className() == "Book3" && !(switches[0].isSwitchOn() &&
                             switches[1].isSwitchOn())) {
