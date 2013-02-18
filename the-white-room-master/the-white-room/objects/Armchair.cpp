@@ -21,7 +21,7 @@ Armchair::Armchair() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    
+
     isClicked = false;
     
     doScale(glm::vec3(6.f));
@@ -32,7 +32,6 @@ Armchair::Armchair() {
  texNum = numTextures();
     LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
     hasTex = true;
-   
     printf("%d\n", texNum);
 }
 

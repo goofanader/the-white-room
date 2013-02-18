@@ -18,9 +18,9 @@ public:
     virtual ~WhiteDoor();
     
     /*void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
+            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);*/
     void update(float dt);
-    bool doesCollide(GameObject* other);*/
+    /*bool doesCollide(GameObject* other);*/
 
     void onEvent(SoundPlayer *soundPlayer);
     
@@ -28,6 +28,8 @@ public:
 private:
     GameObject* door;
     GameObject* knob;
+    bool isClosed;
+    float doorAngle;
 };
 
 #endif	/* WHITEDOOR_H */

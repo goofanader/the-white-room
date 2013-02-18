@@ -20,7 +20,8 @@ public:
     std::string className();
     bool doesCollide(GameObject *other);
 private:
-
+    glm::vec3 hitTestAABBmin;
+    glm::vec3 hitTestAABBmax;
 };
 
 #endif	/* BOOKSHELF_H */

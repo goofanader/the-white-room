@@ -33,20 +33,21 @@ Running::Running() {
     printf("try the sound\n");
     soundPlayer = new SoundPlayer();
     printf("loaded the sound player\n");
-    
+
     switches[0].setClassName("Book1");
     switches[1].setClassName("Book2");
     switches[2].setClassName("Book3");
-    for (int i = 0; i < 3; i++) {
+    switches[3].setClassName("WhiteDoor");
+    for (int i = 0; i < 4; i++) {
         switches[i].setIsEmpty(false);
         switches[i].setSwitch(false);
     }
-    
+
     currEvent = new Event(eventNum, soundPlayer);
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
-    //glfwDisable(GLFW_MOUSE_CURSOR);
+    glfwDisable(GLFW_MOUSE_CURSOR);
 
     mouseClicks = MAX_MOUSE_CLICKS;
 
@@ -92,7 +93,7 @@ void Running::loadObjectsFromEvent() {
         if (newObject) {
             objects.insert(newObject);
             arr->setGameObject(newObject);
-            
+
             if (newObject->className() == "Book1") {
                 switches[0].setGameObject(newObject);
             }
@@ -101,6 +102,9 @@ void Running::loadObjectsFromEvent() {
             }
             if (newObject->className() == "Book3") {
                 switches[2].setGameObject(newObject);
+            }
+            if (newObject->className() == "WhiteDoor") {
+                switches[3].setGameObject(newObject);
             }
         }
     }
@@ -300,8 +304,12 @@ void Running::mouseClicked(int button, int action) {
                         printf("clicked on Book3 in order\n");
                         switches[2].setSwitch(true);
                         curr->onEvent(soundPlayer);
-                        
-                        
+
+                        //cause the white door to open
+                        if (!switches[3].isSwitchOn()) {
+                            switches[3].getGameObject()->onEvent(soundPlayer);
+                            switches[3].setSwitch(true);
+                        }
                     } else if ((curr->className() == "Book2" && !switches[0].isSwitchOn()) ||
                             curr->className() == "Book3" && !(switches[0].isSwitchOn() &&
                             switches[1].isSwitchOn())) {

@@ -32,6 +32,8 @@ Bookshelf::Bookshelf() {
     //doTranslate(glm::vec3(-15.5f,-8.f,0.f));
     doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
     
+    hitTestAABBmin = AABBmin;
+    hitTestAABBmax = AABBmax;
     AABBmin = glm::vec3(-200, -200, -200);
     AABBmax = glm::vec3(-200, -200, -200);
 }
@@ -51,6 +53,10 @@ std::string Bookshelf::className() {
 }
 
 bool Bookshelf::doesCollide(GameObject *other) {
-    //don't do anything, lol
-    return false;
+    return (this->hitTestAABBmin.x <= other->AABBmax.x &&
+            //this->AABBmin.y <= other->AABBmax.y &&
+            this->hitTestAABBmin.z <= other->AABBmax.z &&
+            this->hitTestAABBmax.x >= other->AABBmin.x &&
+            //this->AABBmax.y >= other->AABBmin.y &&
+            this->hitTestAABBmax.z >= other->AABBmin.z);
 }

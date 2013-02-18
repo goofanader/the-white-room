@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include "WhiteDoor.h"
+#include "glm/gtx/integer.hpp"
 
 #define GROUND_POS -0.5f
 
@@ -73,11 +74,15 @@ WhiteDoor::WhiteDoor() {
     diffColor = glm::vec3(.8f);
     specColor = glm::vec3(.8f);
     isClicked = false;
+    isClosed = true;
+    
+    doorAngle = 180.f;
     
     doScale(glm::vec3(ROOM_SIZE / 5.f));
     
-    doRotate(glm::vec3(0, 1, 0), 180);
-    doTranslate(glm::vec3(-3.25f, -3.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
+    doRotate(glm::vec3(0, 1, 0), doorAngle);
+    doRotate(glm::vec3(0,0,1), -doorAngle);
+    doTranslate(glm::vec3(1.75f, -2.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
@@ -96,13 +101,22 @@ void WhiteDoor::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     //printf("coo\n");
 }
 #endif
-/*
+
 void WhiteDoor::update(float dt) {
-    if (this->color != this->door->color)
-        this->door->color = this->color;
-
+    glm::vec3 prevBoundMin = AABBmin;
+    
+    
+    if (!isClosed && ) {
+        doorAngle = 1;
+        doRotate(glm::vec3(0,1,0), doorAngle);
+        
+        float distanceX = sqrt(pow(AABBmin.x - prevBoundMin.x, 2));
+        std::cout << "distance: " << distanceX << std::endl;
+        //doTranslate(glm::vec3(distanceX,0,0));
+        doTranslate(glm::vec3(1, 0,0));
+    }
 }
-
+/*
 bool WhiteDoor::doesCollide(GameObject* other) {
     //printf("hello\n");
 #if 0
@@ -117,7 +131,8 @@ void WhiteDoor::onEvent(SoundPlayer *soundPlayer){
     door->color = (glm::vec3(1.f, 0.f, 0.f));
     knob->color = (glm::vec3(1.f, 0.f, 0.f));
 #endif
-    ambColor = glm::vec3(1.f, 0.f, 0.f);
+    //ambColor = glm::vec3(1.f, 0.f, 0.f);
+    isClosed = false;
 }
 
 std::string WhiteDoor::className() {
