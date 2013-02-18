@@ -16,8 +16,8 @@ Bookshelf::Bookshelf() {
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
-    ambColor = vec3(1.f);
-    diffColor = vec3(.5f);
+    ambColor = vec3(0.75f);
+    diffColor = vec3(.32f, 0.17f, 0.08f);
     specColor = vec3(.5f);
     shininess = 5;
     specStrength = 0.f;

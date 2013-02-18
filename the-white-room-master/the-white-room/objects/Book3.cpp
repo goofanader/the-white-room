@@ -20,8 +20,9 @@ Book3::Book3() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    ambColor = glm::vec3(0.f, 0.f, 1.f);
-    diffColor = vec3(.5f);
+    //ambColor = glm::vec3(0.f, 0.f, 1.f);
+    ambColor = glm::vec3(0.75f);
+    diffColor = vec3(1.0f, 0.85f, 0.0f);
     specColor = vec3(.5f);
     isClicked = false;
     

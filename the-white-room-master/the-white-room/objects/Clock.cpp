@@ -78,7 +78,7 @@ Clock::Clock() {
     //weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
     weight3->ambColor = glm::vec3(0.75f);
     weight3->specColor = glm::vec3(.5f);
-    weight3->diffColor = glm::vec3(1.0, 0.85, 0.0);
+    weight3->diffColor = glm::vec3(1.0f, 0.85f, 0.0f);
 
     //weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
     weight3->isClicked = false;
