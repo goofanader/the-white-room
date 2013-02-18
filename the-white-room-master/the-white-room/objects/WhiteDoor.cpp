@@ -75,6 +75,7 @@ WhiteDoor::WhiteDoor() {
     specColor = glm::vec3(.8f);
     isClicked = false;
     isClosed = true;
+    timeSpent = 0.0;
     
     doorAngle = 180.f;
     
@@ -105,17 +106,27 @@ void WhiteDoor::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 void WhiteDoor::update(float dt) {
     glm::vec3 prevBoundMin = AABBmin;
     
-    
-    if (!isClosed && ) {
-        doorAngle = 1;
-        doRotate(glm::vec3(0,1,0), doorAngle);
+    if (!isClosed) {
+        if(timeSpent < 1.5){
+            doorAngle = 1;
+            doTranslate(glm::vec3(2.f, 0.f, 0.f));
+            doRotate(glm::vec3(0,1,0), doorAngle);
+            doTranslate(glm::vec3(-2.f, 0.f, 0.f));
         
-        float distanceX = sqrt(pow(AABBmin.x - prevBoundMin.x, 2));
-        std::cout << "distance: " << distanceX << std::endl;
-        //doTranslate(glm::vec3(distanceX,0,0));
-        doTranslate(glm::vec3(1, 0,0));
+            //float distanceX = sqrt(pow(AABBmin.x - prevBoundMin.x, 2));
+            //std::cout << "distance: " << distanceX << std::endl;
+            //doTranslate(glm::vec3(distanceX,0,0));
+            //doTranslate(glm::vec3(1, 0,0));
+            timeSpent += (double) dt;
+        }else{
+            doRotate(glm::vec3(0,1,0), 0);
+            rotSpeed = 0.f;
+        }
+
     }
 }
+
+    //doRotate(glm::vec3(0,1,0), 0);
 /*
 bool WhiteDoor::doesCollide(GameObject* other) {
     //printf("hello\n");

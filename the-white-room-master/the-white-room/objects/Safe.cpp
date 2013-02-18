@@ -143,9 +143,9 @@ void Safe::onEvent(SoundPlayer *soundPlayer){
     soundPlayer->playSound("TrySafe");
    // soundPlayer->playContinuous("Tick");
     
-    body->ambColor = glm::vec3(1.f, 0.f, 0.f);
-    door->ambColor = body->ambColor;
-    ambColor = glm::vec3(1.f, 0.f, 0.f);
+    //body->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    //door->ambColor = body->ambColor;
+    //ambColor = glm::vec3(1.f, 0.f, 0.f);
 }
 
 std::string Safe::className() { return "Safe";}

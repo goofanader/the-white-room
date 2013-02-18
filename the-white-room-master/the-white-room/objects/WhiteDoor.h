@@ -30,6 +30,7 @@ private:
     GameObject* knob;
     bool isClosed;
     float doorAngle;
+    double timeSpent;
 };
 
 #endif	/* WHITEDOOR_H */

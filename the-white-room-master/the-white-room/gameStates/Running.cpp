@@ -180,7 +180,7 @@ void Running::mouseClicked(int button, int action) {
     if (action == GLFW_RELEASE && mouseClicks >= MAX_MOUSE_CLICKS) {
         mouseClicks = 0;
         //Sound code
-        //soundPlayer->playSound("Click");
+        soundPlayer->playSound("Click");
 
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
@@ -273,7 +273,7 @@ void Running::mouseClicked(int button, int action) {
                         reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
                         reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z) {
 
-                    //curr->onEvent(soundPlayer);
+                    curr->onEvent(soundPlayer);
                     sound = 1;
                     //curr->changeColor(glm::vec3(1.0f, 0.f, 0.f));
                     //curr->update(0.f);
