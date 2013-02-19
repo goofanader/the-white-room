@@ -39,6 +39,11 @@ Book2::Book2() {
     texNum = numTextures();
     LoadTexture((char *)"objects/meshes/bookshelf/book2UV.bmp", texNum);
     hasTex = true;
+    AABBmin.x -= 1.f;
+    AABBmax.x += 1.f;
+    
+    AABBmin.z -= 1.f;
+    AABBmax.z += 1.f;
 }
 
 Book2::Book2(const Book2& orig) {
@@ -52,6 +57,8 @@ std::string Book2::className() {
 }
 
 void Book2::onEvent(SoundPlayer* soundPlayer) {
-    soundPlayer->playSound("TryBook");
-    ambColor = glm::vec3(0.f);
+    soundPlayer->playSound("Bell2");
+    if (isClicked) {
+        ambColor = glm::vec3(0.f);
+    }
 }

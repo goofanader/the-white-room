@@ -39,6 +39,14 @@ Book3::Book3() {
     texNum = numTextures();
     LoadTexture((char *) "objects/meshes/bookshelf/book3UV.bmp", texNum);
     hasTex = true;
+    
+    std::cout << "Book3: AABBmin=" << printVec3Coordinates(AABBmin);
+    std::cout <<"; AABBmax=" << printVec3Coordinates(AABBmax) << std::endl;
+    AABBmin.x -= 1.f;
+    AABBmax.x += 1.f;
+    
+    AABBmin.z -= 1.f;
+    AABBmax.z += 1.f;
 }
 
 Book3::Book3(const Book3& orig) {
@@ -52,6 +60,8 @@ std::string Book3::className() {
 }
 
 void Book3::onEvent(SoundPlayer* soundPlayer) {
-    soundPlayer->playSound("TryBook");
-    ambColor = glm::vec3(0.f);
+    soundPlayer->playSound("Bell1");
+    if (isClicked) {
+        ambColor = glm::vec3(0.f);
+    }
 }

@@ -86,6 +86,7 @@ void Running::initializeLight() {
 }
 
 void Running::loadObjectsFromEvent() {
+    GameObject *clockSound;
     EventSwitch *arr = currEvent->getSwitches();
 
     for (int i = 0; i < currEvent->getSwitchNum(); i++, arr++) {
@@ -106,7 +107,14 @@ void Running::loadObjectsFromEvent() {
             if (newObject->className() == "WhiteDoor") {
                 switches[3].setGameObject(newObject);
             }
+            if (newObject->className() == "Clock") {
+                clockSound = newObject;
+            }
         }
+    }
+    
+    if (clockSound) {
+        clockSound->onEvent(soundPlayer);
     }
 }
 
@@ -124,8 +132,8 @@ void Running::draw() {
                 getGC()->lightColor, getGC());
     }
     //camBeta += .1;
-    lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-            getGC()->lightColor, getGC());
+    //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+      //      getGC()->lightColor, getGC());
 }
 
 void Running::update(float dt) {
@@ -142,12 +150,7 @@ void Running::update(float dt) {
             curr = (*iter);
 
             curr->update(dt);
-
-            /*std::cout << "Item " << curr->className() << ": AABBmin = (";
-            std::cout << curr->AABBmin.x << ", " << curr->AABBmin.y << ", " << curr->AABBmin.z;
-            std::cout << "). AABBmax=(" << curr->AABBmax.x << ", " << curr->AABBmax.y;
-            std::cout << ", " << curr->AABBmax.z << ")\n==============" << std::endl;*/
-
+            
             if (curr->doesCollide(playerCamera)) {
                 //we need to stop player movement as well AKA
                 //don't go through objects :<
@@ -166,8 +169,8 @@ void Running::update(float dt) {
         printf("You exited the white room and won the game!\n");
 
         exit(EXIT_SUCCESS);
-    }
-        
+}
+
 
 
 
@@ -191,7 +194,7 @@ void Running::mouseClicked(int button, int action) {
     if (action == GLFW_RELEASE && mouseClicks >= MAX_MOUSE_CLICKS) {
         mouseClicks = 0;
         //Sound code
-        soundPlayer->playSound("Click");
+        //soundPlayer->playSound("Click");
 
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
@@ -306,19 +309,22 @@ void Running::mouseClicked(int button, int action) {
                         }
                     }
 #endif
-                    if (curr->className() == "Book1") {
-                        printf("clicked on Book1\n");
-                        switches[0].setSwitch(true);
-                        curr->onEvent(soundPlayer);
-                    } else if (curr->className() == "Book2" && switches[0].isSwitchOn()) {
+                    if (curr->className() == "Book3") {
+                        printf("clicked on Book3\n");
+                        switches[2].setSwitch(true);
+                        curr->isClicked = true;
+                        //curr->onEvent(soundPlayer);
+                    } else if (curr->className() == "Book2" && switches[2].isSwitchOn()) {
                         printf("clicked on Book2 in order\n");
                         switches[1].setSwitch(true);
-                        curr->onEvent(soundPlayer);
-                    } else if (curr->className() == "Book3" && switches[0].isSwitchOn() &&
+                        curr->isClicked = true;
+                        //curr->onEvent(soundPlayer);
+                    } else if (curr->className() == "Book1" && switches[2].isSwitchOn() &&
                             switches[1].isSwitchOn()) {
-                        printf("clicked on Book3 in order\n");
-                        switches[2].setSwitch(true);
-                        curr->onEvent(soundPlayer);
+                        printf("clicked on Book1 in order\n");
+                        switches[0].setSwitch(true);
+                        curr->isClicked = true;
+                        //curr->onEvent(soundPlayer);
                         setIfWon(true);
                         
                         //cause the white door to open
@@ -326,11 +332,12 @@ void Running::mouseClicked(int button, int action) {
                             switches[3].getGameObject()->onEvent(soundPlayer);
                             switches[3].setSwitch(true);
                         }
-                    } else if ((curr->className() == "Book2" && !switches[0].isSwitchOn()) ||
-                            curr->className() == "Book3" && !(switches[0].isSwitchOn() &&
-                            switches[1].isSwitchOn())) {
+                    } else if ((curr->className() == "Book2" && !switches[2].isSwitchOn()) ||
+                            (curr->className() == "Book1" && !(switches[2].isSwitchOn() &&
+                            switches[1].isSwitchOn()))) {
                         for (int i = 0; i < 3; i++) {
                             switches[i].setSwitch(false);
+                            switches[i].getGameObject()->isClicked = false;
                             switches[i].getGameObject()->changeColor(switches[i].getGameObject()->initAmbColor);
                         }
                         printf("oh no! out of order :(\n");
