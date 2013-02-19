@@ -271,7 +271,8 @@ void Running::mouseClicked(int button, int action) {
 
                 if (reach.x >= curr->AABBmin.x && reach.x <= curr->AABBmax.x &&
                         reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
-                        reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z) {
+                        reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z &&
+                        (glm::dot(normalizedCam, reach)) > 0.f) {
                     std::cout << "clicked on... " << curr->className();
                     std::cout << ". AABBmin=" << printVec3Coordinates(curr->AABBmin);
                     std::cout << ", AABBmax=" << printVec3Coordinates(curr->AABBmax);
