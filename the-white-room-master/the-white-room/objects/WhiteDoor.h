@@ -31,6 +31,7 @@ private:
     bool isClosed;
     float doorAngle;
     double timeSpent;
+    glm::vec3 prevAABBmin;
 };
 
 #endif	/* WHITEDOOR_H */

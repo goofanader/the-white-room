@@ -39,7 +39,7 @@ using namespace std;
 using namespace glm;
 
 GameConstants gc;
-
+bool g_hasWon;
 int const numSquares = 100;
 
 GameObject cubes[numSquares];
@@ -114,6 +114,14 @@ unsigned int getWindowWidth() {
 
 unsigned int getWindowHeight() {
     return windowHeight;
+}
+
+bool hasWon() {
+    return g_hasWon;
+}
+
+void setIfWon(bool winning) {
+    g_hasWon = winning;
 }
 
 void SetProjectionMatrix() {
@@ -621,6 +629,7 @@ void initializeShaderVariables() {
 }
 
 int main(int argc, char *argv[]) {
+    g_hasWon = false;
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }

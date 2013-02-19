@@ -304,7 +304,8 @@ void Running::mouseClicked(int button, int action) {
                         printf("clicked on Book3 in order\n");
                         switches[2].setSwitch(true);
                         curr->onEvent(soundPlayer);
-
+                        setIfWon(true);
+                        
                         //cause the white door to open
                         if (!switches[3].isSwitchOn()) {
                             switches[3].getGameObject()->onEvent(soundPlayer);

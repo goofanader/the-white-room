@@ -15,6 +15,7 @@ GameConstants* getGC();
 unsigned int getWindowWidth();
 unsigned int getWindowHeight();
 std::string printVec3Coordinates(glm::vec3 coordinates);
-
+bool hasWon();
+void setIfWon(bool winning);
 #endif	/* MAIN_H */
 

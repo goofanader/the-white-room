@@ -30,14 +30,14 @@ GameObject::GameObject() {
     TBO = -1;
     scale = glm::vec3(1.f);
     rotate = glm::mat4(1.f);
-    this->doRotate(vec3(0,1,0),0);
+    this->doRotate(vec3(0, 1, 0), 0);
     trans = glm::vec3(0.f);
     tag = 0;
     isClicked = false;
-    
+
     texNum = -1;
     hasTex = false;
-    
+
     ambColor = glm::vec3(.75f);
     specColor = glm::vec3(.1f);
     diffColor = glm::vec3(.1f);
@@ -100,7 +100,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 
     if (hasTex) {
         glEnable(GL_TEXTURE_2D);
-        
+
         safe_glUniform1i(gc->h_uTexUnit, texNum);
 
         safe_glEnableVertexAttribArray(gc->h_aTexCoord);
@@ -165,15 +165,17 @@ void GameObject::doTranslate(glm::vec3 trans) {
     this->trans += trans;
     this->AABBmin += trans;
     this->AABBmax += trans;
-    
+
     fixBoundingBoxes();
 }
 
 void GameObject::doRotate(glm::vec3 axis, float deg) {
     this->rotate = glm::rotate(this->rotate, deg, axis);
     this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
+    this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
     this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
-    
+    this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
+
     fixBoundingBoxes();
 }
 
@@ -199,7 +201,7 @@ void GameObject::doScale(glm::vec3 scale) {
     this->scale *= scale;
     this->AABBmin *= scale;
     this->AABBmax *= scale;
-    
+
     fixBoundingBoxes();
 }
 
@@ -230,7 +232,7 @@ void GameObject::printTrans() {
     printf("(%lf, %lf, %lf)", trans.x, trans.y, trans.z);
 }
 
-void GameObject::onEvent(SoundPlayer *soundPlayer){
+void GameObject::onEvent(SoundPlayer *soundPlayer) {
     //soundPlayer->playSound("GameStart");
 }
 

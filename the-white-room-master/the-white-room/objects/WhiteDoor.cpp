@@ -14,7 +14,7 @@ WhiteDoor::WhiteDoor() {
     GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/door/Door.obj",
             IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
-    
+
 #if 0
     //cube for the room/floor
     Mesh *doorMesh = GeometryCreator::CreateCube(vec3(.1f, 6.f, 3.f));
@@ -62,7 +62,7 @@ WhiteDoor::WhiteDoor() {
 
     //setTrans(vec3(9.5f, GROUND_POS - 1.5f, 0.f));
 #endif
-    
+
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -76,14 +76,16 @@ WhiteDoor::WhiteDoor() {
     isClicked = false;
     isClosed = true;
     timeSpent = 0.0;
-    
+
     doorAngle = 180.f;
-    
     doScale(glm::vec3(ROOM_SIZE / 5.f));
-    
+
     doRotate(glm::vec3(0, 1, 0), doorAngle);
-    doRotate(glm::vec3(0,0,1), -doorAngle);
-    doTranslate(glm::vec3(1.75f, -2.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
+    //doRotate(glm::vec3(0, 0, 1), -doorAngle);
+    //doTranslate(glm::vec3(1.75f, -2.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
+    doTranslate(glm::vec3(1.85f, -3.8f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
+    prevAABBmin = AABBmin;
+    std::cout << "prevAABBmin: " << printVec3Coordinates(prevAABBmin) << std::endl;
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
@@ -92,6 +94,7 @@ WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
 WhiteDoor::~WhiteDoor() {
 }
 #if 0
+
 void WhiteDoor::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
         glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc) {
 #if 0
@@ -104,29 +107,24 @@ void WhiteDoor::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 #endif
 
 void WhiteDoor::update(float dt) {
-    glm::vec3 prevBoundMin = AABBmin;
-    
     if (!isClosed) {
-        if(timeSpent < 1.5){
-            doorAngle = 1;
-            doTranslate(glm::vec3(2.f, 0.f, 0.f));
-            doRotate(glm::vec3(0,1,0), doorAngle);
-            doTranslate(glm::vec3(-2.f, 0.f, 0.f));
-        
-            //float distanceX = sqrt(pow(AABBmin.x - prevBoundMin.x, 2));
-            //std::cout << "distance: " << distanceX << std::endl;
-            //doTranslate(glm::vec3(distanceX,0,0));
-            //doTranslate(glm::vec3(1, 0,0));
+        if (timeSpent < .75) {
+            //doTranslate(glm::vec3(2.f, 0.f, -2.f));
+            doRotate(glm::vec3(0, 1, 0), 1.f);
+            float xMove = -.075f;
+            float zMove = -.065f;//-.3f;
+            doTranslate(glm::vec3(xMove, 0.f, zMove));
             timeSpent += (double) dt;
-        }else{
-            doRotate(glm::vec3(0,1,0), 0);
+        } else {
+            doRotate(glm::vec3(0, 1, 0), 0);
             rotSpeed = 0.f;
         }
 
     }
 }
 
-    //doRotate(glm::vec3(0,1,0), 0);
+//doRotate(glm::vec3(0,1,0), 0);
+
 /*
 bool WhiteDoor::doesCollide(GameObject* other) {
     //printf("hello\n");
@@ -135,15 +133,16 @@ bool WhiteDoor::doesCollide(GameObject* other) {
 #endif
     return this->doesCollide(other);
 }
-*/
-void WhiteDoor::onEvent(SoundPlayer *soundPlayer){
-    soundPlayer->playSound("TryDoor");
-#if 0
-    door->color = (glm::vec3(1.f, 0.f, 0.f));
-    knob->color = (glm::vec3(1.f, 0.f, 0.f));
-#endif
-    //ambColor = glm::vec3(1.f, 0.f, 0.f);
-    isClosed = false;
+ */
+void WhiteDoor::onEvent(SoundPlayer *soundPlayer) {
+    if (hasWon()) {
+        if (isClosed) {
+                soundPlayer->playSound("OpenDoor");
+        }
+        isClosed = false;
+    } else {
+        soundPlayer->playSound("TryDoor");
+    }
 }
 
 std::string WhiteDoor::className() {

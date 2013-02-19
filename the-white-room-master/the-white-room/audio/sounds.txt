@@ -1,6 +1,7 @@
 Click:audio/click.wav
 GameStart:audio/gameStart.wav
 TryDoor:audio/tryDoor.wav
+OpenDoor:audio/DoorWoodOpen_02.wav
 SafeAppear:audio/safeAppear.wav
 TrySafe:audio/trySafe.wav
 BooksAppear:audio/booksAppear.wav
