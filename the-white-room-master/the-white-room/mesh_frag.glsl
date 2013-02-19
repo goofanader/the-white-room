@@ -28,7 +28,7 @@ if (uUseTex != 0) {
     }
 
 
-  vec3 specL = dot(uSpecColor, uLightColor);
+  vec3 specL = vec3(dot(uSpecColor, uLightColor));
   //vec3 specL = uSpecColor * uLightColor;
   vec3 V;
   V = normalize(uCamTrans - vThePosition);
