@@ -76,6 +76,11 @@ Room::Room() {
     std::cout << "; Max: " << printVec3Coordinates(room[4].AABBmax) << std::endl;
     room[4].doTranslate(vec3(-(room[4].AABBmax.x + room[4].AABBmin.x) / 2.f, -(room[4].AABBmax.y + room[4].AABBmin.y) / 2.f, ROOM_SIZE));
 
+    northBoundLeftMin = room[4].AABBmin;
+    northBoundLeftMax = glm::vec3(room[4].AABBmin.x / 2.f + (ROOM_SIZE / 5.f) + 5.f, room[4].AABBmax.y, room[4].AABBmax.z);
+    northBoundRightMin = glm::vec3(room[4].AABBmax.x / 2.f - (ROOM_SIZE / 5.f) - 5.f, room[4].AABBmin.y, room[4].AABBmin.z);
+    northBoundRightMax = room[4].AABBmax;
+
     //south wall
     room[5].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
     room[5].doTranslate(vec3(0.f, 0.f, -ROOM_SIZE));
@@ -89,8 +94,10 @@ Room::Room() {
     //the floor
     room[1].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
     room[1].doTranslate(vec3(0.f, room[3].AABBmin.y, 0.f));
-    
+
     //GameObject::roomHeight = room[3].AABBmax.y;
+    AABBmin = glm::vec3(-200.f);
+    AABBmax = glm::vec3(-200.f);
 }
 
 Room::Room(const Room& orig) {
@@ -116,16 +123,28 @@ void Room::update(float dt) {
 bool Room::doesCollide(GameObject* other) {
 #if 1
     for (int i = 2; i < NUM_WALLS; i++) {
-        //printf("room %d:\n", i);
-#if 0
-        printf("room %d. AABBmin: (%lf, %lf, %lf);", i, room[i].AABBmin.x,
-                room[i].AABBmin.y, room[i].AABBmin.z);
-        printf(" AABBmax: (%lf, %lf, %lf)\n=========\n", room[i].AABBmax.x,
-                room[i].AABBmax.y, room[i].AABBmax.z);
-#endif
-        if (room[i].doesCollide(other)) {
-            //printf("nya\n");
-            return true;
+        if (i != 4) {
+            if (room[i].doesCollide(other)) {
+                //printf("nya\n");
+                return true;
+            }
+        } else {
+            if (northBoundLeftMin.x <= other->AABBmax.x &&
+                    //this->northBoundLeftMin.y <= other->AABBmax.y &&
+                    this->northBoundLeftMin.z <= other->AABBmax.z &&
+                    this->northBoundLeftMax.x >= other->AABBmin.x &&
+                    //this->northBoundLeftMax.y >= other->AABBmin.y &&
+                    this->northBoundLeftMax.z >= other->AABBmin.z) {
+                return true;
+            }
+            if (this->northBoundRightMin.x <= other->AABBmax.x &&
+                    //this->northBoundRightMin.y <= other->AABBmax.y &&
+                    this->northBoundRightMin.z <= other->AABBmax.z &&
+                    this->northBoundRightMax.x >= other->AABBmin.x &&
+                    //this->northBoundRightMax.y >= other->AABBmin.y &&
+                    this->northBoundRightMax.z >= other->AABBmin.z) {
+                return true;
+            }
         }
     }
 #endif

@@ -272,7 +272,10 @@ void Running::mouseClicked(int button, int action) {
                 if (reach.x >= curr->AABBmin.x && reach.x <= curr->AABBmax.x &&
                         reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
                         reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z) {
-
+                    std::cout << "clicked on... " << curr->className();
+                    std::cout << ". AABBmin=" << printVec3Coordinates(curr->AABBmin);
+                    std::cout << ", AABBmax=" << printVec3Coordinates(curr->AABBmax);
+                    std::cout << std::endl;
                     curr->onEvent(soundPlayer);
                     sound = 1;
                     //curr->changeColor(glm::vec3(1.0f, 0.f, 0.f));
@@ -320,6 +323,8 @@ void Running::mouseClicked(int button, int action) {
                         }
                         printf("oh no! out of order :(\n");
                     }
+                    
+                    break;
                 }
 
             }
@@ -385,7 +390,7 @@ void Running::keyPressed(float dt, int keyDown[]) {
         glfwEnable(GLFW_MOUSE_CURSOR);
     } else if (keyDown['P'] && isPaused()) {
         resume();
-        //glfwDisable(GLFW_MOUSE_CURSOR);
+        glfwDisable(GLFW_MOUSE_CURSOR);
     }
 }
 

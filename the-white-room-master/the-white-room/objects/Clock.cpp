@@ -103,6 +103,9 @@ Clock::Clock() {
     //weight1->doTranslate(glm::vec3(-2,0,0) + body->trans);
     //weight2->trans += body->trans;
     //weight3->doTranslate(glm::vec3(2,0,0) + body->trans);
+    
+    AABBmin = body->AABBmin;
+    AABBmax = body->AABBmax;
 }
 
 Clock::Clock(const Clock& orig) {

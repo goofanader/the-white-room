@@ -68,7 +68,7 @@ public:
 
     virtual void onEvent(SoundPlayer *soundPlayer);
     virtual void resetEvent(SoundPlayer *soundPlayer);
-
+    
     glm::vec3 dir;
     float speed;
     glm::vec3 rotAxis;

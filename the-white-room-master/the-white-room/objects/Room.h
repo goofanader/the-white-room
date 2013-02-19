@@ -26,6 +26,8 @@ public:
     std::string className();
 private:
     GameObject room[NUM_WALLS];
+    glm::vec3 northBoundRightMin, northBoundRightMax;
+    glm::vec3 northBoundLeftMin, northBoundLeftMax;
 };
 
 #endif	/* ROOM_H */

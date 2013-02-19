@@ -171,9 +171,9 @@ void GameObject::doTranslate(glm::vec3 trans) {
 
 void GameObject::doRotate(glm::vec3 axis, float deg) {
     this->rotate = glm::rotate(this->rotate, deg, axis);
+    //this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
     this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
-    this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
-    this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
+    //this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
     this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
 
     fixBoundingBoxes();
