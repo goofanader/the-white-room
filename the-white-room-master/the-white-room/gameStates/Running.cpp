@@ -160,6 +160,17 @@ void Running::update(float dt) {
         }
         camPrevTrans = playerCamera->trans;
     }
+
+    if(playerCamera->trans.x > ROOM_SIZE || playerCamera->trans.x < -ROOM_SIZE ||
+        playerCamera->trans.z > ROOM_SIZE || playerCamera->trans.z < -ROOM_SIZE){
+        printf("You exited the white room and won the game!\n");
+
+        exit(EXIT_SUCCESS);
+    }
+        
+
+
+
 }
 
 void Running::mouseClicked(int button, int action) {
