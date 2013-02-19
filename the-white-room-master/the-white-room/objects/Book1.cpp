@@ -32,7 +32,7 @@ Book1::Book1() {
     doRotate(glm::vec3(0,1,0), 90);
 
     //doTranslate(glm::vec3(-15.5f,-8.f - 6.f,0.f));
-    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
+    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -3.f, 0.0f));
 
     texNum = numTextures();
     LoadTexture((char *)"objects/meshes/bookshelf/book1UV.bmp", texNum);

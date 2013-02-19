@@ -24,7 +24,7 @@ Chandelier::Chandelier() {
     isClicked = false;
     doScale(glm::vec3(3.f));
     doTranslate(glm::vec3(0.f,
-            ROOM_SIZE / ROOM_HEIGHT_DIVISION - AABBmax.y, 0.f));
+            getRoomCeilHeight() - AABBmax.y + .5f, 0.f));
     //this->doScale(glm::vec3(3.f));
 
     texNum = numTextures();

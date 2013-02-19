@@ -31,7 +31,6 @@ Running::Running() {
 
     isFoot1 = true;
     timeSpent = 0;
-    //objects.insert(new Room());
 
     printf("try the sound\n");
     soundPlayer = new SoundPlayer();
@@ -55,10 +54,6 @@ Running::Running() {
     glfwDisable(GLFW_MOUSE_CURSOR);
 
     mouseClicks = MAX_MOUSE_CLICKS;
-
-    //printf("woof\n");
-
-    //printf("nya\n");
 }
 
 void Running::initializeCamera() {
@@ -136,7 +131,8 @@ void Running::draw() {
         (*iter)->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                 getGC()->lightColor, getGC());
     }
-    //camBeta += .1;
+    
+    //if you want to draw where the light is, uncomment code below.
     //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
     //      getGC()->lightColor, getGC());
 }
@@ -145,29 +141,8 @@ void Running::update(float dt) {
     if (!isPaused()) {
         playerCamera->AABBmin = playerCamera->trans - .5f;
         playerCamera->AABBmax = playerCamera->trans + .5f;
-
-        //play the walking feet sound.
+        
         timeSpent += dt;
-#if 0
-        if (playerCamera->trans != camPrevTrans && timeSpent >= MAX_FOOT_SPACE) {
-            timeSpent = 0.0;
-            if (isFoot1) {
-                printf("foot1 sound\n");
-                soundPlayer->playSound("Footstep1");
-                isFoot1 = false;
-            } else {
-                printf("foot2 sound\n");
-                soundPlayer->playSound("Footstep2");
-                isFoot1 = true;
-            }
-        } else if (playerCamera->trans != camPrevTrans && timeSpent < MAX_FOOT_SPACE) {
-            timeSpent += (double) dt;
-        } else if (playerCamera->trans == camPrevTrans) {
-            printf("standing still.\n");
-            timeSpent = MAX_FOOT_SPACE;
-            isFoot1 = true;
-        }
-#endif
 
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
@@ -220,8 +195,6 @@ void Running::mouseClicked(int button, int action) {
 
     if (action == GLFW_RELEASE && mouseClicks >= MAX_MOUSE_CLICKS) {
         mouseClicks = 0;
-        //Sound code
-        //soundPlayer->playSound("Click");
 
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
@@ -323,8 +296,6 @@ void Running::mouseClicked(int button, int action) {
                         curr->onEvent(soundPlayer);
                     }
                     sound = 1;
-                    //curr->changeColor(glm::vec3(1.0f, 0.f, 0.f));
-                    //curr->update(0.f);
 #if 0
                     //if true, want to switch out to the next event
                     if (eventNum <= MAX_EVENTS && currEvent->getEventNum() == eventNum &&
@@ -376,13 +347,6 @@ void Running::mouseClicked(int button, int action) {
 
                     break;
                 }
-
-            }
-
-            if (!sound) {
-                //soundPlayer->playSound("Click");
-            } else {
-                sound = 0;
             }
         }
     } else mouseClicks++;
@@ -404,7 +368,6 @@ void Running::mouseMoved(int x, int y, float prevX, float prevY) {
 
 void Running::keyPressed(float dt, int keyDown[]) {
     if (!keyDown['P'] && !isPaused()) {
-        //handleFirstPersonMovement(dt, keyDown);
         // Camera movement
         glm::vec3 up = glm::vec3(0, 1, 0);
         glm::vec3 forward = glm::normalize(vec3(camLookAt.x - playerCamera->trans.x, 0.0,
@@ -428,11 +391,11 @@ void Running::keyPressed(float dt, int keyDown[]) {
                 timeSpent = 0.0;
                 if (isFoot1) {
                     //printf("foot1 sound\n");
-                    footSounds->playSound("Footstep1");
+                    //footSounds->playSound("Footstep1");
                     isFoot1 = false;
                 } else {
                     //printf("foot2 sound\n");
-                    footSounds->playSound("Footstep2");
+                    //footSounds->playSound("Footstep2");
                     isFoot1 = true;
                 }
             }
@@ -443,10 +406,8 @@ void Running::keyPressed(float dt, int keyDown[]) {
         updateLookAt();
     } else if (keyDown['P'] && !isPaused()) {
         pause();
-        glfwEnable(GLFW_MOUSE_CURSOR);
     } else if (keyDown['P'] && isPaused()) {
         resume();
-        glfwDisable(GLFW_MOUSE_CURSOR);
     }
 }
 
@@ -464,10 +425,12 @@ void Running::dKeyPressed(glm::vec3 vecU) {
 
 void Running::pause() {
     State::pause();
+    glfwEnable(GLFW_MOUSE_CURSOR);
 }
 
 void Running::resume() {
     State::resume();
+    glfwDisable(GLFW_MOUSE_CURSOR);
 }
 
 void Running::printObjects() {

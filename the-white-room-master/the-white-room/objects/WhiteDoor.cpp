@@ -77,12 +77,13 @@ WhiteDoor::WhiteDoor() {
     timeSpent = 0.0;
 
     doorAngle = 180.f;
-    doScale(glm::vec3(ROOM_SIZE / 5.f));
+    doScale(glm::vec3(ROOM_SIZE / 5.f,ROOM_SIZE / 5.f -.45f,ROOM_SIZE / 5.f));
 
     doRotate(glm::vec3(0, 1, 0), doorAngle);
     //doRotate(glm::vec3(0, 0, 1), -doorAngle);
     //doTranslate(glm::vec3(1.75f, -2.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
-    doTranslate(glm::vec3(1.85f, -3.8f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
+    doTranslate(glm::vec3(1.9f, getRoomFloorHeight().y - AABBmin.y
+            /*-3.8f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
     prevAABBmin = AABBmin;
     std::cout << "prevAABBmin: " << printVec3(prevAABBmin) << std::endl;
 

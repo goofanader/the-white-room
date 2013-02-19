@@ -40,6 +40,8 @@ using namespace glm;
 
 GameConstants gc;
 bool g_hasWon;
+glm::vec3 roomFloorHeight;
+float roomCeilHeight;
 int const numSquares = 100;
 
 GameObject cubes[numSquares];
@@ -122,6 +124,21 @@ bool hasWon() {
 
 void setIfWon(bool winning) {
     g_hasWon = winning;
+}
+
+glm::vec3 getRoomFloorHeight() {
+    return roomFloorHeight;
+}
+
+void setRoomFloorHeight(glm::vec3 newHeight) {
+    roomFloorHeight = newHeight;
+}
+
+float getRoomCeilHeight() {
+    return roomCeilHeight;
+}
+void setRoomCeilHeight(float newHeight) {
+    roomCeilHeight = newHeight;
 }
 
 void SetProjectionMatrix() {
@@ -607,6 +624,9 @@ void initializeShaderVariables() {
 
 int main(int argc, char *argv[]) {
     g_hasWon = false;
+    roomFloorHeight = vec3(0.f);
+    roomCeilHeight = 0.f;
+    
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }

@@ -17,5 +17,10 @@ unsigned int getWindowHeight();
 std::string printVec3(glm::vec3 coordinates);
 bool hasWon();
 void setIfWon(bool winning);
+
+glm::vec3 getRoomFloorHeight();
+void setRoomFloorHeight(glm::vec3 newHeight);
+float getRoomCeilHeight();
+void setRoomCeilHeight(float newHeight);
 #endif	/* MAIN_H */
 

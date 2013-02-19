@@ -93,7 +93,8 @@ Clock::Clock() {
             //ROOM_SIZE - AABBmax.z - 5));
     //body->doRotate(glm::vec3(0,1,0), 225);
     body->doRotate(glm::vec3(0,1,0), 180);
-    body->doTranslate(glm::vec3(-3.25f - 8.f, -2.f, ROOM_SIZE - 2.f));
+    body->doTranslate(glm::vec3(-3.25f - 8.f, 
+            getRoomFloorHeight().y - body->AABBmin.y, ROOM_SIZE - 2.f));
     
     weight1->doTranslate(body->trans);
     weight2->doTranslate(body->trans);

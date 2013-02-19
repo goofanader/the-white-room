@@ -98,6 +98,9 @@ Room::Room() {
     //GameObject::roomHeight = room[3].AABBmax.y;
     AABBmin = glm::vec3(-200.f);
     AABBmax = glm::vec3(-200.f);
+    
+    setRoomFloorHeight(glm::vec3(0.f, room[3].AABBmin.y, 0.f));
+    setRoomCeilHeight(room[3].AABBmax.y);
 }
 
 Room::Room(const Room& orig) {

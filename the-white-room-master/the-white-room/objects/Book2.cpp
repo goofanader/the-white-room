@@ -32,7 +32,7 @@ Book2::Book2() {
 
     //doTranslate(glm::vec3(-15.5f,-8.f - 0.f,3.f));
     //translate to Book1's pos
-    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
+    doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -3.f, 0.0f));
     //translate to its own pos
     doTranslate(glm::vec3(0.f, -4.f, 3.f));
 
