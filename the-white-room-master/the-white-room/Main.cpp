@@ -601,7 +601,7 @@ void initializeShaderVariables() {
     //initialize openGL and shader variables
     gc.shader = ShadeProg;
     gc.aspectRatio = (float) windowWidth / windowHeight;
-    gc.lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    gc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
     gc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
     gc.h_aPosition = aPosition;
     gc.h_aNormal = aNormal;
