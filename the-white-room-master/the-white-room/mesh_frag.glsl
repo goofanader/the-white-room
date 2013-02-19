@@ -21,7 +21,14 @@ void main() {
   
   vec4 texColor;
   vec3 tColor;
-  vec3 specL = cross(uSpecColor, uLightColor);
+
+if (uUseTex != 0) {
+        texColor = vec4(texture2D(uTexUnit, vTexCoord));
+        tColor = vec3(texture2D(uTexUnit, vTexCoord));
+    }
+
+
+  vec3 specL = dot(uSpecColor, uLightColor);
   //vec3 specL = uSpecColor * uLightColor;
   vec3 V;
   V = normalize(uCamTrans - vThePosition);
@@ -33,29 +40,27 @@ void main() {
       specL.y *= VdotR;
       specL.z *= VdotR;*/
       
-    if (uUseTex != 0) {
-        texColor = vec4(texture2D(uTexUnit, vTexCoord));
-        tColor = vec3(texture2D(uTexUnit, vTexCoord));
-    }
-      
+          
       specL *= VdotR;// * uLightColor.rgb;// * uSpecStrength;
       //specL *= uSpecStrength;
   //}
 
   vec3 diffL = uDiffColor;
+  if (uUseTex != 0) {
+    diffL = texColor.xyz;
+  }
   float NdotL = max(dot(normalize(vNormal), normalize(vLightDir)), 0.0);
   diffL *= NdotL * uLightColor;
 
   vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
+  if (uUseTex != 0) {
+    ambL = texColor.xyz * uLightColor / 3.0 + vec3(.1, .1, .1) * texColor.xyz;
+  }
 
-  vec3 finColor = (diffL * 1.3 + specL * 1.3) /
-    (.7 + lDist * 0.004 + lDist * lDist * 0.0004) + ambL * 0.85;
+  vec3 finColor = (diffL * 1.3 + specL * 0.3) /
+    (.9 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.85;
   gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
 
-  //testing if this variable is even being set
-  if (uUseTex != 0) {
-    gl_FragColor = texColor;
-  }
 
     if (gl_FragCoord.x >= 397.0 && gl_FragCoord.x <= 403.0 &&
         gl_FragCoord.y >= 297.0 && gl_FragCoord.y <= 303.0) {

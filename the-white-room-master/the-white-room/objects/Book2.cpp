@@ -9,9 +9,8 @@
 
 Book2::Book2() {
     
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/bookshelf/Book2.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -36,6 +35,10 @@ Book2::Book2() {
     doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
     //translate to its own pos
     doTranslate(glm::vec3(0.f, -4.f, 3.f));
+
+    texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/bookshelf/book2UV.bmp", texNum);
+    hasTex = true;
 }
 
 Book2::Book2(const Book2& orig) {

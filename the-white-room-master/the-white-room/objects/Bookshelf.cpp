@@ -8,9 +8,8 @@
 #include "Bookshelf.h"
 
 Bookshelf::Bookshelf() {
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/bookshelf/Bookshelf.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -36,6 +35,11 @@ Bookshelf::Bookshelf() {
     hitTestAABBmax = AABBmax;
     AABBmin = glm::vec3(-200, -200, -200);
     AABBmax = glm::vec3(-200, -200, -200);
+
+    texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/bookshelf/BookshelfUV.bmp", texNum);
+    hasTex = true;
+    
 }
 
 Bookshelf::Bookshelf(const Bookshelf& orig) {

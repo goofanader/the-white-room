@@ -8,10 +8,8 @@
 #include "Book1.h"
 
 Book1::Book1() {
-    
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/bookshelf/Book1.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -35,6 +33,10 @@ Book1::Book1() {
 
     //doTranslate(glm::vec3(-15.5f,-8.f - 6.f,0.f));
     doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -2.f, 0.0f));
+
+    texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/bookshelf/book1UV.bmp", texNum);
+    hasTex = true;
 }
 
 Book1::Book1(const Book1& orig) {
