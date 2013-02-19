@@ -134,4 +134,7 @@ std::string Clock::className() {
 
 void Clock::onEvent(SoundPlayer *soundPlayer) {
     //body->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    soundPlayer->playSound("TrySafe");
+    
+    
 }
