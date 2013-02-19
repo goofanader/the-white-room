@@ -114,7 +114,7 @@ void Room::update(float dt) {
 }
 
 bool Room::doesCollide(GameObject* other) {
-#if 0
+#if 1
     for (int i = 2; i < NUM_WALLS; i++) {
         //printf("room %d:\n", i);
 #if 0

@@ -11,9 +11,8 @@
 #define GROUND_POS -0.5f
 
 WhiteDoor::WhiteDoor() {
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/door/Door.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
 
 #if 0
     //cube for the room/floor
@@ -86,6 +85,11 @@ WhiteDoor::WhiteDoor() {
     doTranslate(glm::vec3(1.85f, -3.8f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
     prevAABBmin = AABBmin;
     std::cout << "prevAABBmin: " << printVec3Coordinates(prevAABBmin) << std::endl;
+
+    texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/door/DoorUV.bmp", texNum);
+    hasTex = true;
+
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {

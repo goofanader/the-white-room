@@ -61,12 +61,11 @@ Safe::Safe() {
     body = new GameObject();
     door = new GameObject();
     
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/safe/SafeBody.obj",
-            body->IBOlen, body->VBO, body->IBO, body->NBO, faceNBO, 
+            body->IBOlen, body->VBO, body->IBO, body->NBO, body->TBO, 
             body->AABBmin, body->AABBmax);
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/safe/SafeDoor.obj",
-            door->IBOlen, door->VBO, door->IBO, door->NBO, faceNBO, 
+            door->IBOlen, door->VBO, door->IBO, door->NBO, door->TBO, 
             door->AABBmin, door->AABBmax);
     
     body->dir = vec3(1.f, 0.f, 0.f);
@@ -115,6 +114,14 @@ Safe::Safe() {
     std::cout << "body: min=(" << AABBmin.x << ", " << AABBmin.y << ", ";
     std::cout << AABBmin.z << "). max=(" << AABBmax.x << ", " << AABBmax.y;
     std::cout << ", " << AABBmax.z << ")" << std::endl;
+
+    body->texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/safe/SafeBodyUV.bmp", body->texNum);
+    body->hasTex = true;
+
+    door->texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/safe/SafeDoor.bmp", door->texNum);
+    door->hasTex = true;
 }
 
 Safe::Safe(const Safe& orig) {

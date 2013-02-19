@@ -8,24 +8,23 @@
 #include "Clock.h"
 
 Clock::Clock() {
-    GLuint faceNBO;
     body = new GameObject();
     weight1 = new GameObject();
     weight2 = new GameObject();
     weight3 = new GameObject();
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/clock/ClockBody.obj",
-            body->IBOlen, body->VBO, body->IBO, body->NBO, faceNBO,
+            body->IBOlen, body->VBO, body->IBO, body->NBO, body->TBO,
             body->AABBmin, body->AABBmax);
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/clock/ClockWeight1.obj",
-            weight1->IBOlen, weight1->VBO, weight1->IBO, weight1->NBO, faceNBO,
-            weight1->AABBmin, weight1->AABBmax);
+            weight1->IBOlen, weight1->VBO, weight1->IBO, weight1->NBO, 
+            weight1->TBO, weight1->AABBmin, weight1->AABBmax);
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/clock/ClockWeight2.obj",
-            weight2->IBOlen, weight2->VBO, weight2->IBO, weight2->NBO, faceNBO,
-            weight2->AABBmin, weight2->AABBmax);
+            weight2->IBOlen, weight2->VBO, weight2->IBO, weight2->NBO, 
+            weight2->TBO, weight2->AABBmin, weight2->AABBmax);
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/clock/ClockWeight3.obj",
-            weight3->IBOlen, weight3->VBO, weight3->IBO, weight3->NBO, faceNBO,
-            weight3->AABBmin, weight3->AABBmax);
+            weight3->IBOlen, weight3->VBO, weight3->IBO, weight3->NBO, 
+            weight3->TBO, weight3->AABBmin, weight3->AABBmax);
 
     body->dir = vec3(1.f, 0.f, 0.f);
     body->speed = 0.f;
@@ -39,6 +38,10 @@ Clock::Clock() {
     //body->diffColor = glm::vec3(.5f);
     body->diffColor = glm::vec3(.42f, .22f, .08f);
     body->isClicked = false;
+
+    body->texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/clock/ClockUV.bmp", body->texNum);
+    body->hasTex = true;
 
     weight1->dir = vec3(1.f, 0.f, 0.f);
     weight1->speed = 0.f;
