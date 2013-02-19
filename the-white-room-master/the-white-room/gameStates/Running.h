@@ -50,6 +50,7 @@ private:
     WhiteDoor* door;
     std::set<GameObject*> objects;
     SoundPlayer *soundPlayer;
+    SoundPlayer *footSounds;
     
     float camAlpha;
     float camBeta;
@@ -59,6 +60,9 @@ private:
     int eventNum, mouseClicks;
     Event* currEvent;
     EventSwitch switches[MAX_SWITCHES];
+    
+    double timeSpent;
+    bool isFoot1;
     
     void initializeCamera();
     void initializeLight();

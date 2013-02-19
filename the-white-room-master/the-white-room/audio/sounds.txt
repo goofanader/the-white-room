@@ -13,3 +13,6 @@ Bell1:audio/bell1.wav
 Bell2:audio/bell2.wav
 Bell3:audio/bell3.wav
 BellTones:audio/threebells.wav
+Footstep1:audio/footstep1.wav
+Footstep2:audio/footstep2.wav
+TickTock:audio/clockTicking.wav

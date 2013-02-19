@@ -143,17 +143,6 @@ void WhiteDoor::update(float dt) {
     }
 }
 
-//doRotate(glm::vec3(0,1,0), 0);
-
-/*
-bool WhiteDoor::doesCollide(GameObject* other) {
-    //printf("hello\n");
-#if 0
-    return door->doesCollide(other);
-#endif
-    return this->doesCollide(other);
-}
- */
 void WhiteDoor::onEvent(SoundPlayer *soundPlayer) {
     if (hasWon()) {
         if (isClosed) {

@@ -106,6 +106,7 @@ Clock::Clock() {
     
     AABBmin = body->AABBmin;
     AABBmax = body->AABBmax;
+    haveLoadedPlayer = false;
 }
 
 Clock::Clock(const Clock& orig) {
@@ -135,4 +136,10 @@ std::string Clock::className() {
 void Clock::onEvent(SoundPlayer *soundPlayer) {
     //body->ambColor = glm::vec3(1.f, 0.f, 0.f);
     soundPlayer->playSound("BellTones");
+    if (!haveLoadedPlayer) {
+        printf("putting a sound player into clock\n");
+        clockSoundPlayer = soundPlayer;
+        clockSoundPlayer->playContinuous("TickTock");
+        haveLoadedPlayer = true;
+    }
 }

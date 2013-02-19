@@ -14,10 +14,11 @@
 #define HARDCODE_OBJECTS_IN 0
 #define MAX_EVENTS 0
 
-#define MOVE_SPEED 20.f
+#define MOVE_SPEED 15.f
 #define PI 3.14159f
 
 #define MAX_MOUSE_CLICKS 0
+#define MAX_FOOT_SPACE .4
 
 Running::Running() {
     initializeCamera();
@@ -28,11 +29,15 @@ Running::Running() {
 
     eventNum = 1;
 
+    isFoot1 = true;
+    timeSpent = 0;
     //objects.insert(new Room());
 
     printf("try the sound\n");
     soundPlayer = new SoundPlayer();
     printf("loaded the sound player\n");
+    footSounds = new SoundPlayer();
+    printf("loaded foot sounds\n");
 
     switches[0].setClassName("Book1");
     switches[1].setClassName("Book2");
@@ -65,7 +70,7 @@ void Running::initializeCamera() {
     playerCamera->speed = 0.f;
     playerCamera->rotAxis = vec3(0.f, 1.f, 0.f);
     playerCamera->rotSpeed = 0.f;
-    playerCamera->doTranslate(vec3(-8.f, -.7f, 0.f));
+    playerCamera->doTranslate(vec3(0.f, 0.f, 0.f));
     playerCamera->scale = vec3(1.f);
 
     camPrevTrans = playerCamera->trans;
@@ -112,7 +117,7 @@ void Running::loadObjectsFromEvent() {
             }
         }
     }
-    
+
     if (clockSound) {
         clockSound->onEvent(soundPlayer);
     }
@@ -133,14 +138,36 @@ void Running::draw() {
     }
     //camBeta += .1;
     //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-      //      getGC()->lightColor, getGC());
+    //      getGC()->lightColor, getGC());
 }
 
 void Running::update(float dt) {
     if (!isPaused()) {
-        playerCamera->update(dt);
         playerCamera->AABBmin = playerCamera->trans - .5f;
         playerCamera->AABBmax = playerCamera->trans + .5f;
+
+        //play the walking feet sound.
+        timeSpent += dt;
+#if 0
+        if (playerCamera->trans != camPrevTrans && timeSpent >= MAX_FOOT_SPACE) {
+            timeSpent = 0.0;
+            if (isFoot1) {
+                printf("foot1 sound\n");
+                soundPlayer->playSound("Footstep1");
+                isFoot1 = false;
+            } else {
+                printf("foot2 sound\n");
+                soundPlayer->playSound("Footstep2");
+                isFoot1 = true;
+            }
+        } else if (playerCamera->trans != camPrevTrans && timeSpent < MAX_FOOT_SPACE) {
+            timeSpent += (double) dt;
+        } else if (playerCamera->trans == camPrevTrans) {
+            printf("standing still.\n");
+            timeSpent = MAX_FOOT_SPACE;
+            isFoot1 = true;
+        }
+#endif
 
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
@@ -150,7 +177,7 @@ void Running::update(float dt) {
             curr = (*iter);
 
             curr->update(dt);
-            
+
             if (curr->doesCollide(playerCamera)) {
                 //we need to stop player movement as well AKA
                 //don't go through objects :<
@@ -164,12 +191,12 @@ void Running::update(float dt) {
         camPrevTrans = playerCamera->trans;
     }
 
-    if(playerCamera->trans.x > ROOM_SIZE || playerCamera->trans.x < -ROOM_SIZE ||
-        playerCamera->trans.z > ROOM_SIZE || playerCamera->trans.z < -ROOM_SIZE){
+    if (playerCamera->trans.x > ROOM_SIZE || playerCamera->trans.x < -ROOM_SIZE ||
+            playerCamera->trans.z > ROOM_SIZE || playerCamera->trans.z < -ROOM_SIZE) {
         printf("====\nYou exited the white room and won the game!\n");
 
         exit(EXIT_SUCCESS);
-}
+    }
 
 
 
@@ -329,7 +356,7 @@ void Running::mouseClicked(int button, int action) {
                         curr->isClicked = true;
                         curr->onEvent(soundPlayer);
                         setIfWon(true);
-                        
+
                         //cause the white door to open
                         if (!switches[3].isSwitchOn()) {
                             switches[3].getGameObject()->onEvent(soundPlayer);
@@ -346,7 +373,7 @@ void Running::mouseClicked(int button, int action) {
                         }
                         printf("oh no! out of order :(\n");
                     }
-                    
+
                     break;
                 }
 
@@ -357,16 +384,6 @@ void Running::mouseClicked(int button, int action) {
             } else {
                 sound = 0;
             }
-
-
-            /*
-            printf("AABBmins = %f, %f, %f\n",
-            curr->AABBmin.x, curr->AABBmin.y, curr->AABBmin.z);
-
-            printf("AABBmaxes = %f, %f, %f\n",
-            curr->AABBmax.x, curr->AABBmax.y, curr->AABBmax.z);
-             */
-
         }
     } else mouseClicks++;
 }
@@ -391,7 +408,7 @@ void Running::keyPressed(float dt, int keyDown[]) {
         // Camera movement
         glm::vec3 up = glm::vec3(0, 1, 0);
         glm::vec3 forward = glm::normalize(vec3(camLookAt.x - playerCamera->trans.x, 0.0,
-                                            camLookAt.z - playerCamera->trans.z));
+                camLookAt.z - playerCamera->trans.z));
         glm::vec3 right = glm::normalize(glm::cross(forward, up));
 
         //bind player to the floor so they can't fly through the scene :)
@@ -405,8 +422,24 @@ void Running::keyPressed(float dt, int keyDown[]) {
             playerCamera->trans += MOVE_SPEED * right * dt;
         if (keyDown['A'])
             playerCamera->trans -= MOVE_SPEED * right * dt;
-        //if (playerCamera->trans.y <= 0.f)
-        //  playerCamera->trans.y = 0.f;
+
+        if (keyDown['W'] || keyDown['S'] || keyDown['D'] || keyDown['A']) {
+            if (timeSpent >= MAX_FOOT_SPACE) {
+                timeSpent = 0.0;
+                if (isFoot1) {
+                    //printf("foot1 sound\n");
+                    footSounds->playSound("Footstep1");
+                    isFoot1 = false;
+                } else {
+                    //printf("foot2 sound\n");
+                    footSounds->playSound("Footstep2");
+                    isFoot1 = true;
+                }
+            }
+        } else {
+            isFoot1 = true;
+        }
+
         updateLookAt();
     } else if (keyDown['P'] && !isPaused()) {
         pause();

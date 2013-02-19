@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "MeshLoader.h"
 #include <iostream>
+#include "../audio/audio.h"
 
 class Clock : public GameObject {
 public:
@@ -27,6 +28,8 @@ public:
     void onEvent(SoundPlayer *soundPlayer);
 private:
     GameObject *body, *weight1, *weight2, *weight3;
+    SoundPlayer *clockSoundPlayer;
+    bool haveLoadedPlayer;
 };
 
 #endif	/* CLOCK_H */

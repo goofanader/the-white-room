@@ -265,7 +265,7 @@ void Initialize() {
   
  glPopMatrix();
     
-    glClearColor(0.8f, 0.8f, 1.0f, 1.0f);
+    glClearColor(0.f, 0.f, 0.0f, 1.0f);
 
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
@@ -432,9 +432,9 @@ std::string printVec3(glm::vec3 coordinates) {
     std::string out = "(";
     out += static_cast<ostringstream*>( &(ostringstream() << coordinates.x) )->str();
     out += ", ";
-    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.y) )->str();;
+    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.y) )->str();
     out += ", ";
-    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.z) )->str();;
+    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.z) )->str();
     out += ")";
     return out;
 }
@@ -534,29 +534,6 @@ int getScreenSize() {
 
     XCloseDisplay(pdsp);
     return 0;
-}
-
-void handleFirstPersonMovement(float dt) {
-    // Camera movement
-    glm::vec3 up = glm::vec3(0, 1, 0);
-    glm::vec3 forward = glm::normalize(camLookAt - playerCamera->trans);
-    glm::vec3 right = glm::normalize(glm::cross(forward, up));
-    const float MOVE_SPEED = 8.f;
-
-    //bind player to the floor so they can't fly through the scene :)
-    forward = glm::vec3(forward.x, 0, forward.z);
-
-    if (keyDown['W'])
-        playerCamera->trans += MOVE_SPEED * forward * dt;
-    if (keyDown['S'])
-        playerCamera->trans -= MOVE_SPEED * forward * dt;
-    if (keyDown['D'])
-        playerCamera->trans += MOVE_SPEED * right * dt;
-    if (keyDown['A'])
-        playerCamera->trans -= MOVE_SPEED * right * dt;
-    if (playerCamera->trans.y <= 0.f)
-        playerCamera->trans.y = 0.f;
-    updateLookAt();
 }
 
 void gameLoop() {
