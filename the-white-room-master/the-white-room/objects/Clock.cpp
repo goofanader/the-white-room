@@ -68,8 +68,9 @@ Clock::Clock() {
     weight2->ambColor = glm::vec3(0.75f);
     weight2->specColor = glm::vec3(.5f);
     //weight2->diffColor = glm::vec3(1.0, 0.85, 0.0);
-    weight2->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
-    weight2->isClicked = false;
+        weight2->isClicked = false;
+    weight2->diffColor = glm::vec3(1.0f, 0.85f, 0.0f);
+
 
     weight3->dir = vec3(1.f, 0.f, 0.f);
     weight3->speed = 0.f;
@@ -81,7 +82,7 @@ Clock::Clock() {
     //weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
     weight3->ambColor = glm::vec3(0.75f);
     weight3->specColor = glm::vec3(.5f);
-    weight3->diffColor = glm::vec3(1.0f, 0.85f, 0.0f);
+    weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
 
     //weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
     weight3->isClicked = false;
@@ -98,9 +99,9 @@ Clock::Clock() {
     
     weight1->doTranslate(body->trans);
     weight2->doTranslate(body->trans);
-    weight2->doTranslate(glm::vec3(-1.f, 0.f, -0.5f));
+    weight2->doTranslate(glm::vec3(1.f, 0.f, 0.5f));
     weight3->doTranslate(body->trans);
-    weight3->doTranslate(glm::vec3(1.f, 0.f, 0.5f));
+    weight3->doTranslate(glm::vec3(-1.f, 0.f, -0.5f));
     //weight1->doTranslate(glm::vec3(-2,0,0) + body->trans);
     //weight2->trans += body->trans;
     //weight3->doTranslate(glm::vec3(2,0,0) + body->trans);

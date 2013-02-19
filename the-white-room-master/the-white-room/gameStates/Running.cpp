@@ -221,7 +221,8 @@ void Running::mouseClicked(int button, int action) {
             mag = sqrt(x * x + y * y + z * z);
 
             //intersection b/n view vector and planes
-
+            
+            //set normals to planes we're checking against
             for (int i = 0; i < 6; i++) {
                 if (i == 0) {
                     nx = 0.f;
