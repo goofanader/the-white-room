@@ -32,6 +32,7 @@ private:
     float doorAngle;
     double timeSpent;
     glm::vec3 prevAABBmin;
+    bool setNewBounds;
 };
 
 #endif	/* WHITEDOOR_H */

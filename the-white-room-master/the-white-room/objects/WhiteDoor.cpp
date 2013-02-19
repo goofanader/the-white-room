@@ -84,12 +84,12 @@ WhiteDoor::WhiteDoor() {
     //doTranslate(glm::vec3(1.75f, -2.f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
     doTranslate(glm::vec3(1.85f, -3.8f/*-ROOM_SIZE / 2.f + 4*/, ROOM_SIZE - .5f));
     prevAABBmin = AABBmin;
-    std::cout << "prevAABBmin: " << printVec3Coordinates(prevAABBmin) << std::endl;
+    std::cout << "prevAABBmin: " << printVec3(prevAABBmin) << std::endl;
 
     texNum = numTextures();
     LoadTexture((char *)"objects/meshes/door/DoorUV.bmp", texNum);
     hasTex = true;
-
+    setNewBounds = false;
 }
 
 WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
@@ -119,9 +119,25 @@ void WhiteDoor::update(float dt) {
             float zMove = -.065f;//-.3f;
             doTranslate(glm::vec3(xMove, 0.f, zMove));
             timeSpent += (double) dt;
-        } else {
-            doRotate(glm::vec3(0, 1, 0), 0);
-            rotSpeed = 0.f;
+            setNewBounds = true;
+        } else if (setNewBounds) {
+            setNewBounds = false;
+            //AABBmin.x = -7.1f;
+            //AABBmax.x = -6.1f;
+            AABBmin.z *= -1.f;
+            AABBmax.z *= -1.f;
+            AABBmin.z += -1.f;
+            AABBmax.z += 6.f;
+            AABBmin.x += 14.f;
+            AABBmax.x += 10.f;
+            
+            AABBmin.x = -5.025f;
+            AABBmax.x = -4.025f;
+            AABBmin.z = 22.41f;
+            AABBmax.z = 29.12f;
+            this->fixBoundingBoxes();
+            std::cout << "WhiteDoor newBound: AABBmin=" << printVec3(AABBmin);
+            std::cout << "; AABBmax=" << printVec3(AABBmax) << std::endl;
         }
 
     }

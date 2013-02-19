@@ -428,7 +428,7 @@ glfwSwapBuffers();
 //Draw();
 }
 
-std::string printVec3Coordinates(glm::vec3 coordinates) {
+std::string printVec3(glm::vec3 coordinates) {
     std::string out = "(";
     out += static_cast<ostringstream*>( &(ostringstream() << coordinates.x) )->str();
     out += ", ";
@@ -462,31 +462,31 @@ void Keyboard(int key, int state) {
             break;
         case GLFW_KEY_LEFT:
             gc.lightPos = glm::vec3(gc.lightPos.x - .1, gc.lightPos.y, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case GLFW_KEY_RIGHT:
             gc.lightPos = glm::vec3(gc.lightPos.x + .1, gc.lightPos.y, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case GLFW_KEY_UP:
             gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y + .1, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case GLFW_KEY_DOWN:
             gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y - .1, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case 'I':
             gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z + .1);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case 'K':
             gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z - .1);
-            std::cout << "lightPos: " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case 'R':
             gc.lightPos = glm::vec3(0,9,0);
-            std::cout << "Reset lightPos to " << printVec3Coordinates(gc.lightPos) << std::endl;
+            std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;
             // Quit program
         case 'Q':
             exit(EXIT_SUCCESS);

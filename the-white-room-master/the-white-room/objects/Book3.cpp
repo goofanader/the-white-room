@@ -40,13 +40,12 @@ Book3::Book3() {
     LoadTexture((char *) "objects/meshes/bookshelf/book3UV.bmp", texNum);
     hasTex = true;
     
-    std::cout << "Book3: AABBmin=" << printVec3Coordinates(AABBmin);
-    std::cout <<"; AABBmax=" << printVec3Coordinates(AABBmax) << std::endl;
-    AABBmin.x -= 1.f;
+    std::cout << "Book3: AABBmin=" << printVec3(AABBmin);
+    std::cout <<"; AABBmax=" << printVec3(AABBmax) << std::endl;
+    /*AABBmin.x -= 1.f;
     AABBmax.x += 1.f;
-    
     AABBmin.z -= 1.f;
-    AABBmax.z += 1.f;
+    AABBmax.z += 1.f;*/
 }
 
 Book3::Book3(const Book3& orig) {

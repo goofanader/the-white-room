@@ -72,8 +72,8 @@ Room::Room() {
 
     //north wall
     room[4].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
-    std::cout << "north - Min: " << printVec3Coordinates(room[4].AABBmin);
-    std::cout << "; Max: " << printVec3Coordinates(room[4].AABBmax) << std::endl;
+    std::cout << "north - Min: " << printVec3(room[4].AABBmin);
+    std::cout << "; Max: " << printVec3(room[4].AABBmax) << std::endl;
     room[4].doTranslate(vec3(-(room[4].AABBmax.x + room[4].AABBmin.x) / 2.f, -(room[4].AABBmax.y + room[4].AABBmin.y) / 2.f, ROOM_SIZE));
 
     northBoundLeftMin = room[4].AABBmin;
@@ -87,8 +87,8 @@ Room::Room() {
 
     //the ceiling
     room[0].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
-    std::cout << "ceiling - Min: " << printVec3Coordinates(room[0].AABBmin);
-    std::cout << "; Max: " << printVec3Coordinates(room[0].AABBmax) << std::endl;
+    std::cout << "ceiling - Min: " << printVec3(room[0].AABBmin);
+    std::cout << "; Max: " << printVec3(room[0].AABBmax) << std::endl;
     room[0].doTranslate(vec3(0.f, room[3].AABBmax.y, 0.f));
 
     //the floor
@@ -123,7 +123,7 @@ void Room::update(float dt) {
 bool Room::doesCollide(GameObject* other) {
 #if 1
     for (int i = 2; i < NUM_WALLS; i++) {
-        if (i != 4) {
+        if (!hasWon() || (hasWon() && i != 4)) {
             if (room[i].doesCollide(other)) {
                 //printf("nya\n");
                 return true;

@@ -166,7 +166,7 @@ void Running::update(float dt) {
 
     if(playerCamera->trans.x > ROOM_SIZE || playerCamera->trans.x < -ROOM_SIZE ||
         playerCamera->trans.z > ROOM_SIZE || playerCamera->trans.z < -ROOM_SIZE){
-        printf("You exited the white room and won the game!\n");
+        printf("====\nYou exited the white room and won the game!\n");
 
         exit(EXIT_SUCCESS);
 }
@@ -288,10 +288,13 @@ void Running::mouseClicked(int button, int action) {
                         reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z &&
                         (glm::dot(normalizedCam, reach)) > 0.f) {
                     std::cout << "clicked on... " << curr->className();
-                    std::cout << ". AABBmin=" << printVec3Coordinates(curr->AABBmin);
-                    std::cout << ", AABBmax=" << printVec3Coordinates(curr->AABBmax);
+                    std::cout << ". AABBmin=" << printVec3(curr->AABBmin);
+                    std::cout << ", AABBmax=" << printVec3(curr->AABBmax);
                     std::cout << std::endl;
-                    curr->onEvent(soundPlayer);
+                    std::string name = curr->className();
+                    if (name != "Book1" && name != "Book2" && name != "Book3") {
+                        curr->onEvent(soundPlayer);
+                    }
                     sound = 1;
                     //curr->changeColor(glm::vec3(1.0f, 0.f, 0.f));
                     //curr->update(0.f);
@@ -313,18 +316,18 @@ void Running::mouseClicked(int button, int action) {
                         printf("clicked on Book3\n");
                         switches[2].setSwitch(true);
                         curr->isClicked = true;
-                        //curr->onEvent(soundPlayer);
+                        curr->onEvent(soundPlayer);
                     } else if (curr->className() == "Book2" && switches[2].isSwitchOn()) {
                         printf("clicked on Book2 in order\n");
                         switches[1].setSwitch(true);
                         curr->isClicked = true;
-                        //curr->onEvent(soundPlayer);
+                        curr->onEvent(soundPlayer);
                     } else if (curr->className() == "Book1" && switches[2].isSwitchOn() &&
                             switches[1].isSwitchOn()) {
                         printf("clicked on Book1 in order\n");
                         switches[0].setSwitch(true);
                         curr->isClicked = true;
-                        //curr->onEvent(soundPlayer);
+                        curr->onEvent(soundPlayer);
                         setIfWon(true);
                         
                         //cause the white door to open
@@ -335,6 +338,7 @@ void Running::mouseClicked(int button, int action) {
                     } else if ((curr->className() == "Book2" && !switches[2].isSwitchOn()) ||
                             (curr->className() == "Book1" && !(switches[2].isSwitchOn() &&
                             switches[1].isSwitchOn()))) {
+                        curr->onEvent(soundPlayer);
                         for (int i = 0; i < 3; i++) {
                             switches[i].setSwitch(false);
                             switches[i].getGameObject()->isClicked = false;

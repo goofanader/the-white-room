@@ -139,7 +139,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 
 void GameObject::update(float dt) {
     //this needs to be generic
-    doTranslate(glm::vec3(dt * speed * dir));
+    //doTranslate(glm::vec3(dt * speed * dir));
 #if HARDCODE_WALLS
     if (trans.x + AABBmin.x < -9.5) {
         trans.x = -9.5 - AABBmin.x;
@@ -156,7 +156,7 @@ void GameObject::update(float dt) {
         dir = -dir;
     }
 #endif
-    doRotate(rotAxis, dt * rotSpeed);
+    //doRotate(rotAxis, dt * rotSpeed);
     //doRotate(glm::vec3(0, 1, 0), 45);
     //TODO check for collisions
 }

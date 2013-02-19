@@ -39,11 +39,10 @@ Book2::Book2() {
     texNum = numTextures();
     LoadTexture((char *)"objects/meshes/bookshelf/book2UV.bmp", texNum);
     hasTex = true;
-    AABBmin.x -= 1.f;
+    /*AABBmin.x -= 1.f;
     AABBmax.x += 1.f;
-    
     AABBmin.z -= 1.f;
-    AABBmax.z += 1.f;
+    AABBmax.z += 1.f;*/
 }
 
 Book2::Book2(const Book2& orig) {
