@@ -82,6 +82,10 @@ GameObject* createBook3() {
     return new Book3();
 }
 
+GameObject* createMooseHead() {
+    return new MooseHead();
+}
+
 struct {
     GameObject* (*fn)();
     const char* key;
@@ -105,6 +109,7 @@ functionLookupTable[] = {
     { &createBook1, "Book1"},
     { &createBook2, "Book2"},
     { &createBook3, "Book3"},
+    { &createMooseHead, "MooseHead"},
     { NULL, NULL}
 };
 

@@ -207,10 +207,10 @@ void GameObject::doScale(glm::vec3 scale) {
 
 bool GameObject::doesCollide(GameObject *other) {
     return (this->AABBmin.x <= other->AABBmax.x &&
-            //this->AABBmin.y <= other->AABBmax.y &&
+            this->AABBmin.y <= other->AABBmax.y &&
             this->AABBmin.z <= other->AABBmax.z &&
             this->AABBmax.x >= other->AABBmin.x &&
-            //this->AABBmax.y >= other->AABBmin.y &&
+            this->AABBmax.y >= other->AABBmin.y &&
             this->AABBmax.z >= other->AABBmin.z);
 }
 

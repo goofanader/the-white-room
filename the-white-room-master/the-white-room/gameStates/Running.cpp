@@ -21,8 +21,6 @@
 #define MAX_FOOT_SPACE .4
 
 Running::Running() {
-    initializeCamera();
-    initializeLight();
     camAlpha = 0.f;
     camBeta = PI;
     camLookAt = glm::vec3(0.f);
@@ -54,19 +52,25 @@ Running::Running() {
     glfwDisable(GLFW_MOUSE_CURSOR);
 
     mouseClicks = MAX_MOUSE_CLICKS;
+    
+    initializeCamera();
+    initializeLight();
 }
 
 void Running::initializeCamera() {
     //initialize camera
     playerCamera = new GameObject();
-    playerCamera->AABBmin = glm::vec3(-0.5f, -0.5f, -0.5f);
-    playerCamera->AABBmax = glm::vec3(0.5f, 0.5f, 0.5f);
+    playerCamera->AABBmin = glm::vec3(-0.5f, -7.0f, -0.5f);
+    playerCamera->AABBmax = glm::vec3(0.5f, 7.0f, 0.5f);
     playerCamera->dir = vec3(0.f);
     playerCamera->speed = 0.f;
     playerCamera->rotAxis = vec3(0.f, 1.f, 0.f);
     playerCamera->rotSpeed = 0.f;
-    playerCamera->doTranslate(vec3(0.f, 0.f, 0.f));
+    playerCamera->trans = glm::vec3(0.f);
     playerCamera->scale = vec3(1.f);
+    
+    playerCamera->doTranslate(vec3(0.f, 
+            getRoomFloorHeight().y - playerCamera->AABBmin.y, 0.f));
 
     camPrevTrans = playerCamera->trans;
 }
@@ -139,8 +143,12 @@ void Running::draw() {
 
 void Running::update(float dt) {
     if (!isPaused()) {
-        playerCamera->AABBmin = playerCamera->trans - .5f;
-        playerCamera->AABBmax = playerCamera->trans + .5f;
+        playerCamera->AABBmin.x = playerCamera->trans.x - .5f;
+        playerCamera->AABBmin.y = playerCamera->trans.y - 7.f;
+        playerCamera->AABBmin.z = playerCamera->trans.z - .5f;
+        playerCamera->AABBmax.x = playerCamera->trans.x + .5f;
+        playerCamera->AABBmax.y = playerCamera->trans.y + 7.f;
+        playerCamera->AABBmax.z = playerCamera->trans.z + .5f;
         
         timeSpent += dt;
 
@@ -172,10 +180,6 @@ void Running::update(float dt) {
 
         exit(EXIT_SUCCESS);
     }
-
-
-
-
 }
 
 void Running::mouseClicked(int button, int action) {
