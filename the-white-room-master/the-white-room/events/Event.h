@@ -32,6 +32,7 @@ public:
     virtual ~Event();
     EventSwitch* getSwitches();
     int getSwitchNum();
+    void ifObjectSelected(GameObject *curr);
     bool setSwitch(std::string className);
     int getEventNum();
 private:
@@ -47,7 +48,7 @@ private:
     void readFile(std::string filepath);
     bool checkIfAllSwitchesSet();
     void initializeSwitches();
-    void reinitializeSwitches();
+    void reinitializeSwitches(int start, int end);
 };
 
 #endif	/* EVENT_H */

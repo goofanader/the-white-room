@@ -66,6 +66,7 @@ public:
     void changeColor(glm::vec3 c);
     void fixBoundingBoxes();
 
+    virtual void onClick(SoundPlayer *soundPlayer);
     virtual void onEvent(SoundPlayer *soundPlayer);
     virtual void resetEvent(SoundPlayer *soundPlayer);
     

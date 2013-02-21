@@ -6,6 +6,7 @@
  */
 
 #include "Event.h"
+#include "ObjectCreation.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -20,14 +21,16 @@ using namespace std;
  * @param currentEventNum
  */
 Event::Event(int currentEventNum, SoundPlayer *currSoundPlayer) {
-    cout << "creating a new event" << endl;
+    //cout << "creating a new event" << endl;
     //read from event file
-    eventNum = currentEventNum;
+    //eventNum = currentEventNum;
     soundPlayer = currSoundPlayer;
 
+    initializeIndices();
     initializeSwitches();
 
-    readFromEventFile();
+    //readFromEventFile();
+    readFile("events/loadObjects.txt");
 }
 
 void Event::initializeSwitches() {
@@ -38,16 +41,15 @@ void Event::initializeSwitches() {
     }
 }
 
-void Event::reinitializeSwitches() {
-    for (int i = 0; i < switchNum; i++) {
-        eventSwitches[i].setIsEmpty(true);
+void Event::reinitializeSwitches(int start, int end) {
+    for (int i = start; i < end; i++) {
+        //eventSwitches[i].setIsEmpty(true);
         eventSwitches[i].setSwitch(false);
-        eventSwitches[i].getGameObject()->resetEvent(soundPlayer);
+        //eventSwitches[i].getGameObject()->resetEvent(soundPlayer);
     }
 }
 
 void Event::readFromEventFile() {
-
     string dir, filepath;
     int num;
     DIR *dp;
@@ -111,7 +113,7 @@ void Event::readFromEventFile() {
 }
 
 void Event::readFile(std::string filepath) {
-    cout << "reading .evt file " << filepath << endl;
+    cout << "reading " << filepath << endl;
     ifstream fin;
     int numSwitches = 0, itemCount = 0;
     std::string parsedString;
@@ -130,50 +132,22 @@ void Event::readFile(std::string filepath) {
             if (label.find("#") != std::string::npos) {
                 // Comment, skip
                 continue;
-            }
-
-            if (label == "ordered:") {
-                std::string choice;
-                stream >> choice;
-
-                if (choice == "no") {
-                    isEventOrdered = false;
-                } else {
-                    isEventOrdered = true;
-                }
-            } else if (label == "timed:") {
-                std::string choice;
-                stream >> choice;
-
-                if (choice == "no")
-                    isEventTimed = false;
-                else
-                    isEventTimed = true;
-            }
-            else if (label == "numItems:") {
+            } else if (label == "numItems:") {
                 stream >> numSwitches;
                 //sscanf(parsedString.c_str(), "%d", &numSwitches);
                 switchNum = numSwitches;
                 //would initialize array to the number of switches, but
                 //that's a little difficult right now at 5:20AM...
 
-                initializeSwitches();
-            }
-            else if (label == "create") {
+                //initializeSwitches();
+            } else if (label == "create") {
                 std::string item;
                 stream >> item;
-                
+
+                setObjectIndex(item, itemCount);
                 eventSwitches[itemCount].setClassName(item);
                 eventSwitches[itemCount].setSwitch(false);
-                eventSwitches[itemCount++].setIsEmpty(true);
-            } else if (label == "skipCreate") {
-                std::string item;
-                stream >> item;
-                eventSwitches[itemCount].setClassName(item);
-                eventSwitches[itemCount].setSwitch(true);
                 eventSwitches[itemCount++].setIsEmpty(false);
-                
-                std::cout << "Line: " << item << std::endl;
             }
         }
         fin.close();
@@ -195,6 +169,63 @@ int Event::getSwitchNum() {
     return switchNum;
 }
 
+void Event::ifObjectSelected(GameObject *curr) {
+    std::string name = curr->className();
+    
+    if (name != "Book1" && name != "Book2" && name != "Book3") {
+        curr->onEvent(soundPlayer);
+    }
+    
+    /*==================================================================
+     * PUZZLE 1 LOGIC
+     *==================================================================*/
+    if (name == "Book3") {
+        printf("clicked on Book3, index %d\n", BOOK3);
+        eventSwitches[BOOK3].setSwitch(true);
+        curr->isClicked = true;
+        curr->onEvent(soundPlayer);
+    } else if (name == "Book2" && eventSwitches[BOOK3].isSwitchOn()) {
+        printf("clicked on Book2 in order, index %d\n", BOOK2);
+        eventSwitches[BOOK2].setSwitch(true);
+        curr->isClicked = true;
+        curr->onEvent(soundPlayer);
+    } else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
+            eventSwitches[BOOK2].isSwitchOn()) {
+        printf("clicked on Book1 in order, index %d\n", BOOK1);
+        eventSwitches[BOOK1].setSwitch(true);
+        curr->isClicked = true;
+        curr->onEvent(soundPlayer);
+        setIfWon(true);
+
+        //cause the white door to open
+        if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
+            eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
+            eventSwitches[WHITE_DOOR].setSwitch(true);
+        }
+    } else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
+            (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
+            eventSwitches[BOOK2].isSwitchOn()))) {
+        curr->onEvent(soundPlayer);
+        
+        reinitializeSwitches(BOOK1, BOOK1 + 1);
+        reinitializeSwitches(BOOK2, BOOK2 + 1);
+        reinitializeSwitches(BOOK3, BOOK3 + 1);
+        reinitializeSwitches(WHITE_DOOR, WHITE_DOOR + 1);
+        printf("oh no! out of order :(\n");
+    }
+    
+    /*==================================================================
+     * PUZZLE 2 LOGIC
+     *==================================================================*/
+    if (name == "Plant1") {
+        
+    } else if (name == "Plant6") {
+        
+    } else if (name == "Radio") {
+        
+    }
+}
+
 bool Event::setSwitch(std::string className) {
     bool classExists = false;
 
@@ -210,7 +241,7 @@ bool Event::setSwitch(std::string className) {
             for (int i = 0; i < switchNum; i++) {
                 if (eventSwitches[i].isUninitialized()) {
                     if (eventSwitches[i].getClassName() != className) {
-                        reinitializeSwitches();
+                        reinitializeSwitches(0, switchNum);
                         return false;
                     } else if (eventSwitches[i].getClassName() == className) {
                         eventSwitches[i].setSwitch(true);

@@ -232,6 +232,10 @@ void GameObject::printTrans() {
     printf("(%lf, %lf, %lf)", trans.x, trans.y, trans.z);
 }
 
+void GameObject::onClick(SoundPlayer *soundPlayer) {
+    //soundPlayer->playSound("GameStart");
+}
+
 void GameObject::onEvent(SoundPlayer *soundPlayer) {
     //soundPlayer->playSound("GameStart");
 }

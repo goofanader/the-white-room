@@ -1,0 +1,13 @@
+numItems: 11
+# list of items to be created
+create Room
+create WhiteDoor
+create Book1
+create Book2
+create Book3
+create Bookshelf
+create Clock
+create Safe
+create Armchair
+create Chandelier
+create MooseHead

@@ -8,8 +8,6 @@
 #include "ObjectCreation.h"
 #include "../objects/AllObjects.h"
 
-//we really need to make a .h just for object class #includes -_-
-
 GameObject* createDoor() {
     cout << "made a door" << endl;
     return new WhiteDoor();
@@ -119,4 +117,71 @@ GameObject* lookupAndCall(const string& name) {
             return (*(functionLookupTable[i].fn))();
         }
     return NULL;
+}
+
+int door, book1, book2, book3;
+int plant1, plant6, radio;
+
+void initializeIndices() {
+    door = -1;
+    book1 = -1;
+    book2 = -1;
+    book3 = -1;
+    
+    plant1 = plant6 = radio = -1;
+}
+
+int getDoorNum() { return door; }
+int getBook1Num() { return book1; }
+int getBook2Num() { return book2; }
+int getBook3Num() { return book3; }
+int getPlant1Num() { return plant1; }
+int getPlant6Num() { return plant6; }
+int getRadioNum() { return radio; }
+
+void setDoorNum(int index) {
+    door = index;
+}
+
+void setBook1Num(int index) {
+    book1 = index;
+}
+
+void setBook2Num(int index) {
+    book2 = index;
+}
+
+void setBook3Num(int index) {
+    book3 = index;
+}
+
+void setPlant1Num(int index) { plant1 = index; }
+void setPlant6Num(int index) { plant6 = index; }
+void setRadioNum(int index) { radio = index; }
+
+struct {
+    void (*fn)(int);
+    const char* key;
+}
+
+indexLookupTable[] = {
+    { &setDoorNum, "WhiteDoor"},
+    { &setBook1Num, "Book1"},
+    { &setBook2Num, "Book2"},
+    { &setBook3Num, "Book3"},
+    
+    { &setPlant1Num, "Plant1"},
+    { &setPlant6Num, "Plant6"},
+    { &setRadioNum, "Radio"},
+    { NULL, NULL}
+};
+
+void setObjectIndex(const string& name, int index) {
+    std::cout << "Look for index of " << name << std::endl;
+    for (int i = 0; indexLookupTable[i].fn; i++) {
+        if (name == indexLookupTable[i].key) {
+            (*(indexLookupTable[i].fn))(index);
+            break;
+        }
+    }
 }

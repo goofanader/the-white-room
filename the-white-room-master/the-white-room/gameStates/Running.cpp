@@ -287,69 +287,17 @@ void Running::mouseClicked(int button, int action) {
 
                 //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
 
-
                 if (reach.x >= curr->AABBmin.x && reach.x <= curr->AABBmax.x &&
                         reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
                         reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z &&
                         (glm::dot(normalizedCam, reach)) > 0.f) {
+                    //print out what got clicked on
                     std::cout << "clicked on... " << curr->className();
                     std::cout << ". AABBmin=" << printVec3(curr->AABBmin);
                     std::cout << ", AABBmax=" << printVec3(curr->AABBmax);
                     std::cout << std::endl;
-                    std::string name = curr->className();
-                    if (name != "Book1" && name != "Book2" && name != "Book3") {
-                        curr->onEvent(soundPlayer);
-                    }
-                    sound = 1;
-#if 0
-                    //if true, want to switch out to the next event
-                    if (eventNum <= MAX_EVENTS && currEvent->getEventNum() == eventNum &&
-                            currEvent->setSwitch(curr->className())) {
-                        //cout << "deleted old event" << endl;
-                        //delete currEvent;
-
-                        if ((++eventNum) <= MAX_EVENTS) {
-                            currEvent = new Event(eventNum, soundPlayer);
-                            loadObjectsFromEvent();
-                            break;
-                        }
-                    }
-#endif
-                    if (curr->className() == "Book3") {
-                        printf("clicked on Book3\n");
-                        switches[2].setSwitch(true);
-                        curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
-                    } else if (curr->className() == "Book2" && switches[2].isSwitchOn()) {
-                        printf("clicked on Book2 in order\n");
-                        switches[1].setSwitch(true);
-                        curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
-                    } else if (curr->className() == "Book1" && switches[2].isSwitchOn() &&
-                            switches[1].isSwitchOn()) {
-                        printf("clicked on Book1 in order\n");
-                        switches[0].setSwitch(true);
-                        curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
-                        setIfWon(true);
-
-                        //cause the white door to open
-                        if (!switches[3].isSwitchOn()) {
-                            switches[3].getGameObject()->onEvent(soundPlayer);
-                            switches[3].setSwitch(true);
-                        }
-                    } else if ((curr->className() == "Book2" && !switches[2].isSwitchOn()) ||
-                            (curr->className() == "Book1" && !(switches[2].isSwitchOn() &&
-                            switches[1].isSwitchOn()))) {
-                        curr->onEvent(soundPlayer);
-                        for (int i = 0; i < 3; i++) {
-                            switches[i].setSwitch(false);
-                            switches[i].getGameObject()->isClicked = false;
-                            switches[i].getGameObject()->changeColor(switches[i].getGameObject()->initAmbColor);
-                        }
-                        printf("oh no! out of order :(\n");
-                    }
-
+                    
+                    currEvent->ifObjectSelected(curr);
                     break;
                 }
             }

@@ -14,8 +14,26 @@
 
 #include "../objects/GameObject.h"
 
+#define WHITE_DOOR getDoorNum()
+#define BOOK1 getBook1Num()
+#define BOOK2 getBook2Num()
+#define BOOK3 getBook3Num()
+#define PLANT1 getPlant1Num()
+#define PLANT6 getPlant6Num()
+#define RADIO getRadioNum()
+
 using namespace std;
 
+void initializeIndices();
 GameObject* lookupAndCall(const string& name);
+void setObjectIndex(const string& name, int index);
+
+int getDoorNum();
+int getBook1Num();
+int getBook2Num();
+int getBook3Num();
+int getPlant1Num();
+int getPlant6Num();
+int getRadioNum();
 #endif	/* OBJECTCREATION_H */
 
