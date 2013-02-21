@@ -24,6 +24,9 @@ Book3::Book3() {
     initAmbColor = ambColor;
     diffColor = vec3(1.0f, 0.85f, 0.0f);
     specColor = vec3(.5f);
+    ambAlpha = 1.f;
+    diffAlpha = 1.f;
+    specAlpha = 1.f;
     isClicked = false;
     
     doScale(glm::vec3(1.25f));
@@ -59,7 +62,9 @@ std::string Book3::className() {
 }
 
 void Book3::onEvent(SoundPlayer* soundPlayer) {
+    if (IS_SOUND_ON) {
     soundPlayer->playSound("Bell1");
+    }
     if (isClicked) {
         ambColor = glm::vec3(0.f);
     }

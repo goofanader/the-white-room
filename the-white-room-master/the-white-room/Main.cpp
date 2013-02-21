@@ -603,6 +603,7 @@ void initializeShaderVariables() {
     gc.aspectRatio = (float) windowWidth / windowHeight;
     gc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
     gc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
+    gc.lightAlpha = 1.f;
     gc.h_aPosition = aPosition;
     gc.h_aNormal = aNormal;
     gc.h_uAmbColor = uAmbColor;

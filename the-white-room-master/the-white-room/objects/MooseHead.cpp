@@ -18,6 +18,9 @@ MooseHead::MooseHead() {
     ambColor = vec3(1.f);
     diffColor = vec3(.5f);
     specColor = vec3(.5f);
+    ambAlpha = 1.f;
+    diffAlpha = 1.f;
+    specAlpha = 1.f;
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);

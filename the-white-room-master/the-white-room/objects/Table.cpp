@@ -9,7 +9,7 @@
 
 Table::Table() {
     GLuint faceNBO;
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Table2.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Table3.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -18,6 +18,9 @@ Table::Table() {
     ambColor = vec3(1.f);
     diffColor = vec3(.5f);
     specColor = vec3(.5f);
+    ambAlpha = 1.0f;
+    diffAlpha = 1.0f;
+    specAlpha = 1.0f;
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);

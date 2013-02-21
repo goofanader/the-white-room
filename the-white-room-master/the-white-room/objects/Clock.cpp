@@ -37,6 +37,9 @@ Clock::Clock() {
     body->specColor = glm::vec3(.42f, .22f, .08f);
     //body->diffColor = glm::vec3(.5f);
     body->diffColor = glm::vec3(.42f, .22f, .08f);
+    body->ambAlpha = 1.f;
+    body->diffAlpha = 1.f;
+    body->specAlpha = 1.f;
     body->isClicked = false;
 
     body->texNum = numTextures();
@@ -50,10 +53,12 @@ Clock::Clock() {
     weight1->shininess = 5;
     weight1->specStrength = 0.f;
     weight1->scale = glm::vec3(1.f);
-    //weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
     weight1->ambColor = glm::vec3(0.94f, .90f, .55f)/ 5.f;
     weight1->specColor = glm::vec3(.94f, 0.90f, 0.55f);
     weight1->diffColor = glm::vec3(0.94f, 0.90f, 0.55f);
+    weight1->ambAlpha = 1.f;
+    weight1->diffAlpha = 1.f;
+    weight1->specAlpha = 1.f;
 
     weight1->isClicked = false;
 
@@ -64,12 +69,13 @@ Clock::Clock() {
     weight2->shininess = 5;
     weight2->specStrength = 0.f;
     weight2->scale = glm::vec3(1.f);
-    //weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
     weight2->ambColor = glm::vec3(1.0f, 0.85, 0.0f)/5.f;
     weight2->specColor = glm::vec3(1.0f, 0.85, 0.0f);
-    //weight2->diffColor = glm::vec3(1.0, 0.85, 0.0);
         weight2->isClicked = false;
     weight2->diffColor = glm::vec3(1.0f, 0.85f, 0.0f);
+    weight2->ambAlpha = 1.f;
+    weight2->diffAlpha = 1.f;
+    weight2->specAlpha = 1.f;
 
 
     weight3->dir = vec3(1.f, 0.f, 0.f);
@@ -79,20 +85,17 @@ Clock::Clock() {
     weight3->shininess = 5;
     weight3->specStrength = 0.f;
     weight3->scale = glm::vec3(1.f);
-    //weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
     weight3->ambColor = glm::vec3(.93f, .93f, .88f)/5.f;
     weight3->specColor = glm::vec3(.93f, .93f, .88f);
     weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
+    weight3->ambAlpha = 1.f;
+    weight3->diffAlpha = 1.f;
+    weight3->specAlpha = 1.f;
 
-    //weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
     weight3->isClicked = false;
     
-    //body->doScale(glm::vec3(10.f));
     body->doScale(glm::vec3(ROOM_SIZE/5.f));
     weight1->scale = weight2->scale = weight3->scale = body->scale / 3.f;
-    //body->doTranslate(glm::vec3(ROOM_SIZE - 5.f, -ROOM_SIZE + 14.5f,
-            //ROOM_SIZE - AABBmax.z - 5));
-    //body->doRotate(glm::vec3(0,1,0), 225);
     body->doRotate(glm::vec3(0,1,0), 180);
     body->doTranslate(glm::vec3(-3.25f - 8.f, 
             getRoomFloorHeight().y - body->AABBmin.y, ROOM_SIZE - 2.f));
@@ -102,9 +105,6 @@ Clock::Clock() {
     weight2->doTranslate(glm::vec3(1.f, 0.f, 0.5f));
     weight3->doTranslate(body->trans);
     weight3->doTranslate(glm::vec3(-1.f, 0.f, -0.5f));
-    //weight1->doTranslate(glm::vec3(-2,0,0) + body->trans);
-    //weight2->trans += body->trans;
-    //weight3->doTranslate(glm::vec3(2,0,0) + body->trans);
     
     AABBmin = body->AABBmin;
     AABBmax = body->AABBmax;
@@ -136,12 +136,15 @@ std::string Clock::className() {
 }
 
 void Clock::onEvent(SoundPlayer *soundPlayer) {
-    //body->ambColor = glm::vec3(1.f, 0.f, 0.f);
+    if (IS_SOUND_ON) {
     soundPlayer->playSound("BellTones");
+    }
     if (!haveLoadedPlayer) {
+        if (IS_SOUND_ON) {
         printf("putting a sound player into clock\n");
         clockSoundPlayer = soundPlayer;
         clockSoundPlayer->playContinuous("TickTock");
+        }
         haveLoadedPlayer = true;
     }
 }

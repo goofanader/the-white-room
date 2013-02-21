@@ -6,7 +6,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "GameObject.h"
-#include "../cullingStuff-temp_1/VFCull.h"
 #include <math.h>
 
 #define HARDCODE_WALLS 0
@@ -41,8 +40,11 @@ GameObject::GameObject() {
     hasTex = false;
 
     ambColor = glm::vec3(.75f);
+    ambAlpha = 1.f;
     specColor = glm::vec3(.1f);
+    specAlpha = 1.f;
     diffColor = glm::vec3(.1f);
+    diffAlpha = 1.f;
 
     textureMaps[0] = GL_TEXTURE0;
     textureMaps[1] = GL_TEXTURE1;
@@ -73,7 +75,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         return;
     }
-
+#if 0
     glm::vec3 objPos = (AABBmax + AABBmin)*0.5f - cameraPos;
     glm::vec3 lookDir = lookAt - cameraPos;
     
@@ -85,7 +87,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     //printf("angle: %lf\n", angle);
     
     if(angle < 90.0f) {
-    
+#endif
     glUseProgram(gc->shader);
 
     //TODO Set matrix stuff
@@ -137,13 +139,13 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 
     printOpenGLError();
     //pass colors, camera position, and light info to GPU
-    glUniform3f(gc->h_uAmbColor, ambColor.x, ambColor.y, ambColor.z);
-    glUniform3f(gc->h_uSpecColor, specColor.x, specColor.y, specColor.z);
-    glUniform3f(gc->h_uDiffColor, diffColor.x, diffColor.y, diffColor.z);
+    glUniform4f(gc->h_uAmbColor, ambColor.x, ambColor.y, ambColor.z, ambAlpha);
+    glUniform4f(gc->h_uSpecColor, specColor.x, specColor.y, specColor.z, specAlpha);
+    glUniform4f(gc->h_uDiffColor, diffColor.x, diffColor.y, diffColor.z, diffAlpha);
     glUniform1f(gc->h_uShininess, shininess);
     glUniform1f(gc->h_uSpecStrength, specStrength);
     glUniform3f(gc->h_uLightPos, lightPos.x, lightPos.y, lightPos.z);
-    glUniform3f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z);
+    glUniform4f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z, gc->lightAlpha);
     glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
     printOpenGLError();
 
@@ -154,31 +156,11 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glDisableVertexAttribArray(gc->h_aTexCoord);
     glUseProgram(0);
     
-    }
+    //}
 }
 
 void GameObject::update(float dt) {
-    //this needs to be generic
-    //doTranslate(glm::vec3(dt * speed * dir));
-#if HARDCODE_WALLS
-    if (trans.x + AABBmin.x < -9.5) {
-        trans.x = -9.5 - AABBmin.x;
-        dir = -dir;
-    } else if (trans.x + AABBmax.x > 9.5) {
-        trans.x = 9.5 - AABBmax.x;
-        dir = -dir;
-    }
-    if (trans.z + AABBmin.z < -9.5) {
-        trans.z = -9.5 - AABBmin.z;
-        dir = -dir;
-    } else if (trans.z + AABBmax.z > 9.5) {
-        trans.z = 9.5 - AABBmax.z;
-        dir = -dir;
-    }
-#endif
-    //doRotate(rotAxis, dt * rotSpeed);
-    //doRotate(glm::vec3(0, 1, 0), 45);
-    //TODO check for collisions
+    //default: do nothing.
 }
 
 void GameObject::doTranslate(glm::vec3 trans) {
@@ -191,9 +173,7 @@ void GameObject::doTranslate(glm::vec3 trans) {
 
 void GameObject::doRotate(glm::vec3 axis, float deg) {
     this->rotate = glm::rotate(this->rotate, deg, axis);
-    //this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
     this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
-    //this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
     this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
 
     fixBoundingBoxes();
@@ -240,8 +220,9 @@ void GameObject::setTrans(glm::vec3 t) {
     this->AABBmax += t;
 }
 
-void GameObject::changeColor(glm::vec3 c) {
+void GameObject::changeColor(glm::vec3 c, float alpha) {
     this->ambColor = c;
+    ambAlpha = alpha;
 }
 
 std::string GameObject::className() {
@@ -253,15 +234,12 @@ void GameObject::printTrans() {
 }
 
 void GameObject::onClick(SoundPlayer *soundPlayer) {
-    //soundPlayer->playSound("GameStart");
 }
 
 void GameObject::onEvent(SoundPlayer *soundPlayer) {
-    //soundPlayer->playSound("GameStart");
 }
 
 void GameObject::resetEvent(SoundPlayer *soundPlayer) {
-    this->ambColor = glm::vec3(1.f);
 }
 
 unsigned int GameObject::numTextures() {

@@ -1,10 +1,10 @@
 uniform float uShininess;
 uniform float uSpecStrength;
-uniform vec3 uLightColor;
+uniform vec4 uLightColor;
 uniform vec3 uCamTrans;
-uniform vec3 uAmbColor;
-uniform vec3 uSpecColor;
-uniform vec3 uDiffColor;
+uniform vec4 uAmbColor;
+uniform vec4 uSpecColor;
+uniform vec4 uDiffColor;
 uniform int uUseTex;
 uniform sampler2D uTexUnit;
 
@@ -32,7 +32,7 @@ if (uUseTex != 0) {
 
 vec3 specL;
     if (NDotL > 0.0) {
-  specL = uSpecColor;
+  specL = uSpecColor.rgb;
   if (uUseTex != 0) {
     specL = texColor.xyz;
   }
@@ -54,15 +54,15 @@ vec3 specL;
 }
 else specL = vec3(0.0);
 
-  vec3 diffL = uDiffColor;
+  vec3 diffL = uDiffColor.rgb;
   if (uUseTex != 0) {
     diffL = texColor.xyz;
   }
-  diffL *= NDotL * uLightColor;
+  diffL *= NDotL * uLightColor.rgb;
 
-  vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
+  vec3 ambL = uAmbColor.rgb * uLightColor.rgb + vec3(.1, .1, .1) * uAmbColor.rgb;
   if (uUseTex != 0) {
-    ambL = texColor.xyz * uLightColor / 3.0 + vec3(.1, .1, .1) * texColor.xyz;
+    ambL = texColor.xyz * uLightColor.rgb / 3.0 + vec3(.1, .1, .1) * texColor.xyz;
   }
 
   vec3 finColor = (diffL * 0.7 + specL * 0.7) /

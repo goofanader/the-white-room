@@ -28,18 +28,20 @@ Running::Running() {
     isFoot1 = true;
     timeSpent = 0;
 
-    printf("try the sound\n");
-    soundPlayer = new SoundPlayer("audio/sounds.txt");
-    printf("loaded the sound player\n");
-    footSounds = new SoundPlayer("audio/feetSounds.txt");
-    printf("loaded foot sounds\n");
+    if (IS_SOUND_ON) {
+        printf("try the sound\n");
+        soundPlayer = new SoundPlayer("audio/sounds.txt");
+        printf("loaded the sound player\n");
+        footSounds = new SoundPlayer("audio/feetSounds.txt");
+        printf("loaded foot sounds\n");
+    }
 
     currEvent = new Event(eventNum, soundPlayer);
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
     glfwDisable(GLFW_MOUSE_CURSOR);
-    
+
     initializeCamera();
     initializeLight();
 }
@@ -55,8 +57,8 @@ void Running::initializeCamera() {
     playerCamera->rotSpeed = 0.f;
     playerCamera->trans = glm::vec3(0.f);
     playerCamera->scale = vec3(1.f);
-    
-    playerCamera->doTranslate(vec3(0.f, 
+
+    playerCamera->doTranslate(vec3(0.f,
             getRoomFloorHeight().y - playerCamera->AABBmin.y, 0.f));
 
     camPrevTrans = playerCamera->trans;
@@ -85,7 +87,7 @@ void Running::loadObjectsFromEvent() {
         if (newObject) {
             objects.insert(newObject);
             arr->setGameObject(newObject);
-            
+
             if (newObject->className() == "Clock") {
                 clockSound = newObject;
             }
@@ -105,12 +107,26 @@ Running::~Running() {
 }
 
 void Running::draw() {
+    GameObject *curr;
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
-        (*iter)->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-                getGC()->lightColor, getGC());
+        curr = (*iter);
+
+        glm::vec3 objPos = (curr->AABBmax + curr->AABBmin)*0.5f - playerCamera->trans;
+        glm::vec3 lookDir = camLookAt - playerCamera->trans;
+
+        float objPoslen = sqrt(objPos.x * objPos.x + objPos.y * objPos.y + objPos.z * objPos.z);
+        float lookAtlen = sqrt(lookDir.x * lookDir.x + lookDir.y * lookDir.y + lookDir.z * lookDir.z);
+        float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / 3.141592f;
+
+        //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
+        //printf("angle: %lf\n", angle);
+
+        if (angle < 90.0f || curr->className() == "Room") {
+            curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+                    getGC()->lightColor, getGC());
+        }
     }
-    
     //====if you want to draw where the light is, uncomment code below.====//
     /*lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
           getGC()->lightColor, getGC());*/
@@ -124,7 +140,7 @@ void Running::update(float dt) {
         playerCamera->AABBmax.x = playerCamera->trans.x + .5f;
         playerCamera->AABBmax.y = playerCamera->trans.y + 7.f;
         playerCamera->AABBmax.z = playerCamera->trans.z + .5f;
-        
+
         timeSpent += dt;
 
         lightPos->trans = getGC()->lightPos;
@@ -190,7 +206,7 @@ void Running::mouseClicked(int button, int action) {
             mag = sqrt(x * x + y * y + z * z);
 
             //intersection b/n view vector and planes
-            
+
             //set normals to planes we're checking against
             for (int i = 0; i < 6; i++) {
                 if (i == 0) {
@@ -261,7 +277,7 @@ void Running::mouseClicked(int button, int action) {
                     std::cout << ". AABBmin=" << printVec3(curr->AABBmin);
                     std::cout << ", AABBmax=" << printVec3(curr->AABBmax);
                     std::cout << std::endl;
-                    
+
                     currEvent->ifObjectSelected(curr);
                     break;
                 }
@@ -305,7 +321,7 @@ void Running::keyPressed(float dt, int keyDown[]) {
             playerCamera->trans -= MOVE_SPEED * right * dt;
 
         //make feet-walking sounds (uncomment the code below if you wanna hear)
-        if (keyDown['W'] || keyDown['S'] || keyDown['D'] || keyDown['A']) {
+        if (IS_SOUND_ON && (keyDown['W'] || keyDown['S'] || keyDown['D'] || keyDown['A'])) {
             if (timeSpent >= MAX_FOOT_SPACE) {
                 timeSpent = 0.0;
                 if (isFoot1) {

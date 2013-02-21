@@ -18,6 +18,9 @@ Bookshelf::Bookshelf() {
     ambColor = vec3(0.75f);
     diffColor = vec3(.32f, 0.17f, 0.08f);
     specColor = vec3(.5f);
+    ambAlpha = 1.f;
+    diffAlpha = 1.f;
+    specAlpha = 1.f;
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);

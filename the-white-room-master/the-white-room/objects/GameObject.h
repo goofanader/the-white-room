@@ -27,6 +27,7 @@ typedef struct GameConstants {
     float aspectRatio;
     glm::vec3 lightPos;
     glm::vec3 lightColor;
+    float lightAlpha;
     GLuint h_aPosition;
     GLuint h_aNormal;
     GLuint h_aTexCoord;
@@ -63,7 +64,7 @@ public:
     void doScale(glm::vec3 scale);
 
     void setTrans(glm::vec3 t);
-    void changeColor(glm::vec3 c);
+    void changeColor(glm::vec3 c, float alpha);
     void fixBoundingBoxes();
 
     virtual void onClick(SoundPlayer *soundPlayer);
@@ -89,9 +90,12 @@ public:
     GLenum textureMaps[39];
 
     glm::vec3 ambColor;
+    float ambAlpha;
     glm::vec3 initAmbColor;
     glm::vec3 specColor;
+    float specAlpha;
     glm::vec3 diffColor;
+    float diffAlpha;
     float shininess;
     float specStrength;
     int tag; //Misc information goes here

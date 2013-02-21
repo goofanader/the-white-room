@@ -13,7 +13,7 @@ uniform mat4 uTpViewMatrix;
 uniform mat4 uTpModelMatrix;
 
 uniform vec3 uLightPos;
-uniform vec3 uLightColor;
+uniform vec4 uLightColor;
 
 varying vec3 vNormal;
 varying vec3 normals;

@@ -11,6 +11,8 @@
 #include "glm/glm.hpp"
 #include "objects/GameObject.h"
 
+#define IS_SOUND_ON false
+
 GameConstants* getGC();
 unsigned int getWindowWidth();
 unsigned int getWindowHeight();
