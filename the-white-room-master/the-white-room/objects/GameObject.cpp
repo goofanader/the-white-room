@@ -6,6 +6,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "GameObject.h"
+#include "../cullingStuff-temp_1/VFCull.h"
+#include <math.h>
 
 #define HARDCODE_WALLS 0
 
@@ -72,6 +74,18 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
         return;
     }
 
+    glm::vec3 objPos = (AABBmax + AABBmin)*0.5f - cameraPos;
+    glm::vec3 lookDir = lookAt - cameraPos;
+    
+    float objPoslen = sqrt(objPos.x*objPos.x + objPos.y*objPos.y + objPos.z*objPos.z);
+    float lookAtlen = sqrt(lookDir.x*lookDir.x + lookDir.y*lookDir.y + lookDir.z*lookDir.z);
+    float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / 3.141592f;
+
+    //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
+    //printf("angle: %lf\n", angle);
+    
+    if(angle < 90.0f) {
+    
     glUseProgram(gc->shader);
 
     //TODO Set matrix stuff
@@ -89,6 +103,10 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glUniformMatrix4fv(gc->h_uNormalMatrix,
             glm::value_ptr(glm::transpose(glm::inverse(model))));
 
+    //Plane* p_planes;
+    //mat4 vpMatrix = projection * view;
+    //VFCull::ExtractPlanesGL(p_planes, vpMatrix, true); 
+    
     //Do transformations
     safe_glEnableVertexAttribArray(gc->h_aPosition);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -135,6 +153,8 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glDisableVertexAttribArray(gc->h_aPosition);
     safe_glDisableVertexAttribArray(gc->h_aTexCoord);
     glUseProgram(0);
+    
+    }
 }
 
 void GameObject::update(float dt) {
