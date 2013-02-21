@@ -33,8 +33,8 @@ Clock::Clock() {
     body->shininess = 5;
     body->specStrength = 0.f;
     body->scale = glm::vec3(1.f);
-    body->ambColor = glm::vec3(.75f);
-    body->specColor = glm::vec3(.75f);
+    body->ambColor = glm::vec3(.25f);
+    body->specColor = glm::vec3(.42f, .22f, .08f);
     //body->diffColor = glm::vec3(.5f);
     body->diffColor = glm::vec3(.42f, .22f, .08f);
     body->isClicked = false;
@@ -51,8 +51,8 @@ Clock::Clock() {
     weight1->specStrength = 0.f;
     weight1->scale = glm::vec3(1.f);
     //weight1->ambColor = glm::vec3(1.f, 0.f, 0.f);
-    weight1->ambColor = glm::vec3(0.75f);
-    weight1->specColor = glm::vec3(.5f);
+    weight1->ambColor = glm::vec3(0.94f, .90f, .55f)/ 5.f;
+    weight1->specColor = glm::vec3(.94f, 0.90f, 0.55f);
     weight1->diffColor = glm::vec3(0.94f, 0.90f, 0.55f);
 
     weight1->isClicked = false;
@@ -65,8 +65,8 @@ Clock::Clock() {
     weight2->specStrength = 0.f;
     weight2->scale = glm::vec3(1.f);
     //weight2->ambColor = glm::vec3(0.f, 1.f, 0.f);
-    weight2->ambColor = glm::vec3(0.75f);
-    weight2->specColor = glm::vec3(.5f);
+    weight2->ambColor = glm::vec3(1.0f, 0.85, 0.0f)/5.f;
+    weight2->specColor = glm::vec3(1.0f, 0.85, 0.0f);
     //weight2->diffColor = glm::vec3(1.0, 0.85, 0.0);
         weight2->isClicked = false;
     weight2->diffColor = glm::vec3(1.0f, 0.85f, 0.0f);
@@ -80,8 +80,8 @@ Clock::Clock() {
     weight3->specStrength = 0.f;
     weight3->scale = glm::vec3(1.f);
     //weight3->ambColor = glm::vec3(0.f, 0.f, 1.f);
-    weight3->ambColor = glm::vec3(0.75f);
-    weight3->specColor = glm::vec3(.5f);
+    weight3->ambColor = glm::vec3(.93f, .93f, .88f)/5.f;
+    weight3->specColor = glm::vec3(.93f, .93f, .88f);
     weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);
 
     //weight3->diffColor = glm::vec3(0.93f, 0.93f, 0.88f);

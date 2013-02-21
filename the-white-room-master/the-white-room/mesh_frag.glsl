@@ -21,21 +21,28 @@ void main() {
   
   vec4 texColor;
   vec3 tColor;
+  vec3 nNormal = normalize(vNormal);
+  vec3 nLightDir = normalize(vLightDir);
+  float NDotL = max(dot(nNormal, nLightDir), 0.0);
 
 if (uUseTex != 0) {
         texColor = vec4(texture2D(uTexUnit, vTexCoord));
         tColor = vec3(texture2D(uTexUnit, vTexCoord));
     }
 
-
-  vec3 specL = vec3(dot(uSpecColor, uLightColor));
+vec3 specL;
+    if (NDotL > 0.0) {
+  specL = uSpecColor;
+  if (uUseTex != 0) {
+    specL = texColor.xyz;
+  }
   //vec3 specL = uSpecColor * uLightColor;
   vec3 V;
   V = normalize(uCamTrans - vThePosition);
-      vec3 R = 2.0 * max(dot(normalize(vNormal), normalize(vLightDir)), 0.0) * normalize(vNormal) - normalize(vLightDir);
+      vec3 R = 2.0 * NDotL * nNormal - nLightDir;
 
       float VdotR = clamp(
-        pow(max(dot(normalize(R), normalize(V)), 0.0), uShininess), 0.0, 1.0);
+        pow(max(dot(R, V), 0.0), uShininess), 0.0, 1.0);
       /*specL.x *= VdotR;
       specL.y *= VdotR;
       specL.z *= VdotR;*/
@@ -43,22 +50,23 @@ if (uUseTex != 0) {
           
       specL *= VdotR;// * uLightColor.rgb;// * uSpecStrength;
       //specL *= uSpecStrength;
-  //}
+  //
+}
+else specL = vec3(0.0);
 
   vec3 diffL = uDiffColor;
   if (uUseTex != 0) {
     diffL = texColor.xyz;
   }
-  float NdotL = max(dot(normalize(vNormal), normalize(vLightDir)), 0.0);
-  diffL *= NdotL * uLightColor;
+  diffL *= NDotL * uLightColor;
 
   vec3 ambL = uAmbColor * uLightColor + vec3(.1, .1, .1) * uAmbColor;
   if (uUseTex != 0) {
     ambL = texColor.xyz * uLightColor / 3.0 + vec3(.1, .1, .1) * texColor.xyz;
   }
 
-  vec3 finColor = (diffL * 1.3 + specL * 0.3) /
-    (.9 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.85;
+  vec3 finColor = (diffL * 0.7 + specL * 0.7) /
+    (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
   gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
 
 
