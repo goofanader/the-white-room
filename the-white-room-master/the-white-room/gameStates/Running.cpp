@@ -19,8 +19,8 @@
 #define MAX_FOOT_SPACE .4
 
 Running::Running() {
-    camAlpha = 0.f;
-    camBeta = PI;
+    camAlpha = -0.545f;
+    camBeta = -PI / 2.f - 1.f;
     camLookAt = glm::vec3(0.f);
 
     eventNum = 1;
@@ -152,6 +152,7 @@ void Running::update(float dt) {
 }
 
 void Running::mouseClicked(int button, int action) {
+    std::cout << "alpha=" << camAlpha << ", beta=" << camBeta << std::endl;
     float x, y, z, mag;
     glm::vec3 translatedCam, reach;
 

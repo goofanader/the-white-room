@@ -656,6 +656,7 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
 
     //set input callback functions
+    glfwSetMousePos(windowWidth / 2, windowHeight / 2);
     currState = new Running();
     glfwSetKeyCallback(Keyboard);
     glfwSetMousePosCallback(MouseMove);
