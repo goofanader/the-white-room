@@ -8,81 +8,32 @@
 #include "ObjectCreation.h"
 #include "../objects/AllObjects.h"
 
-GameObject* createDoor() {
-    cout << "made a door" << endl;
-    return new WhiteDoor();
-}
+GameObject* createRoom() { return new Room(); }
+GameObject* createDoor() { return new WhiteDoor(); }
 
-GameObject* createSafe() {
-    cout << "made a safe" << endl;
-    return new Safe();
-}
+GameObject* createSafe() { return new Safe(); }
 
-GameObject* createRoom() {
-    cout << "made a room" << endl;
-    return new Room();
-}
+GameObject* createArmchair() { return new Armchair(); }
 
-GameObject* createArmchair() {
-    cout << "made an armchair" << endl;
-    return new Armchair();
-}
+GameObject* createBox1() { return new Box1(); }
+GameObject* createBox2() { return new Box2(); }
+GameObject* createBox3() { return new Box3(); }
+GameObject* createBox4() { return new Box4(); }
 
-GameObject* createBox1() {
-    return new Box1();
-}
+GameObject* createRadio() { return new Radio(); }
+GameObject* createTable() { return new Table(); }
+GameObject* createPlant1() { return new Plant1(); }
+GameObject* createPlant6() { return new Plant6(); }
 
-GameObject* createBox2() {
-    return new Box2();
-}
+GameObject* createChandelier() { return new Chandelier(); }
 
-GameObject* createBox3() {
-    return new Box3();
-}
+GameObject* createClock() { return new Clock(); }
+GameObject* createBookshelf() { return new Bookshelf(); }
+GameObject* createBook1() { return new Book1(); }
+GameObject* createBook2() { return new Book2(); }
+GameObject* createBook3() { return new Book3(); }
 
-GameObject* createBox4() {
-    return new Box4();
-}
-
-GameObject* createRadio() {
-    return new Radio();
-}
-
-GameObject* createPlant1() {
-    return new Plant1();
-}
- 
-GameObject* createPlant6() {
-    return new Plant6();
-}
-
-GameObject* createChandelier() {
-    return new Chandelier();
-}
-
-GameObject* createClock() {
-    return new Clock();
-}
-
-GameObject* createBookshelf() {
-    return new Bookshelf();
-}
-
-GameObject* createBook1() {
-    return new Book1();
-}
-
-GameObject* createBook2() {
-    return new Book2();
-}
-
-GameObject* createBook3() {
-    return new Book3();
-}
-
-GameObject* createMooseHead() {
-    return new MooseHead();
-}
+GameObject* createMooseHead() { return new MooseHead(); }
 
 struct {
     GameObject* (*fn)();
@@ -108,6 +59,7 @@ functionLookupTable[] = {
     { &createBook2, "Book2"},
     { &createBook3, "Book3"},
     { &createMooseHead, "MooseHead"},
+    { &createTable, "Table"},
     { NULL, NULL}
 };
 

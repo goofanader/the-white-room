@@ -34,32 +34,21 @@ public:
     void mouseClicked(int button, int action);
     void mouseMoved(int x, int y, float prevX, float prevY);
     void keyPressed(float dt, int keyDown[]);
-    void wKeyPressed(glm::vec3 vecW);
-    void aKeyPressed(glm::vec3 vecU);
-    void sKeyPressed(glm::vec3 vecW);
-    void dKeyPressed(glm::vec3 vecU);
-    void handleFirstPersonMovement(int keyDown[], float dt);
 
     void pause();
     void resume();
-
-    void printObjects();
 private:
     GameObject* playerCamera, *lightPos;
-    Room* room;
-    WhiteDoor* door;
     std::set<GameObject*> objects;
-    SoundPlayer *soundPlayer;
-    SoundPlayer *footSounds;
+    SoundPlayer *soundPlayer, *footSounds;
     
     float camAlpha;
     float camBeta;
     glm::vec3 camLookAt;
     glm::vec3 camPrevTrans;
     
-    int eventNum, mouseClicks;
+    int eventNum;
     Event* currEvent;
-    EventSwitch switches[MAX_SWITCHES];
     
     double timeSpent;
     bool isFoot1;

@@ -1,4 +1,4 @@
-numItems: 11
+numItems: 12
 # list of items to be created
 create Room
 create WhiteDoor
@@ -11,3 +11,4 @@ create Safe
 create Armchair
 create Chandelier
 create MooseHead
+create Table

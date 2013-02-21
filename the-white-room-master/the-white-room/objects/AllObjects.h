@@ -27,6 +27,7 @@
 #include "../objects/Book2.h"
 #include "../objects/Book3.h"
 #include "../objects/MooseHead.h"
+#include "../objects/Table.h"
 
 #endif	/* ALLOBJECTS_H */
 

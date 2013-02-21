@@ -11,13 +11,11 @@
 #include "GeometryCreator.h"
 #include "events/ObjectCreation.h"
 
-#define HARDCODE_OBJECTS_IN 0
 #define MAX_EVENTS 0
 
 #define MOVE_SPEED 15.f
 #define PI 3.14159f
 
-#define MAX_MOUSE_CLICKS 0
 #define MAX_FOOT_SPACE .4
 
 Running::Running() {
@@ -36,22 +34,11 @@ Running::Running() {
     footSounds = new SoundPlayer("audio/feetSounds.txt");
     printf("loaded foot sounds\n");
 
-    switches[0].setClassName("Book1");
-    switches[1].setClassName("Book2");
-    switches[2].setClassName("Book3");
-    switches[3].setClassName("WhiteDoor");
-    for (int i = 0; i < 4; i++) {
-        switches[i].setIsEmpty(false);
-        switches[i].setSwitch(false);
-    }
-
     currEvent = new Event(eventNum, soundPlayer);
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
     glfwDisable(GLFW_MOUSE_CURSOR);
-
-    mouseClicks = MAX_MOUSE_CLICKS;
     
     initializeCamera();
     initializeLight();
@@ -98,19 +85,7 @@ void Running::loadObjectsFromEvent() {
         if (newObject) {
             objects.insert(newObject);
             arr->setGameObject(newObject);
-
-            if (newObject->className() == "Book1") {
-                switches[0].setGameObject(newObject);
-            }
-            if (newObject->className() == "Book2") {
-                switches[1].setGameObject(newObject);
-            }
-            if (newObject->className() == "Book3") {
-                switches[2].setGameObject(newObject);
-            }
-            if (newObject->className() == "WhiteDoor") {
-                switches[3].setGameObject(newObject);
-            }
+            
             if (newObject->className() == "Clock") {
                 clockSound = newObject;
             }
@@ -136,9 +111,9 @@ void Running::draw() {
                 getGC()->lightColor, getGC());
     }
     
-    //if you want to draw where the light is, uncomment code below.
-    //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-    //      getGC()->lightColor, getGC());
+    //====if you want to draw where the light is, uncomment code below.====//
+    /*lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+          getGC()->lightColor, getGC());*/
 }
 
 void Running::update(float dt) {
@@ -162,13 +137,7 @@ void Running::update(float dt) {
             curr->update(dt);
 
             if (curr->doesCollide(playerCamera)) {
-                //we need to stop player movement as well AKA
-                //don't go through objects :<
                 playerCamera->trans = camPrevTrans;
-
-                //cout << "colliding with " << curr->className() << endl;
-            } else {
-                //cout << "not colliding with " << curr->className() << endl;
             }
         }
         camPrevTrans = playerCamera->trans;
@@ -192,14 +161,9 @@ void Running::mouseClicked(int button, int action) {
             dx, dy, dz;
 
     float t;
-
-    int sound = 0;
-
     GameObject* curr;
 
-    if (action == GLFW_RELEASE && mouseClicks >= MAX_MOUSE_CLICKS) {
-        mouseClicks = 0;
-
+    if (action == GLFW_RELEASE) {
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
             curr = (*iter);
@@ -302,7 +266,7 @@ void Running::mouseClicked(int button, int action) {
                 }
             }
         }
-    } else mouseClicks++;
+    }
 }
 
 void Running::mouseMoved(int x, int y, float prevX, float prevY) {
@@ -339,6 +303,7 @@ void Running::keyPressed(float dt, int keyDown[]) {
         if (keyDown['A'])
             playerCamera->trans -= MOVE_SPEED * right * dt;
 
+        //make feet-walking sounds (uncomment the code below if you wanna hear)
         if (keyDown['W'] || keyDown['S'] || keyDown['D'] || keyDown['A']) {
             if (timeSpent >= MAX_FOOT_SPACE) {
                 timeSpent = 0.0;
@@ -364,18 +329,6 @@ void Running::keyPressed(float dt, int keyDown[]) {
     }
 }
 
-void Running::wKeyPressed(glm::vec3 vecW) {
-}
-
-void Running::aKeyPressed(glm::vec3 vecU) {
-}
-
-void Running::sKeyPressed(glm::vec3 vecW) {
-}
-
-void Running::dKeyPressed(glm::vec3 vecU) {
-}
-
 void Running::pause() {
     State::pause();
     glfwEnable(GLFW_MOUSE_CURSOR);
@@ -386,16 +339,9 @@ void Running::resume() {
     glfwDisable(GLFW_MOUSE_CURSOR);
 }
 
-void Running::printObjects() {
-}
-
 void Running::updateLookAt() {
     camLookAt = playerCamera->trans - glm::vec3(
             cos(camAlpha) * cos(camBeta),
             sin(camAlpha),
             cos(camAlpha) * sin(camBeta));
-}
-
-void Running::handleFirstPersonMovement(int keyDown[], float dt) {
-
 }
