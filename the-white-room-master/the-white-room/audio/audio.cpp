@@ -60,10 +60,10 @@ vector<string> SoundPlayer::tokenize(const string &str, const string &delim) {
 }
 
 
-void SoundPlayer::fillMap() {
+void SoundPlayer::fillMap(std::string listOfSounds) {
     ifstream soundFile;
     string in;
-    soundFile.open("audio/sounds.txt");
+    soundFile.open(listOfSounds.c_str());
 
     if (soundFile.is_open()) {
         while (soundFile.good()) {
@@ -85,7 +85,7 @@ void SoundPlayer::fillMap() {
     else cout << "Unable to open file\n";
 }
 
-SoundPlayer::SoundPlayer() {
+SoundPlayer::SoundPlayer(std::string listOfSounds) {
     int               key;
     unsigned int      version;
 
@@ -112,7 +112,7 @@ SoundPlayer::SoundPlayer() {
     result = soundSystem->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);
     
-    fillMap();
+    fillMap(listOfSounds);
 }
 
 SoundPlayer::~SoundPlayer() {

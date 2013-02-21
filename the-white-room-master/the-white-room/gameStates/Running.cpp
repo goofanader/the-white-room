@@ -31,7 +31,7 @@ Running::Running() {
     timeSpent = 0;
 
     printf("try the sound\n");
-    soundPlayer = new SoundPlayer();
+    soundPlayer = new SoundPlayer("audio/sounds.txt");
     printf("loaded the sound player\n");
     footSounds = new SoundPlayer();
     printf("loaded foot sounds\n");
@@ -118,7 +118,7 @@ void Running::loadObjectsFromEvent() {
     }
 
     if (clockSound) {
-        clockSound->onEvent(soundPlayer);
+        clockSound->onClick(soundPlayer);
     }
 }
 
@@ -298,7 +298,7 @@ void Running::mouseClicked(int button, int action) {
                     std::cout << std::endl;
                     std::string name = curr->className();
                     if (name != "Book1" && name != "Book2" && name != "Book3") {
-                        curr->onEvent(soundPlayer);
+                        curr->onClick(soundPlayer);
                     }
                     sound = 1;
 #if 0
@@ -319,29 +319,29 @@ void Running::mouseClicked(int button, int action) {
                         printf("clicked on Book3\n");
                         switches[2].setSwitch(true);
                         curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
+                        curr->onClick(soundPlayer);
                     } else if (curr->className() == "Book2" && switches[2].isSwitchOn()) {
                         printf("clicked on Book2 in order\n");
                         switches[1].setSwitch(true);
                         curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
+                        curr->onClick(soundPlayer);
                     } else if (curr->className() == "Book1" && switches[2].isSwitchOn() &&
                             switches[1].isSwitchOn()) {
                         printf("clicked on Book1 in order\n");
                         switches[0].setSwitch(true);
                         curr->isClicked = true;
-                        curr->onEvent(soundPlayer);
+                        curr->onClick(soundPlayer);
                         setIfWon(true);
 
                         //cause the white door to open
                         if (!switches[3].isSwitchOn()) {
-                            switches[3].getGameObject()->onEvent(soundPlayer);
+                            switches[3].getGameObject()->onClick(soundPlayer);
                             switches[3].setSwitch(true);
                         }
                     } else if ((curr->className() == "Book2" && !switches[2].isSwitchOn()) ||
                             (curr->className() == "Book1" && !(switches[2].isSwitchOn() &&
                             switches[1].isSwitchOn()))) {
-                        curr->onEvent(soundPlayer);
+                        curr->onClick(soundPlayer);
                         for (int i = 0; i < 3; i++) {
                             switches[i].setSwitch(false);
                             switches[i].getGameObject()->isClicked = false;

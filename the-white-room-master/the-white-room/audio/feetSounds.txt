@@ -1,0 +1,2 @@
+Footstep1:audio/footstep1.wav
+Footstep2:audio/footstep2.wav

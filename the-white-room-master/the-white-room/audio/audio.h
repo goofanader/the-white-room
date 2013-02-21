@@ -28,10 +28,10 @@ class SoundPlayer {
         SoundObject *object;
 
         vector<string> tokenize(const string &str, const string &delim);
-        void fillMap();
+        void fillMap(std::string listOfSounds);
 
     public:
-        SoundPlayer();
+        SoundPlayer(std::string listOfSounds);
         virtual ~SoundPlayer();
 
         void playSound(string sName);
