@@ -106,8 +106,8 @@ SoundPlayer::SoundPlayer(std::string listOfSounds) {
         return;
     }
 
-    result = soundSystem->setOutput(FMOD_OUTPUTTYPE_ALSA);
-    ERRCHECK(result);
+    //result = soundSystem->setOutput(FMOD_OUTPUTTYPE_ALSA);
+    //ERRCHECK(result);
     
     result = soundSystem->init(32, FMOD_INIT_NORMAL, 0);
     ERRCHECK(result);

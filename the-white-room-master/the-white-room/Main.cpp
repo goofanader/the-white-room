@@ -237,6 +237,9 @@ void advanceState(State* newState) {
 }
 
 void Initialize() {
+    //enable alpha for color
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     
          //create shadow map texture
     glGenTextures(1, &shadowMapTexture);
