@@ -20,12 +20,16 @@ GLvoid LoadTexture(char* image_file, int texID) {
   /*  x size from image, y size from image,                                              */    
   /*  border 0 (normal), rgb color data, unsigned byte data, data  */ 
   glBindTexture(GL_TEXTURE_2D, texID);
-  glTexImage2D(GL_TEXTURE_2D, 0, 3,
+  gluBuild2DMipmaps(GL_TEXTURE_2D, 3,
     TextureImage->sizeX, TextureImage->sizeY,
-    0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); /*  cheap scaling when image bigger than texture */    
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); /*  cheap scaling when image smalled than texture*/
-  
+    GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
+
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,
+    GL_NEAREST_MIPMAP_LINEAR); 
+  /*  cheap scaling when image bigger than texture */    
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,
+    GL_NEAREST_MIPMAP_LINEAR); 
+  /*  cheap scaling when image smalled than texture*/
 }
 
 
