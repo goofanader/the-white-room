@@ -17,7 +17,7 @@
 #define PI 3.14159f
 
 #define MAX_FOOT_SPACE .4
-#define MAX_CLICK_DISTANCE 100
+#define MAX_CLICK_DISTANCE 10
 
 Running::Running() {
     camAlpha = -0.545f;
@@ -137,14 +137,6 @@ void Running::draw() {
 
 void Running::update(float dt) {
     if (!isPaused()) {
-        /*
-        playerCamera->AABBmin.x = playerCamera->trans.x - .5f;
-        playerCamera->AABBmin.y = playerCamera->trans.y - 7.f;
-        playerCamera->AABBmin.z = playerCamera->trans.z - .5f;
-        playerCamera->AABBmax.x = playerCamera->trans.x + .5f;
-        playerCamera->AABBmax.y = playerCamera->trans.y + 7.f;
-        playerCamera->AABBmax.z = playerCamera->trans.z + .5f;*/
-
         timeSpent += dt;
 
         lightPos->trans = getGC()->lightPos;
@@ -198,9 +190,15 @@ void Running::mouseClicked(int button, int action) {
             oy = playerCamera->trans.y;
             oz = playerCamera->trans.z;
 
-            x = playerCamera->trans.x - curr->trans.x;
+/*            x = playerCamera->trans.x - curr->trans.x;
             y = playerCamera->trans.y - curr->trans.y;
             z = playerCamera->trans.z - curr->trans.z;
+*/          x = ((playerCamera->getAABBmin().x + playerCamera->getAABBmax().x) / 2.f)
+                      - ((curr->getAABBmin().x + curr->getAABBmax().x) / 2.f);
+            y = ((playerCamera->getAABBmin().y + playerCamera->getAABBmax().y) / 2.f)
+                      - ((curr->getAABBmin().y + curr->getAABBmax().y) / 2.f);
+            z = ((playerCamera->getAABBmin().z + playerCamera->getAABBmax().z) / 2.f)
+                      - ((curr->getAABBmin().z + curr->getAABBmax().z) / 2.f);
 
             //distance from current object
 

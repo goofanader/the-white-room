@@ -45,25 +45,9 @@ GameObject::GameObject() {
     diffColor = glm::vec3(.1f);
     diffAlpha = 1.f;
 
-    textureMaps[0] = GL_TEXTURE0;
-    textureMaps[1] = GL_TEXTURE1;
-    textureMaps[2] = GL_TEXTURE2;
-    textureMaps[3] = GL_TEXTURE3;
-    textureMaps[4] = GL_TEXTURE4;
-    textureMaps[5] = GL_TEXTURE5;
-    textureMaps[6] = GL_TEXTURE6;
-    textureMaps[7] = GL_TEXTURE7;
-    textureMaps[8] = GL_TEXTURE8;
-    textureMaps[9] = GL_TEXTURE9;
-    textureMaps[10] = GL_TEXTURE10;
-    textureMaps[11] = GL_TEXTURE11;
-    textureMaps[12] = GL_TEXTURE12;
-    textureMaps[13] = GL_TEXTURE13;
-    textureMaps[14] = GL_TEXTURE14;
-    textureMaps[15] = GL_TEXTURE15;
-    textureMaps[16] = GL_TEXTURE16;
-    textureMaps[17] = GL_TEXTURE17;
-
+    for (int i = 0; i < MAX_TEXTURES; i++) {
+        textureMaps[i] = GL_TEXTURE0 + i;
+    }
 }
 
 GameObject::~GameObject() {
@@ -74,20 +58,8 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         return;
     }
-#if 0
-    glm::vec3 objPos = (AABBmax + AABBmin)*0.5f - cameraPos;
-    glm::vec3 lookDir = lookAt - cameraPos;
     
-    float objPoslen = sqrt(objPos.x*objPos.x + objPos.y*objPos.y + objPos.z*objPos.z);
-    float lookAtlen = sqrt(lookDir.x*lookDir.x + lookDir.y*lookDir.y + lookDir.z*lookDir.z);
-    float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / 3.141592f;
-
-    //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
-    //printf("angle: %lf\n", angle);
-    
-    if(angle < 90.0f) {
-#endif
-        printOpenGLError();
+    printOpenGLError();
     glUseProgram(gc->shader);
     printOpenGLError();
     //TODO Set matrix stuff
@@ -105,10 +77,6 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glUniformMatrix4fv(gc->h_uNormalMatrix,
             glm::value_ptr(glm::transpose(glm::inverse(model))));
 
-    //Plane* p_planes;
-    //mat4 vpMatrix = projection * view;
-    //VFCull::ExtractPlanesGL(p_planes, vpMatrix, true); 
-    
     //Do transformations
     safe_glEnableVertexAttribArray(gc->h_aPosition);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -160,8 +128,6 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glDisableVertexAttribArray(gc->h_aPosition);
     safe_glDisableVertexAttribArray(gc->h_aTexCoord);
     glUseProgram(0);
-    
-    //}
 }
 
 void GameObject::update(float dt) {
@@ -170,17 +136,10 @@ void GameObject::update(float dt) {
 
 void GameObject::doTranslate(glm::vec3 trans) {
     this->trans += trans;
-    //this->AABBmin += trans;
-    //this->AABBmax += trans;
-    fixBoundingBoxes();
 }
 
 void GameObject::doRotate(glm::vec3 axis, float deg) {
     this->rotate = glm::rotate(this->rotate, deg, axis);
-    //this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
-    //this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
-
-    fixBoundingBoxes();
 }
 
 void GameObject::fixBoundingBoxes() {
@@ -203,64 +162,14 @@ void GameObject::fixBoundingBoxes() {
 
 void GameObject::doScale(glm::vec3 scale) {
     this->scale *= scale;
-    //this->AABBmin *= scale;
-    //this->AABBmax *= scale;
-
-    fixBoundingBoxes();
 }
 
 bool GameObject::doesCollide(GameObject *other) {
-#if 0
-    vec3 thisMin = getAABBmin();
-    vec3 thisMax = getAABBmax();
-    
-    if (thisMin.x > thisMax.x) {
-        float temp = thisMin.x;
-        thisMin.x = thisMax.x;
-        thisMax.x = temp;
-    }
-    if (thisMin.y > thisMax.y) {
-        float temp = thisMin.y;
-        thisMin.y = thisMax.y;
-        thisMax.y = temp;
-    }
-    if (thisMin.z > thisMax.z) {
-        float temp = thisMin.z;
-        thisMin.z = thisMax.z;
-        thisMax.z = temp;
-    }
-    
-    vec3 otherMin = other->getAABBmin();
-    vec3 otherMax = other->getAABBmax();
-    
-    if (otherMin.x > otherMax.x) {
-        float temp = otherMin.x;
-        otherMin.x = otherMax.x;
-        otherMax.x = temp;
-    }
-    if (otherMin.y > otherMax.y) {
-        float temp = otherMin.y;
-        otherMin.y = otherMax.y;
-        otherMax.y = temp;
-    }
-    if (otherMin.z > otherMax.z) {
-        float temp = otherMin.z;
-        otherMin.z = otherMax.z;
-        otherMax.z = temp;
-    }
-    
-    return (thisMin.x <= otherMax.x &&
-            //thisMin.y <= otherMax.y &&
-            thisMin.z <= otherMax.z &&
-            thisMax.x >= otherMin.x &&
-            //thisMax.y >= otherMin.y &&
-            thisMax.z >= otherMin.z);
-#endif
     vec3 thisMin = getAABBmin();
     vec3 thisMax = getAABBmax();
     vec3 otherMin = other->getAABBmin();
     vec3 otherMax = other->getAABBmax();
-    
+
     return (thisMin.x <= otherMax.x &&
             thisMin.y <= otherMax.y &&
             thisMin.z <= otherMax.z &&
@@ -271,8 +180,6 @@ bool GameObject::doesCollide(GameObject *other) {
 
 void GameObject::setTrans(glm::vec3 t) {
     this->trans = t;
-    //this->AABBmin += t;
-    //this->AABBmax += t;
 }
 
 void GameObject::changeColor(glm::vec3 c, float alpha) {
@@ -302,15 +209,15 @@ unsigned int GameObject::numTextures() {
     return counter++;
 }
 
-glm::vec3 GameObject::getAABBmin() {
+glm::vec3 GameObject::getMinOrMax(bool isFindingMin) {
     glm::mat4 transMat = glm::translate(glm::mat4(), trans);
     glm::mat4 scaleMat = glm::scale(glm::mat4(), scale);
 
     glm::mat4 model = transMat * rotate * scaleMat;
-    
+
     vec3 min = vec3(model * vec4(AABBmin, 1.0));
     vec3 max = vec3(model * vec4(AABBmax, 1.0));
-    
+
     if (min.x > max.x) {
         float temp = min.x;
         min.x = max.x;
@@ -327,33 +234,16 @@ glm::vec3 GameObject::getAABBmin() {
         max.z = temp;
     }
     
-    return min;
+    if (isFindingMin)
+        return min;
+    else
+        return max;
+}
+
+glm::vec3 GameObject::getAABBmin() {
+    return getMinOrMax(true);
 }
 
 glm::vec3 GameObject::getAABBmax() {
-    glm::mat4 transMat = glm::translate(glm::mat4(), trans);
-    glm::mat4 scaleMat = glm::scale(glm::mat4(), scale);
-
-    glm::mat4 model = transMat * rotate * scaleMat;
-    
-    vec3 min = vec3(model * vec4(AABBmin, 1.0));
-    vec3 max = vec3(model * vec4(AABBmax, 1.0));
-    
-    if (min.x > max.x) {
-        float temp = min.x;
-        min.x = max.x;
-        max.x = temp;
-    }
-    if (min.y > max.y) {
-        float temp = min.y;
-        min.y = max.y;
-        max.y = temp;
-    }
-    if (min.z > max.z) {
-        float temp = min.z;
-        min.z = max.z;
-        max.z = temp;
-    }
-    
-    return max;
+    return getMinOrMax(false);
 }

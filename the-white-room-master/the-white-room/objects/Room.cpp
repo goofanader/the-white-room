@@ -64,6 +64,10 @@ Room::Room() {
         room[i].hasTex = true;
     }
     
+    for (int i = 0; i < NUM_WALLS; i++) {
+        std::cout << "texNum, room " << i << ": " << room[i].texNum << std::endl;
+    }
+    
     //load textures
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/CeilingUV.bmp", room[0].texNum);
