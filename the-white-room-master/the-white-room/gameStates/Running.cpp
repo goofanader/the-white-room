@@ -273,7 +273,7 @@ void Running::mouseClicked(int button, int action) {
                 if (reach.x >= curr->getAABBmin().x && reach.x <= curr->getAABBmax().x &&
                         reach.y >= curr->getAABBmin().y && reach.y <= curr->getAABBmax().y &&
                         reach.z >= curr->getAABBmin().z && reach.z <= curr->getAABBmax().z &&
-                        (glm::dot(normalizedCam, reach)) > 0.f) {
+                        (glm::dot(normalizedCam, reach - playerCamera->trans)) > 0.f) {
                     //print out what got clicked on
                     std::cout << "clicked on... " << curr->className();
                     std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());

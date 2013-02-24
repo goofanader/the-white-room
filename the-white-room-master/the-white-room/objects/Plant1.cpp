@@ -20,6 +20,8 @@ Plant1::Plant1() {
     specStrength = 0.f;
     scale = glm::vec3(1.f);
     
+    rotating = 0.f;
+    
     doScale(glm::vec3(3.f));
     doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,4.5f));
     //this->doScale(glm::vec3(3.f));
@@ -31,6 +33,20 @@ Plant1::Plant1(const Plant1& orig) {
 Plant1::~Plant1() {
 }
 
+void Plant1::update(float dt) {
+    if (rotating < 90.f) {
+        rotating++;
+        doRotate(vec3(0,1,0), 1.f);
+    }
+}
+
 std::string Plant1::className() {
     return "Plant1";
+}
+
+void Plant1::onEvent(SoundPlayer *soundPlayer) {
+    if (rotating >= 90.f) {
+        rotating = 0.f;
+    } else {
+    }
 }
