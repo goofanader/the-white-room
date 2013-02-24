@@ -27,15 +27,15 @@ MooseHead::MooseHead() {
 
     isClicked = false;
     doScale(glm::vec3(ROOM_SIZE / 10.f));
-    doRotate(glm::vec3(0,1,0), 90.f);
-    doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x, 
+    doRotate(glm::vec3(0, 1, 0), 90.f);
+    doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x,
             getRoomCeilHeight() - getAABBmax().y - 1.f, -17.f));
     //when we have the textures
-/*
- texNum = numTextures();
-    LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
+
+    texNum = numTextures();
+    LoadTexture((char *) "objects/meshes/moosehead/MooseUV.bmp", texNum);
     hasTex = true;
-    printf("%d\n", texNum);*/
+    //printf("%d\n", texNum);
 }
 
 MooseHead::MooseHead(const MooseHead& orig) {

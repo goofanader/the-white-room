@@ -17,6 +17,7 @@
 #define PI 3.14159f
 
 #define MAX_FOOT_SPACE .4
+#define MAX_CLICK_DISTANCE 100
 
 Running::Running() {
     camAlpha = -0.545f;
@@ -273,7 +274,8 @@ void Running::mouseClicked(int button, int action) {
                 if (reach.x >= curr->getAABBmin().x && reach.x <= curr->getAABBmax().x &&
                         reach.y >= curr->getAABBmin().y && reach.y <= curr->getAABBmax().y &&
                         reach.z >= curr->getAABBmin().z && reach.z <= curr->getAABBmax().z &&
-                        (glm::dot(normalizedCam, reach - playerCamera->trans)) > 0.f) {
+                        (glm::dot(normalizedCam, reach - playerCamera->trans)) > 0.f &&
+                        mag <= MAX_CLICK_DISTANCE) {
                     //print out what got clicked on
                     std::cout << "clicked on... " << curr->className();
                     std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());

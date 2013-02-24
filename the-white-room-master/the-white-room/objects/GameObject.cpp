@@ -1,7 +1,6 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-#include "GLSL_helper.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -88,8 +87,9 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     
     if(angle < 90.0f) {
 #endif
+        printOpenGLError();
     glUseProgram(gc->shader);
-
+    printOpenGLError();
     //TODO Set matrix stuff
     glm::mat4 projection = glm::perspective(80.0f, gc->aspectRatio, 0.1f, 100.f);
     safe_glUniformMatrix4fv(gc->h_uProjMatrix, glm::value_ptr(projection));
@@ -119,22 +119,27 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glVertexAttribPointer(gc->h_aNormal, 3, GL_FLOAT, GL_TRUE, 0, 0);
 
     if (hasTex) {
+        printOpenGLError();
         glEnable(GL_TEXTURE_2D);
-
+        printOpenGLError();
         safe_glUniform1i(gc->h_uTexUnit, texNum);
-
+        printOpenGLError();
         safe_glEnableVertexAttribArray(gc->h_aTexCoord);
+        printOpenGLError();
         glBindBuffer(GL_ARRAY_BUFFER, TBO);
+        printOpenGLError();
         safe_glVertexAttribPointer(
                 gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+        printOpenGLError();
         glActiveTexture(textureMaps[texNum]);
+        printOpenGLError();
         glBindTexture(GL_TEXTURE_2D, texNum);
-
+        printOpenGLError();
         glDisable(GL_TEXTURE_2D);
     }
+    printOpenGLError();
     safe_glUniform1i(gc->h_uUseTex, hasTex ? 1 : 0);
-
+    printOpenGLError();
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
     printOpenGLError();

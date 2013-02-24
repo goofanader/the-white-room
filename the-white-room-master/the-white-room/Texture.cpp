@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "GLSL_helper.h"
 
 using namespace std;
 
@@ -19,17 +20,21 @@ GLvoid LoadTexture(char* image_file, int texID) {
   /*  2d texture, level of detail 0 (normal), 3 components (red, green, blue),            */
   /*  x size from image, y size from image,                                              */    
   /*  border 0 (normal), rgb color data, unsigned byte data, data  */ 
+  printOpenGLError();
   glBindTexture(GL_TEXTURE_2D, texID);
+  printOpenGLError();
   gluBuild2DMipmaps(GL_TEXTURE_2D, 3,
     TextureImage->sizeX, TextureImage->sizeY,
     GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
-
+  printOpenGLError();
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,
-    GL_NEAREST_MIPMAP_LINEAR); 
+    GL_NEAREST_MIPMAP_LINEAR);
+  printOpenGLError();
   /*  cheap scaling when image bigger than texture */    
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,
     GL_NEAREST_MIPMAP_LINEAR); 
   /*  cheap scaling when image smalled than texture*/
+  printOpenGLError();
 }
 
 

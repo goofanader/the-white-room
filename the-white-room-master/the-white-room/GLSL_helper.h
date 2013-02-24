@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef GLSL_HELPER_H
+#define GLSL_HELPER_H
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #include <OPENGL/gl.h>
@@ -23,6 +26,7 @@
 
 #include <string>
 #include <iostream>
+#include <stdio.h>
 
 
 int printOglError(char const * file, int line);
@@ -121,3 +125,4 @@ inline void safe_glUniform1f(const GLint handle, const GLfloat a) {
     if (handle >= 0)
         glUniform1f(handle, a);
 }
+#endif

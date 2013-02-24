@@ -24,6 +24,10 @@ Table::Table() {
     specStrength = 0.f;
     scale = glm::vec3(1.f);
     rotate = glm::mat4(1.f);
+    
+    texNum = numTextures();
+    LoadTexture((char *)"objects/meshes/table/Table2.bmp", texNum);
+    hasTex = true;
 
     isClicked = false;
     doRotate(glm::vec3(0,1,0), 90);

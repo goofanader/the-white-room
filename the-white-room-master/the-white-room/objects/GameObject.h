@@ -2,13 +2,14 @@
 #define	GAME_OBJECT_H
 
 #include <GL/gl.h>
+#include "GLSL_helper.h"
 #include "../GeometryCreator.h"
 #include "../audio/audio.h"
 #include "../Texture.h"
 
-
 #include <string>
 
+#define MAX_TEXTURES 52
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
 
@@ -90,7 +91,7 @@ public:
     GLuint TBO;
     int texNum;
 
-    GLenum textureMaps[39];
+    GLenum textureMaps[MAX_TEXTURES];
 
     glm::vec3 ambColor;
     float ambAlpha;

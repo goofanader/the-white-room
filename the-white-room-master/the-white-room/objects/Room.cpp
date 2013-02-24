@@ -21,27 +21,27 @@ Room::Room() {
     //Get the ceiling mesh, set it to room 0
     GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomCeilingNew.obj",
-            room[0].IBOlen, room[0].VBO, room[0].IBO, room[0].NBO, faceNBO,
+            room[0].IBOlen, room[0].VBO, room[0].IBO, room[0].NBO, room[0].TBO,
             room[0].AABBmin, room[0].AABBmax);
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomFloor.obj",
-            room[1].IBOlen, room[1].VBO, room[1].IBO, room[1].NBO, faceNBO,
+            room[1].IBOlen, room[1].VBO, room[1].IBO, room[1].NBO, room[1].TBO,
             room[1].AABBmin, room[1].AABBmax);
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallEast1.obj",
-            room[2].IBOlen, room[2].VBO, room[2].IBO, room[2].NBO, faceNBO,
+            room[2].IBOlen, room[2].VBO, room[2].IBO, room[2].NBO, room[2].TBO,
             room[2].AABBmin, room[2].AABBmax);
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallWest1.obj",
-            room[3].IBOlen, room[3].VBO, room[3].IBO, room[3].NBO, faceNBO,
+            room[3].IBOlen, room[3].VBO, room[3].IBO, room[3].NBO, room[3].TBO,
             room[3].AABBmin, room[3].AABBmax);
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallNorth1.obj",
-            room[4].IBOlen, room[4].VBO, room[4].IBO, room[4].NBO, faceNBO,
+            room[4].IBOlen, room[4].VBO, room[4].IBO, room[4].NBO, room[4].TBO,
             room[4].AABBmin, room[4].AABBmax);
 
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallSouth2.obj",
-            room[5].IBOlen, room[5].VBO, room[5].IBO, room[5].NBO, faceNBO,
+            room[5].IBOlen, room[5].VBO, room[5].IBO, room[5].NBO, room[5].TBO,
             room[5].AABBmin, room[5].AABBmax);
 
     int startIndex = 0;
@@ -60,7 +60,24 @@ Room::Room() {
         room[i].shininess = 1.f;
         room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
+        room[i].texNum = numTextures();
+        room[i].hasTex = true;
     }
+    
+    //load textures
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/CeilingUV.bmp", room[0].texNum);
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/FloorUV.bmp", room[1].texNum);
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/EastUV.bmp", room[2].texNum);
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/WestUV.bmp", room[3].texNum);
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/NorthUV.bmp", room[4].texNum);
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/SouthUV.bmp", room[5].texNum);
+    printOpenGLError();
 
     //east wall
     room[2].doScale(vec3(1.f, ROOM_SIZE / ROOM_HEIGHT_DIVISION, ROOM_SIZE));
@@ -68,6 +85,7 @@ Room::Room() {
 
     //west wall
     room[3].doScale(vec3(1.f, ROOM_SIZE / ROOM_HEIGHT_DIVISION, ROOM_SIZE));
+    room[3].doRotate(vec3(0,1,0), 180);
     room[3].doTranslate(vec3(ROOM_SIZE, 0.f, 0.f));
 
     //north wall

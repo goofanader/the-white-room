@@ -10,7 +10,7 @@
 Plant6::Plant6() {
     GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/plants/Plant6.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -21,6 +21,11 @@ Plant6::Plant6() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    texNum = numTextures();
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/plants/Plant6UV.bmp", texNum);
+    printOpenGLError();
+    hasTex = true;
     
     rotating = 90.f;
     
