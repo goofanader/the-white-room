@@ -72,14 +72,17 @@ Room::Room() {
 
     //north wall
     room[4].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
-    std::cout << "north - Min: " << printVec3(room[4].AABBmin);
-    std::cout << "; Max: " << printVec3(room[4].AABBmax) << std::endl;
-    room[4].doTranslate(vec3(-(room[4].AABBmax.x + room[4].AABBmin.x) / 2.f, -(room[4].AABBmax.y + room[4].AABBmin.y) / 2.f, ROOM_SIZE));
+    std::cout << "north - Min: " << printVec3(room[4].getAABBmin());
+    std::cout << "; Max: " << printVec3(room[4].getAABBmax()) << std::endl;
+    room[4].doTranslate(vec3(-(room[4].getAABBmax().x + room[4].getAABBmin().x) / 2.f,
+            -(room[4].getAABBmax().y + room[4].getAABBmin().y) / 2.f, ROOM_SIZE));
 
-    northBoundLeftMin = room[4].AABBmin;
-    northBoundLeftMax = glm::vec3(room[4].AABBmin.x / 2.f + (ROOM_SIZE / 5.f) + 5.f, room[4].AABBmax.y, room[4].AABBmax.z);
-    northBoundRightMin = glm::vec3(room[4].AABBmax.x / 2.f - (ROOM_SIZE / 5.f) - 5.f, room[4].AABBmin.y, room[4].AABBmin.z);
-    northBoundRightMax = room[4].AABBmax;
+    northBoundLeftMin = room[4].getAABBmin();
+    northBoundLeftMax = glm::vec3(room[4].getAABBmin().x / 2.f + 
+            (ROOM_SIZE / 5.f) + 5.f, room[4].getAABBmax().y, room[4].getAABBmax().z);
+    northBoundRightMin = glm::vec3(room[4].getAABBmax().x / 2.f - 
+            (ROOM_SIZE / 5.f) - 5.f, room[4].getAABBmin().y, room[4].getAABBmin().z);
+    northBoundRightMax = room[4].getAABBmax();
 
     //south wall
     room[5].doScale(vec3(ROOM_SIZE, ROOM_SIZE / ROOM_HEIGHT_DIVISION, 1.f));
@@ -87,20 +90,20 @@ Room::Room() {
 
     //the ceiling
     room[0].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
-    std::cout << "ceiling - Min: " << printVec3(room[0].AABBmin);
-    std::cout << "; Max: " << printVec3(room[0].AABBmax) << std::endl;
-    room[0].doTranslate(vec3(0.f, room[3].AABBmax.y, 0.f));
+    std::cout << "ceiling - Min: " << printVec3(room[0].getAABBmin());
+    std::cout << "; Max: " << printVec3(room[0].getAABBmax()) << std::endl;
+    room[0].doTranslate(vec3(0.f, room[3].getAABBmax().y, 0.f));
 
     //the floor
     room[1].doScale(vec3(ROOM_SIZE, 1.f, ROOM_SIZE));
-    room[1].doTranslate(vec3(0.f, room[3].AABBmin.y, 0.f));
+    room[1].doTranslate(vec3(0.f, room[3].getAABBmin().y, 0.f));
 
     //GameObject::roomHeight = room[3].AABBmax.y;
     AABBmin = glm::vec3(-200.f);
     AABBmax = glm::vec3(-200.f);
     
-    setRoomFloorHeight(glm::vec3(0.f, room[3].AABBmin.y, 0.f));
-    setRoomCeilHeight(room[3].AABBmax.y);
+    setRoomFloorHeight(glm::vec3(0.f, room[3].getAABBmin().y, 0.f));
+    setRoomCeilHeight(room[3].getAABBmax().y);
 }
 
 Room::Room(const Room& orig) {
@@ -132,20 +135,20 @@ bool Room::doesCollide(GameObject* other) {
                 return true;
             }
         } else {
-            if (northBoundLeftMin.x <= other->AABBmax.x &&
+            if (northBoundLeftMin.x <= other->getAABBmax().x &&
                     //this->northBoundLeftMin.y <= other->AABBmax.y &&
-                    this->northBoundLeftMin.z <= other->AABBmax.z &&
-                    this->northBoundLeftMax.x >= other->AABBmin.x &&
+                    this->northBoundLeftMin.z <= other->getAABBmax().z &&
+                    this->northBoundLeftMax.x >= other->getAABBmin().x &&
                     //this->northBoundLeftMax.y >= other->AABBmin.y &&
-                    this->northBoundLeftMax.z >= other->AABBmin.z) {
+                    this->northBoundLeftMax.z >= other->getAABBmin().z) {
                 return true;
             }
-            if (this->northBoundRightMin.x <= other->AABBmax.x &&
+            if (this->northBoundRightMin.x <= other->getAABBmax().x &&
                     //this->northBoundRightMin.y <= other->AABBmax.y &&
-                    this->northBoundRightMin.z <= other->AABBmax.z &&
-                    this->northBoundRightMax.x >= other->AABBmin.x &&
+                    this->northBoundRightMin.z <= other->getAABBmax().z &&
+                    this->northBoundRightMax.x >= other->getAABBmin().x &&
                     //this->northBoundRightMax.y >= other->AABBmin.y &&
-                    this->northBoundRightMax.z >= other->AABBmin.z) {
+                    this->northBoundRightMax.z >= other->getAABBmin().z) {
                 return true;
             }
         }

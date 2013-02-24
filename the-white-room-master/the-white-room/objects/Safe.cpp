@@ -51,19 +51,16 @@ Safe::Safe() {
     door->specAlpha = 1.0f;
     door->isClicked = false;
     
-    AABBmin = body->AABBmin;
-    AABBmax = body->AABBmax;
-    
     body->doScale(glm::vec3(ROOM_SIZE / 10.f));
     door->doScale(1.f * body->scale);
     
     body->doTranslate(glm::vec3(0.f, 
-            getRoomFloorHeight().y - body->AABBmin.y, -ROOM_SIZE - body->AABBmin.z));
+            getRoomFloorHeight().y - body->getAABBmin().y, -ROOM_SIZE - body->getAABBmin().z));
     door->doTranslate(body->trans);
     door->doTranslate(glm::vec3(1.f, -0.1f, 2.f));
     
-    AABBmin = body->AABBmin;
-    AABBmax = body->AABBmax;
+    AABBmin = body->getAABBmin();
+    AABBmax = body->getAABBmax();
 
     body->texNum = numTextures();
     LoadTexture((char *)"objects/meshes/safe/SafeBodyUV.bmp", body->texNum);

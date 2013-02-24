@@ -43,8 +43,8 @@ Book3::Book3() {
     LoadTexture((char *) "objects/meshes/bookshelf/book3UV.bmp", texNum);
     hasTex = true;
     
-    std::cout << "Book3: AABBmin=" << printVec3(AABBmin);
-    std::cout <<"; AABBmax=" << printVec3(AABBmax) << std::endl;
+    std::cout << "Book3: AABBmin=" << printVec3(getAABBmin());
+    std::cout <<"; AABBmax=" << printVec3(getAABBmax()) << std::endl;
     /*AABBmin.x -= 1.f;
     AABBmax.x += 1.f;
     AABBmin.z -= 1.f;

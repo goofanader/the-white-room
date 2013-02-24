@@ -32,11 +32,11 @@ WhiteDoor::WhiteDoor() {
     timeSpent = 0.0;
 
     doorAngle = 180.f;
-    doScale(glm::vec3(ROOM_SIZE / 5.f,ROOM_SIZE / 5.f -.45f,ROOM_SIZE / 5.f));
+    doScale(glm::vec3(ROOM_SIZE / 5.f,ROOM_SIZE / 5.f -.45f, ROOM_SIZE / 5.f));
 
     doRotate(glm::vec3(0, 1, 0), doorAngle);
-    doTranslate(glm::vec3(1.9f, getRoomFloorHeight().y - AABBmin.y, ROOM_SIZE - .5f));
-    prevAABBmin = AABBmin;
+    doTranslate(glm::vec3(1.9f, getRoomFloorHeight().y - getAABBmin().y, ROOM_SIZE - .5f));
+    prevAABBmin = getAABBmin();
     std::cout << "prevAABBmin: " << printVec3(prevAABBmin) << std::endl;
 
     texNum = numTextures();
@@ -50,18 +50,6 @@ WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
 
 WhiteDoor::~WhiteDoor() {
 }
-#if 0
-
-void WhiteDoor::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-        glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc) {
-#if 0
-    door->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    knob->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-#endif
-    draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    //printf("coo\n");
-}
-#endif
 
 void WhiteDoor::update(float dt) {
     if (!isClosed) {
@@ -72,7 +60,7 @@ void WhiteDoor::update(float dt) {
             float zMove = -.065f;//-.3f;
             doTranslate(glm::vec3(xMove, 0.f, zMove));
             timeSpent += (double) dt;
-            setNewBounds = true;
+            //setNewBounds = true;
         } else if (setNewBounds) {
             setNewBounds = false;
             //AABBmin.x = -7.1f;

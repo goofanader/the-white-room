@@ -165,16 +165,15 @@ void GameObject::update(float dt) {
 
 void GameObject::doTranslate(glm::vec3 trans) {
     this->trans += trans;
-    this->AABBmin += trans;
-    this->AABBmax += trans;
-
+    //this->AABBmin += trans;
+    //this->AABBmax += trans;
     fixBoundingBoxes();
 }
 
 void GameObject::doRotate(glm::vec3 axis, float deg) {
     this->rotate = glm::rotate(this->rotate, deg, axis);
-    this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
-    this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
+    //this->AABBmin = vec3(this->rotate * vec4(this->AABBmin, 1.f));
+    //this->AABBmax = vec3(this->rotate * vec4(this->AABBmax, 1.f));
 
     fixBoundingBoxes();
 }
@@ -199,25 +198,76 @@ void GameObject::fixBoundingBoxes() {
 
 void GameObject::doScale(glm::vec3 scale) {
     this->scale *= scale;
-    this->AABBmin *= scale;
-    this->AABBmax *= scale;
+    //this->AABBmin *= scale;
+    //this->AABBmax *= scale;
 
     fixBoundingBoxes();
 }
 
 bool GameObject::doesCollide(GameObject *other) {
-    return (this->AABBmin.x <= other->AABBmax.x &&
-            this->AABBmin.y <= other->AABBmax.y &&
-            this->AABBmin.z <= other->AABBmax.z &&
-            this->AABBmax.x >= other->AABBmin.x &&
-            this->AABBmax.y >= other->AABBmin.y &&
-            this->AABBmax.z >= other->AABBmin.z);
+#if 0
+    vec3 thisMin = getAABBmin();
+    vec3 thisMax = getAABBmax();
+    
+    if (thisMin.x > thisMax.x) {
+        float temp = thisMin.x;
+        thisMin.x = thisMax.x;
+        thisMax.x = temp;
+    }
+    if (thisMin.y > thisMax.y) {
+        float temp = thisMin.y;
+        thisMin.y = thisMax.y;
+        thisMax.y = temp;
+    }
+    if (thisMin.z > thisMax.z) {
+        float temp = thisMin.z;
+        thisMin.z = thisMax.z;
+        thisMax.z = temp;
+    }
+    
+    vec3 otherMin = other->getAABBmin();
+    vec3 otherMax = other->getAABBmax();
+    
+    if (otherMin.x > otherMax.x) {
+        float temp = otherMin.x;
+        otherMin.x = otherMax.x;
+        otherMax.x = temp;
+    }
+    if (otherMin.y > otherMax.y) {
+        float temp = otherMin.y;
+        otherMin.y = otherMax.y;
+        otherMax.y = temp;
+    }
+    if (otherMin.z > otherMax.z) {
+        float temp = otherMin.z;
+        otherMin.z = otherMax.z;
+        otherMax.z = temp;
+    }
+    
+    return (thisMin.x <= otherMax.x &&
+            //thisMin.y <= otherMax.y &&
+            thisMin.z <= otherMax.z &&
+            thisMax.x >= otherMin.x &&
+            //thisMax.y >= otherMin.y &&
+            thisMax.z >= otherMin.z);
+#endif
+    vec3 thisMin = getAABBmin();
+    vec3 thisMax = getAABBmax();
+    vec3 otherMin = other->getAABBmin();
+    vec3 otherMax = other->getAABBmax();
+    
+    return (thisMin.x <= otherMax.x &&
+            thisMin.y <= otherMax.y &&
+            thisMin.z <= otherMax.z &&
+            thisMax.x >= otherMin.x &&
+            thisMax.y >= otherMin.y &&
+            thisMax.z >= otherMin.z);
 }
 
 void GameObject::setTrans(glm::vec3 t) {
     this->trans = t;
-    this->AABBmin += t;
-    this->AABBmax += t;
+    //this->AABBmin += t;
+    //this->AABBmax += t;
 }
 
 void GameObject::changeColor(glm::vec3 c, float alpha) {
@@ -245,4 +295,60 @@ void GameObject::resetEvent(SoundPlayer *soundPlayer) {
 unsigned int GameObject::numTextures() {
     static int counter = 0;
     return counter++;
+}
+
+glm::vec3 GameObject::getAABBmin() {
+    glm::mat4 transMat = glm::translate(glm::mat4(), trans);
+    glm::mat4 scaleMat = glm::scale(glm::mat4(), scale);
+
+    glm::mat4 model = transMat * rotate * scaleMat;
+    
+    vec3 min = vec3(model * vec4(AABBmin, 1.0));
+    vec3 max = vec3(model * vec4(AABBmax, 1.0));
+    
+    if (min.x > max.x) {
+        float temp = min.x;
+        min.x = max.x;
+        max.x = temp;
+    }
+    if (min.y > max.y) {
+        float temp = min.y;
+        min.y = max.y;
+        max.y = temp;
+    }
+    if (min.z > max.z) {
+        float temp = min.z;
+        min.z = max.z;
+        max.z = temp;
+    }
+    
+    return min;
+}
+
+glm::vec3 GameObject::getAABBmax() {
+    glm::mat4 transMat = glm::translate(glm::mat4(), trans);
+    glm::mat4 scaleMat = glm::scale(glm::mat4(), scale);
+
+    glm::mat4 model = transMat * rotate * scaleMat;
+    
+    vec3 min = vec3(model * vec4(AABBmin, 1.0));
+    vec3 max = vec3(model * vec4(AABBmax, 1.0));
+    
+    if (min.x > max.x) {
+        float temp = min.x;
+        min.x = max.x;
+        max.x = temp;
+    }
+    if (min.y > max.y) {
+        float temp = min.y;
+        min.y = max.y;
+        max.y = temp;
+    }
+    if (min.z > max.z) {
+        float temp = min.z;
+        min.z = max.z;
+        max.z = temp;
+    }
+    
+    return max;
 }

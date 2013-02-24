@@ -28,7 +28,7 @@ Armchair::Armchair() {
     isClicked = false;
     
     doScale(glm::vec3(6.f));
-    doTranslate(glm::vec3(20.f,getRoomFloorHeight().y - AABBmin.y, -ROOM_SIZE + 5.f));
+    doTranslate(glm::vec3(20.f,getRoomFloorHeight().y - getAABBmin().y, -ROOM_SIZE + 5.f));
     //this->doScale(glm::vec3(3.f));
 
 

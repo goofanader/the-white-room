@@ -56,10 +56,11 @@ void Running::initializeCamera() {
     playerCamera->rotAxis = vec3(0.f, 1.f, 0.f);
     playerCamera->rotSpeed = 0.f;
     playerCamera->trans = glm::vec3(0.f);
-    playerCamera->scale = vec3(1.f);
+    playerCamera->scale = glm::vec3(1.f);
+    playerCamera->rotate = glm::mat4(1.f);
 
     playerCamera->doTranslate(vec3(0.f,
-            getRoomFloorHeight().y - playerCamera->AABBmin.y, 0.f));
+            getRoomFloorHeight().y - playerCamera->getAABBmin().y, 20.f));
 
     camPrevTrans = playerCamera->trans;
 }
@@ -112,7 +113,7 @@ void Running::draw() {
             iter != objects.end(); iter++) {
         curr = (*iter);
 
-        glm::vec3 objPos = (curr->AABBmax + curr->AABBmin)*0.5f - playerCamera->trans;
+        glm::vec3 objPos = (curr->getAABBmax() + curr->getAABBmin())*0.5f - playerCamera->trans;
         glm::vec3 lookDir = camLookAt - playerCamera->trans;
 
         float objPoslen = sqrt(objPos.x * objPos.x + objPos.y * objPos.y + objPos.z * objPos.z);
@@ -122,7 +123,8 @@ void Running::draw() {
         //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
         //printf("angle: %lf\n", angle);
 
-        if (angle < 90.0f || curr->className() == "Room") {
+        if (angle < 90.0f || curr->className() == "Room" || 
+                curr->className() == "Bookshelf") {
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                     getGC()->lightColor, getGC());
         }
@@ -134,12 +136,13 @@ void Running::draw() {
 
 void Running::update(float dt) {
     if (!isPaused()) {
+        /*
         playerCamera->AABBmin.x = playerCamera->trans.x - .5f;
         playerCamera->AABBmin.y = playerCamera->trans.y - 7.f;
         playerCamera->AABBmin.z = playerCamera->trans.z - .5f;
         playerCamera->AABBmax.x = playerCamera->trans.x + .5f;
         playerCamera->AABBmax.y = playerCamera->trans.y + 7.f;
-        playerCamera->AABBmax.z = playerCamera->trans.z + .5f;
+        playerCamera->AABBmax.z = playerCamera->trans.z + .5f;*/
 
         timeSpent += dt;
 
@@ -168,10 +171,9 @@ void Running::update(float dt) {
 }
 
 void Running::mouseClicked(int button, int action) {
-    std::cout << "alpha=" << camAlpha << ", beta=" << camBeta << std::endl;
     float x, y, z, mag;
     glm::vec3 translatedCam, reach;
-
+    
     float nx, ny, nz,
             px, py, pz,
             ox, oy, oz,
@@ -214,49 +216,49 @@ void Running::mouseClicked(int button, int action) {
                     ny = 0.f;
                     nz = 1.f;
 
-                    px = curr->AABBmax.x;
-                    py = curr->AABBmax.y;
-                    pz = curr->AABBmax.z;
+                    px = curr->getAABBmax().x;
+                    py = curr->getAABBmax().y;
+                    pz = curr->getAABBmax().z;
                 } else if (i == 1) {
                     nx = 1.f;
                     ny = 0.f;
                     nz = 0.f;
 
-                    px = curr->AABBmax.x;
-                    py = curr->AABBmax.y;
-                    pz = curr->AABBmax.z;
+                    px = curr->getAABBmax().x;
+                    py = curr->getAABBmax().y;
+                    pz = curr->getAABBmax().z;
                 } else if (i == 2) {
                     nx = 0.f;
                     ny = 1.f;
                     nz = 0.f;
 
-                    px = curr->AABBmax.x;
-                    py = curr->AABBmax.y;
-                    pz = curr->AABBmax.z;
+                    px = curr->getAABBmax().x;
+                    py = curr->getAABBmax().y;
+                    pz = curr->getAABBmax().z;
                 } else if (i == 3) {
                     nx = 0.f;
                     ny = 0.f;
                     nz = -1.f;
 
-                    px = curr->AABBmin.x;
-                    py = curr->AABBmin.y;
-                    pz = curr->AABBmin.z;
+                    px = curr->getAABBmin().x;
+                    py = curr->getAABBmin().y;
+                    pz = curr->getAABBmin().z;
                 } else if (i == 4) {
                     nx = -1.f;
                     ny = 0.f;
                     nz = 0.f;
 
-                    px = curr->AABBmin.x;
-                    py = curr->AABBmin.y;
-                    pz = curr->AABBmin.z;
+                    px = curr->getAABBmin().x;
+                    py = curr->getAABBmin().y;
+                    pz = curr->getAABBmin().z;
                 } else if (i == 5) {
                     nx = 0.f;
                     ny = -1.f;
                     nz = 0.f;
 
-                    px = curr->AABBmin.x;
-                    py = curr->AABBmin.y;
-                    pz = curr->AABBmin.z;
+                    px = curr->getAABBmin().x;
+                    py = curr->getAABBmin().y;
+                    pz = curr->getAABBmin().z;
                 }
 
                 t = (nx * px + ny * py + nz * pz - nx * ox - ny * oy - nz * oz) /
@@ -268,14 +270,14 @@ void Running::mouseClicked(int button, int action) {
 
                 //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
 
-                if (reach.x >= curr->AABBmin.x && reach.x <= curr->AABBmax.x &&
-                        reach.y >= curr->AABBmin.y && reach.y <= curr->AABBmax.y &&
-                        reach.z >= curr->AABBmin.z && reach.z <= curr->AABBmax.z &&
+                if (reach.x >= curr->getAABBmin().x && reach.x <= curr->getAABBmax().x &&
+                        reach.y >= curr->getAABBmin().y && reach.y <= curr->getAABBmax().y &&
+                        reach.z >= curr->getAABBmin().z && reach.z <= curr->getAABBmax().z &&
                         (glm::dot(normalizedCam, reach)) > 0.f) {
                     //print out what got clicked on
                     std::cout << "clicked on... " << curr->className();
-                    std::cout << ". AABBmin=" << printVec3(curr->AABBmin);
-                    std::cout << ", AABBmax=" << printVec3(curr->AABBmax);
+                    std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());
+                    std::cout << ", AABBmax=" << printVec3(curr->getAABBmax());
                     std::cout << std::endl;
 
                     currEvent->ifObjectSelected(curr);

@@ -71,6 +71,9 @@ public:
     virtual void onEvent(SoundPlayer *soundPlayer);
     virtual void resetEvent(SoundPlayer *soundPlayer);
     
+    virtual vec3 getAABBmin();
+    virtual vec3 getAABBmax();
+    
     glm::vec3 dir;
     float speed;
     glm::vec3 rotAxis;

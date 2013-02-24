@@ -8,7 +8,6 @@
 #include "Table.h"
 
 Table::Table() {
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Table3.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
@@ -24,11 +23,13 @@ Table::Table() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    rotate = glm::mat4(1.f);
 
     isClicked = false;
-    doScale(glm::vec3(ROOM_SIZE / 5.f));
+    doRotate(glm::vec3(0,1,0), 90);
+    doScale(glm::vec3(ROOM_SIZE / 5.f, ROOM_SIZE / 4.f, ROOM_SIZE / 5.f));
     doTranslate(glm::vec3(0.f, 
-            getRoomFloorHeight().y - AABBmin.y, -10.f));
+            getRoomFloorHeight().y - getAABBmin().y, 0.f));
     //when we have the textures
 
  /*texNum = numTextures();

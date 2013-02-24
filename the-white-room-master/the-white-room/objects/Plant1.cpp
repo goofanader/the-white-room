@@ -21,7 +21,7 @@ Plant1::Plant1() {
     scale = glm::vec3(1.f);
     
     doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f,-3.f,-7.f));
+    doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,4.5f));
     //this->doScale(glm::vec3(3.f));
 }
 

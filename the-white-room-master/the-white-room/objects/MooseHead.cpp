@@ -28,8 +28,8 @@ MooseHead::MooseHead() {
     isClicked = false;
     doScale(glm::vec3(ROOM_SIZE / 10.f));
     doRotate(glm::vec3(0,1,0), 90.f);
-    doTranslate(glm::vec3(-ROOM_SIZE - AABBmin.x, 
-            getRoomCeilHeight() - AABBmax.y - 1.f, -17.f));
+    doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x, 
+            getRoomCeilHeight() - getAABBmax().y - 1.f, -17.f));
     //when we have the textures
 /*
  texNum = numTextures();

@@ -98,7 +98,7 @@ Clock::Clock() {
     weight1->scale = weight2->scale = weight3->scale = body->scale / 3.f;
     body->doRotate(glm::vec3(0,1,0), 180);
     body->doTranslate(glm::vec3(-3.25f - 8.f, 
-            getRoomFloorHeight().y - body->AABBmin.y, ROOM_SIZE - 2.f));
+            getRoomFloorHeight().y - body->getAABBmin().y, ROOM_SIZE - 2.f));
     
     weight1->doTranslate(body->trans);
     weight2->doTranslate(body->trans);
@@ -106,8 +106,8 @@ Clock::Clock() {
     weight3->doTranslate(body->trans);
     weight3->doTranslate(glm::vec3(-1.f, 0.f, -0.5f));
     
-    AABBmin = body->AABBmin;
-    AABBmax = body->AABBmax;
+    AABBmin = body->getAABBmin();
+    AABBmax = body->getAABBmax();
     haveLoadedPlayer = false;
 }
 

@@ -17,8 +17,10 @@ public:
     Plant6(const Plant6& orig);
     virtual ~Plant6();
     std::string className();
+    void onEvent(SoundPlayer *soundPlayer);
+    void update(float dt);
 private:
-
+    float rotating;
 };
 
 #endif	/* PLANT6_H */

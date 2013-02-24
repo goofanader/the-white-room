@@ -22,6 +22,7 @@ public:
 private:
     glm::vec3 hitTestAABBmin;
     glm::vec3 hitTestAABBmax;
+    GameObject *shelf;
 };
 
 #endif	/* BOOKSHELF_H */
