@@ -21,7 +21,9 @@ Plant6::Plant6() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/plants/Plant6UV.bmp", texNum);
     printOpenGLError();

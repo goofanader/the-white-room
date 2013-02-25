@@ -63,10 +63,12 @@ Safe::Safe() {
     AABBmax = body->getAABBmax();
 
     body->texNum = numTextures();
+    body->textureEnum = GL_TEXTURE0 + body->texNum;
     LoadTexture((char *)"objects/meshes/safe/SafeBodyUV.bmp", body->texNum);
     body->hasTex = true;
 
     door->texNum = numTextures();
+    door->textureEnum = GL_TEXTURE0 + door->texNum;
     LoadTexture((char *)"objects/meshes/safe/SafeDoor.bmp", door->texNum);
     door->hasTex = true;
 }

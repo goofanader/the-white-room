@@ -9,7 +9,7 @@
 
 #include <string>
 
-#define MAX_TEXTURES 30
+#define MAX_TEXTURES 20
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
 
@@ -91,7 +91,7 @@ public:
     GLuint TBO;
     int texNum;
 
-    GLenum textureMaps[MAX_TEXTURES];
+    GLenum textureEnum;
 
     glm::vec3 ambColor;
     float ambAlpha;

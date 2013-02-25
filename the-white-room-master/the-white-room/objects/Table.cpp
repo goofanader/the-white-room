@@ -26,6 +26,7 @@ Table::Table() {
     rotate = glm::mat4(1.f);
     
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *)"objects/meshes/table/Table2.bmp", texNum);
     hasTex = true;
 

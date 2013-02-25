@@ -40,6 +40,7 @@ Book2::Book2() {
     doTranslate(glm::vec3(0.f, -4.f, 3.f));
 
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *)"objects/meshes/bookshelf/book2UV.bmp", texNum);
     hasTex = true;
     /*AABBmin.x -= 1.f;

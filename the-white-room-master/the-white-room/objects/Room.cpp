@@ -61,6 +61,7 @@ Room::Room() {
         room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
         room[i].texNum = numTextures();
+        room[i].textureEnum = GL_TEXTURE0 + room[i].texNum;
         room[i].hasTex = true;
     }
     

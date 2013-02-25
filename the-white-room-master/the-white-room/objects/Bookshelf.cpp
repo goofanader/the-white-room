@@ -40,6 +40,7 @@ Bookshelf::Bookshelf() {
     //AABBmax = glm::vec3(-200, -200, -200);
 
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *)"objects/meshes/bookshelf/BookshelfUV.bmp", texNum);
     hasTex = true;
     

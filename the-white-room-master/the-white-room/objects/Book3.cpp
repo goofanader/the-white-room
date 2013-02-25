@@ -40,6 +40,7 @@ Book3::Book3() {
     doTranslate(glm::vec3(0.f, 3.f, -1.f));
 
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *) "objects/meshes/bookshelf/book3UV.bmp", texNum);
     hasTex = true;
     

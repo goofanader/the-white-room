@@ -20,6 +20,7 @@ Plant1::Plant1() {
     specStrength = 0.f;
     scale = glm::vec3(1.f);
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/plants/Plant1UV.bmp", texNum);
     printOpenGLError();

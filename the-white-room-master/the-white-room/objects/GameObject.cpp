@@ -45,9 +45,6 @@ GameObject::GameObject() {
     diffColor = glm::vec3(.1f);
     diffAlpha = 1.f;
 
-    for (int i = 0; i < MAX_TEXTURES; i++) {
-        textureMaps[i] = GL_TEXTURE0 + i;
-    }
 }
 
 GameObject::~GameObject() {
@@ -99,7 +96,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
         safe_glVertexAttribPointer(
                 gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
         printOpenGLError();
-        glActiveTexture(textureMaps[texNum]);
+        glActiveTexture(textureEnum);
         printOpenGLError();
         glBindTexture(GL_TEXTURE_2D, texNum);
         printOpenGLError();

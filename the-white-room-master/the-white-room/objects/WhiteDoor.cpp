@@ -40,6 +40,7 @@ WhiteDoor::WhiteDoor() {
     std::cout << "prevAABBmin: " << printVec3(prevAABBmin) << std::endl;
 
     texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *)"objects/meshes/door/DoorUV.bmp", texNum);
     hasTex = true;
     setNewBounds = false;

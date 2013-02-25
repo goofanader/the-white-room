@@ -21,13 +21,14 @@ GLvoid LoadTexture(char* image_file, int texID) {
   
   glBindTexture(GL_TEXTURE_2D, texID);
   printOpenGLError();
+  printf("%d\n", texID);
   /*  cheap scaling when image smaller than texture*/
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,
     GL_NEAREST_MIPMAP_LINEAR); 
   printOpenGLError();
   /*  cheap scaling when image bigger than texture */    
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,
-    GL_NEAREST_MIPMAP_LINEAR);
+    GL_LINEAR);
   printOpenGLError();
   
   /*  2d texture, level of detail 0 (normal), 3 components (red, green, blue),            */
