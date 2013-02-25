@@ -634,6 +634,7 @@ int main(int argc, char *argv[]) {
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
+glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
     //set window size to screen size
     getScreenSize();
@@ -643,7 +644,7 @@ int main(int argc, char *argv[]) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
-    glfwSetWindowTitle("The White Room");
+        glfwSetWindowTitle("The White Room");
 
     // OpenGL Setup
     Initialize();
