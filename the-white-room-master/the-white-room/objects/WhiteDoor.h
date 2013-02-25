@@ -19,7 +19,7 @@ public:
     
     /*void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);*/
-    void update(float dt);
+    void update(float dt, GameObject* playerCamera);
     /*bool doesCollide(GameObject* other);*/
 
     void onEvent(SoundPlayer *soundPlayer);

@@ -9,7 +9,7 @@
 
 #include <string>
 
-#define MAX_TEXTURES 20
+#define MAX_TEXTURES 22
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
 
@@ -57,7 +57,7 @@ public:
     ~GameObject();
     virtual void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
-    virtual void update(float dt);
+    virtual void update(float dt, GameObject* playerCamera);
     virtual std::string className();
     virtual bool doesCollide(GameObject *other);
     void doTranslate(glm::vec3 trans);

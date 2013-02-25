@@ -46,7 +46,7 @@ void Box1::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
     cube->draw(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 
-void Box1::update(float dt){
+void Box1::update(float dt, GameObject* playerCamera){
     if(this->ambColor != this->cube->ambColor){
         this->cube->ambColor = vec3(1.f, 0.f, 0.f);
         this->ambColor = this->cube->ambColor;

@@ -21,6 +21,8 @@ GameObject* createBox3() { return new Box3(); }
 GameObject* createBox4() { return new Box4(); }
 
 GameObject* createRadio() { return new Radio(); }
+GameObject* createKnob100() { return new Knob100(); }
+GameObject* createKnob10() { return new Knob10(); }
 GameObject* createTable() { return new Table(); }
 GameObject* createPlant1() { return new Plant1(); }
 GameObject* createPlant6() { return new Plant6(); }
@@ -60,6 +62,8 @@ functionLookupTable[] = {
     { &createBook3, "Book3"},
     { &createMooseHead, "MooseHead"},
     { &createTable, "Table"},
+    { &createKnob100, "Knob100"},
+    { &createKnob10, "Knob10"},
     { NULL, NULL}
 };
 

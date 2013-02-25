@@ -52,7 +52,7 @@ WhiteDoor::WhiteDoor(const WhiteDoor& orig) {
 WhiteDoor::~WhiteDoor() {
 }
 
-void WhiteDoor::update(float dt) {
+void WhiteDoor::update(float dt, GameObject* playerCamera) {
     if (!isClosed) {
         if (timeSpent < .75) {
             //doTranslate(glm::vec3(2.f, 0.f, -2.f));

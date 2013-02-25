@@ -28,6 +28,8 @@
 #include "../objects/Book3.h"
 #include "../objects/MooseHead.h"
 #include "../objects/Table.h"
+#include "../objects/Knob100.h"
+#include "../objects/Knob10.h"
 
 #endif	/* ALLOBJECTS_H */
 

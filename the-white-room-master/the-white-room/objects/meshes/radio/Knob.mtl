@@ -1,0 +1,22 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl blinn3SG
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.250000 0.250000 0.250000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd cherry-wood.jpg
+
+newmtl lambert9SG
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd cherry-wood.jpg

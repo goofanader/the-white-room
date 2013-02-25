@@ -127,7 +127,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     glUseProgram(0);
 }
 
-void GameObject::update(float dt) {
+void GameObject::update(float dt, GameObject* playerCamera) {
     //default: do nothing.
 }
 

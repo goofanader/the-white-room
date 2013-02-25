@@ -39,7 +39,7 @@ Plant1::Plant1(const Plant1& orig) {
 Plant1::~Plant1() {
 }
 
-void Plant1::update(float dt) {
+void Plant1::update(float dt, GameObject* playerCamera) {
     if (rotating < 90.f) {
         rotating++;
         doRotate(vec3(0,1,0), 1.f);

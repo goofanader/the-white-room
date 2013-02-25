@@ -35,11 +35,6 @@ Plant6::Plant6() {
     doRotate(glm::vec3(0,1,0), rotating);
     doTranslate(glm::vec3(/*getAABBmax().x / 2.f*/0.f,-3.85f - getAABBmin().y,-4.f));
     //this->doScale(glm::vec3(3.f));
-    
-    std::cout << "Plant6 AABBmin=" << printVec3(getAABBmin());
-    std::cout << ", AABBmax=" << printVec3(getAABBmax()) << std::endl;
-    std::cout << "Plant6 realMin=" << printVec3(AABBmin);
-    std::cout << ", realMax=" << printVec3(AABBmax) << std::endl;
 }
 
 Plant6::Plant6(const Plant6& orig) {
@@ -48,7 +43,7 @@ Plant6::Plant6(const Plant6& orig) {
 Plant6::~Plant6() {
 }
 
-void Plant6::update(float dt) {
+void Plant6::update(float dt, GameObject* playerCamera) {
     if (rotating < 90.f) {
         rotating++;
         doRotate(vec3(0,1,0), 1.f);

@@ -85,7 +85,7 @@ void Safe::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
     door->draw(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 
-void Safe::update(float dt){
+void Safe::update(float dt, GameObject* playerCamera){
     if(this->ambColor != this->body->ambColor){
         this->body->ambColor = this->ambColor;
     }
