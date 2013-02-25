@@ -9,7 +9,7 @@
 
 #include <string>
 
-#define MAX_TEXTURES 22
+#define MAX_TEXTURES 23
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
 

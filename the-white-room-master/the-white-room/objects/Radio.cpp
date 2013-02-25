@@ -9,20 +9,31 @@
 
 Radio::Radio() {
     GLuint faceNBO;
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/radio/Radio.obj",
-            IBOlen, VBO, IBO, NBO, faceNBO, AABBmin, AABBmax);
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/radio/Radio3.obj",
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
 
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
     ambColor = vec3(1.f);
+    specColor = vec3(.5f);
+    diffColor = vec3(.5f);
+    ambAlpha = specAlpha = diffAlpha = 1.f;
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
     
-    doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f,-3.f,7.f));
+    doScale(glm::vec3(2.f));
+    doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,0.f));
+
+    texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
+    printOpenGLError();
+    LoadTexture((char *)"objects/meshes/radio/RadioUV.bmp", texNum);
+    printOpenGLError();
+    hasTex = true;
+
 }
 
 Radio::Radio(const Radio& orig) {
@@ -32,7 +43,7 @@ Radio::~Radio() {
 }
 
 void Radio::onEvent(SoundPlayer *soundPlayer){
-    soundPlayer->playSound("radioAppear");
+    //soundPlayer->playSound("radioAppear");
 }
 
 std::string Radio::className() {

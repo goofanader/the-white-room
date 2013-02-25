@@ -10,7 +10,7 @@
 
 MooseHead::MooseHead() {
     GLuint faceNBO;
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/moosehead/MooseHead1.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/moosehead/MooseHead.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;

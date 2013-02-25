@@ -138,7 +138,7 @@ void Running::draw() {
 void Running::update(float dt) {
     if (!isPaused()) {
         timeSpent += dt;
-
+        
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
 
