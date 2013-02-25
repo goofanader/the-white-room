@@ -6,6 +6,7 @@
  */
 
 #include "MooseHead.h"
+#include "glm/glm.hpp"
 
 MooseHead::MooseHead() {
     GLuint faceNBO;
@@ -43,6 +44,34 @@ MooseHead::MooseHead(const MooseHead& orig) {
 }
 
 MooseHead::~MooseHead() {
+}
+
+void MooseHead::update(float dt, GameObject *playerCamera){
+    //make it so it always faces the player
+    /*float rotY, rotA;
+    vec3 up = glm::vec3(0.f, 1.f, 0.f);
+
+    vec3 loc = playerCamera->trans - this->trans;
+
+    vec3 axis = glm::cross(up, loc);
+    //vec3 axis = up * loc;
+
+    if(loc.z == 0 && loc.x == 0)
+        rotY = 0;
+    else
+        rotY = atan2(loc.x, loc.z) * 180.0/3.14 - 90;
+
+    rotA = 90 - asin(glm::length(axis)/(glm::length(loc))) * 180.0 / 3.14;
+
+    if(loc.y > 0)
+        rotA = -rotA;
+
+    this->rotate = glm::mat4(1.f);
+    doRotate(axis,rotA);
+
+    doRotate(up, rotY);
+    doRotate(up, 90.f);
+    */
 }
 
 std::string MooseHead::className() {

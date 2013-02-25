@@ -16,6 +16,8 @@ public:
     MooseHead();
     MooseHead(const MooseHead& orig);
     virtual ~MooseHead();
+    virtual void update(float dt, GameObject *playerCamera);
+    float rotY;
     std::string className();
 private:
 

@@ -17,6 +17,8 @@ public:
     Knob10(const Knob10& orig);
     virtual ~Knob10();
     std::string className();
+    virtual void update(float dt, GameObject *playerCamera);
+
 private:
     float rotating;
 };

@@ -146,7 +146,7 @@ void Running::update(float dt) {
                 iter != objects.end(); iter++) {
             curr = (*iter);
 
-            curr->update(dt, NULL);
+            curr->update(dt, playerCamera);
 
             if (curr->doesCollide(playerCamera)) {
                 playerCamera->trans = camPrevTrans;
