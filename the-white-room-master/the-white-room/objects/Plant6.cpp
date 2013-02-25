@@ -31,7 +31,7 @@ Plant6::Plant6() {
     
     doScale(glm::vec3(3.f));
     doRotate(glm::vec3(0,1,0), rotating);
-    doTranslate(glm::vec3(getAABBmax().x / 2.f,-3.85f - getAABBmin().y,-4.f));
+    doTranslate(glm::vec3(/*getAABBmax().x / 2.f*/0.f,-3.85f - getAABBmin().y,-4.f));
     //this->doScale(glm::vec3(3.f));
     
     std::cout << "Plant6 AABBmin=" << printVec3(getAABBmin());

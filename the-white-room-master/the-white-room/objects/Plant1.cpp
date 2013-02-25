@@ -25,7 +25,7 @@ Plant1::Plant1() {
     printOpenGLError();
     hasTex = true;
     
-    rotating = 0.f;
+    rotating = 90.f;
     
     doScale(glm::vec3(3.f));
     doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,4.5f));

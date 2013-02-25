@@ -17,7 +17,7 @@
 #define PI 3.14159f
 
 #define MAX_FOOT_SPACE .4
-#define MAX_CLICK_DISTANCE 10
+#define MAX_CLICK_DISTANCE 15
 
 Running::Running() {
     camAlpha = -0.545f;
