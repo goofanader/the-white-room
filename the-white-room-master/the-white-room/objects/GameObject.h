@@ -9,7 +9,6 @@
 
 #include <string>
 
-#define MAX_TEXTURES 23
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
 
@@ -47,6 +46,7 @@ typedef struct GameConstants {
     GLuint h_uCamTrans;
     GLuint h_uUseTex;
 } GameConstants;
+
 #include "../Main.h"
 
 class GameObject {
@@ -56,6 +56,8 @@ public:
     GameObject();
     ~GameObject();
     virtual void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
+            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
+    virtual void drawHighlight(glm::vec3 cameraPs, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
     virtual void update(float dt, GameObject* playerCamera);
     virtual std::string className();

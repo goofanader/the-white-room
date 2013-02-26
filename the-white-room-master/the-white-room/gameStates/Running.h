@@ -44,6 +44,7 @@ private:
     
     float camAlpha;
     float camBeta;
+    float prevAlpha, prevBeta;
     glm::vec3 camLookAt;
     glm::vec3 camPrevTrans;
     

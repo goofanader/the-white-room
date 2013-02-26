@@ -38,7 +38,7 @@
 using namespace std;
 using namespace glm;
 
-GameConstants gc;
+GameConstants gc, lc, sc;
 bool g_hasWon;
 glm::vec3 roomFloorHeight;
 float roomCeilHeight;
@@ -78,7 +78,7 @@ GLuint uCamTrans;
 GLuint uUseTex;
 
 // Shader Handle
-GLuint ShadeProg;
+GLuint ShadeProg[MAX_SHADERS];
 
 // Program Variables
 float Accumulator;
@@ -93,21 +93,29 @@ int keyDown[128] = {0};
 RenderingHelper ModelTrans;
 
 // NEEDS FIXING *****************************************
-    glm::vec3 cameraPosition = gc.lightPos;
-    GLfloat lightPosition[3] = {0.0f, 0.0f, 0.0f};
-  
-    const int shadowMapSize = 512;
-    GLuint shadowMapTexture;
-    
-    GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat dimwhite[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-    GLfloat black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    
-    GLfloat lightProjectionMatrix[16], lightViewMatrix[16];
-    GLfloat cameraProjectionMatrix[16], cameraViewMatrix[16];
+glm::vec3 cameraPosition = gc.lightPos;
+GLfloat lightPosition[3] = {0.0f, 0.0f, 0.0f};
+
+const int shadowMapSize = 512;
+GLuint shadowMapTexture;
+
+GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat dimwhite[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+GLfloat black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+GLfloat lightProjectionMatrix[16], lightViewMatrix[16];
+GLfloat cameraProjectionMatrix[16], cameraViewMatrix[16];
 
 GameConstants* getGC() {
     return &gc; //this is a lot of data being pushed onto the stack...
+}
+
+GameConstants* getLC() {
+    return &lc; //this is a lot of data being pushed onto the stack...
+}
+
+GameConstants* getSC() {
+    return &sc; //this is a lot of data being pushed onto the stack...
 }
 
 unsigned int getWindowWidth() {
@@ -137,6 +145,7 @@ void setRoomFloorHeight(glm::vec3 newHeight) {
 float getRoomCeilHeight() {
     return roomCeilHeight;
 }
+
 void setRoomCeilHeight(float newHeight) {
     roomCeilHeight = newHeight;
 }
@@ -159,7 +168,8 @@ void SetModel() {
             glm::value_ptr(glm::transpose(glm::inverse(ModelTrans.modelViewMatrix))));
 }
 
-bool InstallShader(std::string const & vShaderName, std::string const & fShaderName) {
+bool InstallShader(std::string const & vShaderName, std::string const & fShaderName,
+        int shader) {
     GLuint VS; // handles to shader object
     GLuint FS; // handles to frag shader object
     GLint vCompiled, fCompiled, linked; // status of shader
@@ -192,42 +202,17 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     }
 
     // create a program object and attach the compiled shader
-    ShadeProg = glCreateProgram();
-    glAttachShader(ShadeProg, VS);
-    glAttachShader(ShadeProg, FS);
+    ShadeProg[shader] = glCreateProgram();
+    glAttachShader(ShadeProg[shader], VS);
+    glAttachShader(ShadeProg[shader], FS);
 
-    glLinkProgram(ShadeProg);
+    glLinkProgram(ShadeProg[shader]);
 
     // check shader status requires helper functions
     printOpenGLError();
-    glGetProgramiv(ShadeProg, GL_LINK_STATUS, &linked);
-    printProgramInfoLog(ShadeProg);
-
-    glUseProgram(ShadeProg);
-
-    // get handles to attribute data
-    aPosition = safe_glGetAttribLocation(ShadeProg, "aPosition");
-    aNormal = safe_glGetAttribLocation(ShadeProg, "aNormal");
-
-    uAmbColor = safe_glGetUniformLocation(ShadeProg, "uAmbColor");
-    uSpecColor = safe_glGetUniformLocation(ShadeProg, "uSpecColor");
-    uDiffColor = safe_glGetUniformLocation(ShadeProg, "uDiffColor");
-    uProjMatrix = safe_glGetUniformLocation(ShadeProg, "uProjMatrix");
-    uViewMatrix = safe_glGetUniformLocation(ShadeProg, "uViewMatrix");
-    uModelMatrix = safe_glGetUniformLocation(ShadeProg, "uModelMatrix");
-    uNormalMatrix = safe_glGetUniformLocation(ShadeProg, "uNormalMatrix");
-
-    uLightPos = safe_glGetUniformLocation(ShadeProg, "uLightPos");
-    uLightColor = safe_glGetUniformLocation(ShadeProg, "uLightColor");
-    uShininess = safe_glGetUniformLocation(ShadeProg, "uShininess");
-    uSpecStrength = safe_glGetUniformLocation(ShadeProg, "uSpecStrength");
-    uCamTrans = safe_glGetUniformLocation(ShadeProg, "uCamTrans");
-
-    aTexCoord = safe_glGetAttribLocation(ShadeProg, "aTexCoord");
-    uTexUnit = safe_glGetUniformLocation(ShadeProg, "uTexUnit");
-    uUseTex = safe_glGetUniformLocation(ShadeProg, "uUseTex");
-
-    std::cout << "Successfully installed shader " << ShadeProg << std::endl;
+    glGetProgramiv(ShadeProg[shader], GL_LINK_STATUS, &linked);
+    printProgramInfoLog(ShadeProg[shader]);
+    
     return true;
 }
 
@@ -240,8 +225,8 @@ void Initialize() {
     //enable alpha for color
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    
-         //create shadow map texture
+
+    //create shadow map texture
     glGenTextures(1, &shadowMapTexture);
     glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapSize,
@@ -251,40 +236,40 @@ void Initialize() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
- 
-    
+
+
     //setting color, etc.
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
-    
+
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
     glMaterialf(GL_FRONT, GL_SHININESS, 16.0f);
-    
-           //initializing matrices
- glPushMatrix();
- 
+
+    //initializing matrices
+    glPushMatrix();
+
     glLoadIdentity();
-    gluPerspective(45.0f, (float)windowWidth/windowHeight, 1.0f, 100.0f);
+    gluPerspective(45.0f, (float) windowWidth / windowHeight, 1.0f, 100.0f);
     glGetFloatv(GL_MODELVIEW_MATRIX, cameraProjectionMatrix);
-  
+
     glLoadIdentity();
     gluLookAt(cameraPosition[0], cameraPosition[1], cameraPosition[2],
-    0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f);
+            0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f);
     glGetFloatv(GL_MODELVIEW_MATRIX, cameraViewMatrix);
-    
+
     glLoadIdentity();
     gluPerspective(45.0f, 1.0f, 2.0f, 8.0f);
     glGetFloatv(GL_MODELVIEW_MATRIX, lightProjectionMatrix);
-    
+
     glLoadIdentity();
     gluLookAt(lightPosition[0], lightPosition[1], lightPosition[2],
-               0.0f, 0.0f, 0.0f,
-               0.0f, 1.0f, 0.0f);
+            0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f);
     glGetFloatv(GL_MODELVIEW_MATRIX, lightViewMatrix);
-  
- glPopMatrix();
-    
+
+    glPopMatrix();
+
     glClearColor(0.f, 0.f, 0.0f, 1.0f);
 
     glClearDepth(1.0f);
@@ -294,23 +279,25 @@ void Initialize() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
+    glEnable(GL_MULTISAMPLE);
+
+    glClearStencil(0);
+
     ModelTrans.useModelViewMatrix();
     ModelTrans.loadIdentity();
 }
 
 void Draw() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
     currState->draw();
-    
-    
 
     glfwSwapBuffers();
     printOpenGLError();
 }
 
-void Shadow() {    
+void Shadow() {
     // 1st pass - draw light's POV
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -363,7 +350,7 @@ void Shadow() {
     glEnable(GL_LIGHTING);
 
     //draw scene
- //   Draw();
+    //   Draw();
 
 
     //third pass(shadow calculations):
@@ -373,16 +360,15 @@ void Shadow() {
 
     //texture matrix (eye space -> light's clip space)
     //using column major
-    static GLfloat biasMatrix[16] =
-      {0.5f, 0.0f, 0.0f, 0.0f,
-       0.0f, 0.5f, 0.0f, 0.0f,
-       0.0f, 0.0f, 0.5f, 0.0f,
-       0.5f, 0.5f, 0.5f, 1.0f};
+    static GLfloat biasMatrix[16] ={0.5f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.5f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.5f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f};
     //bias from [-1, 1] to [0,1]
 
     GLfloat textureMatrix[16];
-    for(int i = 0; i < 16; i++) {
-       textureMatrix[i] = biasMatrix[i]*lightProjectionMatrix[i]*lightViewMatrix[i];
+    for (int i = 0; i < 16; i++) {
+        textureMatrix[i] = biasMatrix[i] * lightProjectionMatrix[i] * lightViewMatrix[i];
     }
     GLfloat row1[] = {textureMatrix[0], textureMatrix[4], textureMatrix[8], textureMatrix[12]};
     GLfloat row2[] = {textureMatrix[1], textureMatrix[5], textureMatrix[9], textureMatrix[13]};
@@ -416,7 +402,7 @@ void Shadow() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
 
     //intensity result
-    glTexParameteri (GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
 
     //alpha test to discard false comparisons (alpha < 0.99)
     glAlphaFunc(GL_GEQUAL, 0.99f);
@@ -442,19 +428,19 @@ void Shadow() {
     glMatrixMode(GL_MODELVIEW);
     //glPopMatrix();
 
-glFinish();
-glfwSwapBuffers();
-//glutPostRedisplay();
-//Draw();
+    glFinish();
+    glfwSwapBuffers();
+    //glutPostRedisplay();
+    //Draw();
 }
 
 std::string printVec3(glm::vec3 coordinates) {
     std::string out = "(";
-    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.x) )->str();
+    out += static_cast<ostringstream*> (&(ostringstream() << coordinates.x))->str();
     out += ", ";
-    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.y) )->str();
+    out += static_cast<ostringstream*> (&(ostringstream() << coordinates.y))->str();
     out += ", ";
-    out += static_cast<ostringstream*>( &(ostringstream() << coordinates.z) )->str();
+    out += static_cast<ostringstream*> (&(ostringstream() << coordinates.z))->str();
     out += ")";
     return out;
 }
@@ -505,7 +491,7 @@ void Keyboard(int key, int state) {
             std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
             break;
         case 'R':
-            gc.lightPos = glm::vec3(0,9,0);
+            gc.lightPos = glm::vec3(0, 9, 0);
             std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;
             // Quit program
         case 'Q':
@@ -528,7 +514,7 @@ void MouseClick(int button, int action) {
 void MouseMove(int x, int y) {
     glm::vec2 newPos = glm::vec2(x, y);
     currState->mouseMoved(newPos.x, newPos.y, mousePos.x, mousePos.y);
-    
+
     glfwSetMousePos(windowWidth / 2, windowHeight / 2);
     mousePos = glm::vec2(windowWidth / 2, windowHeight / 2);
 }
@@ -560,21 +546,21 @@ void gameLoop() {
     int running = GL_TRUE;
     double oldTime = glfwGetTime();
     double curTime;
-    double timeDelta = 1.0/60.0;
+    double timeDelta = 1.0 / 60.0;
     double timeAccumulator = 0.0;
 
     while (running) {
 
         curTime = glfwGetTime();
-       
-        
+
+
         currState->keyPressed(timeAccumulator, keyDown);
-        
+
         //timeAccumulator is the amount of time we spent on the last frame
         //By stepping through our physics calculation with a constant DT, we
         //prevent any graphical lag from causing strange hitbox detection from
         //happening
-        
+
         while (timeAccumulator >= timeDelta) {
             currState->update(timeDelta);
             timeAccumulator -= timeDelta;
@@ -585,7 +571,7 @@ void gameLoop() {
             timeAccumulator = 0;
         }
 
-        
+
         Draw();
         //Shadow();
         oldTime = curTime;
@@ -602,7 +588,7 @@ void gameLoop() {
 
 void initializeShaderVariables() {
     //initialize openGL and shader variables
-    gc.shader = ShadeProg;
+    gc.shader = ShadeProg[0];
     gc.aspectRatio = (float) windowWidth / windowHeight;
     gc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
     gc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
@@ -626,15 +612,95 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
 }
 
+void initializeLaplaceShaderVariables() {
+    //initialize openGL and shader variables
+    lc.shader = ShadeProg[1];
+    lc.aspectRatio = (float) windowWidth / windowHeight;
+    lc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
+    lc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
+    lc.lightAlpha = 1.f;
+    lc.h_aPosition = aPosition;
+    lc.h_aNormal = aNormal;
+    lc.h_uAmbColor = uAmbColor;
+    lc.h_uDiffColor = uDiffColor;
+    lc.h_uSpecColor = uSpecColor;
+    lc.h_uProjMatrix = uProjMatrix;
+    lc.h_uViewMatrix = uViewMatrix;
+    lc.h_uModelMatrix = uModelMatrix;
+    lc.h_uNormalMatrix = uNormalMatrix;
+    lc.h_uLightPos = uLightPos;
+    lc.h_uLightColor = uLightColor;
+    lc.h_uShininess = uShininess;
+    lc.h_uSpecStrength = uSpecStrength;
+    lc.h_uCamTrans = uCamTrans;
+    lc.h_aTexCoord = aTexCoord;
+    lc.h_uTexUnit = uTexUnit;
+    lc.h_uUseTex = uUseTex;
+}
+
+void initializeShadowShaderVariables() {
+    //initialize openGL and shader variables
+    sc.shader = ShadeProg[2];
+    sc.aspectRatio = (float) windowWidth / windowHeight;
+    sc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
+    sc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
+    sc.lightAlpha = 1.f;
+    sc.h_aPosition = aPosition;
+    sc.h_aNormal = aNormal;
+    sc.h_uAmbColor = uAmbColor;
+    sc.h_uDiffColor = uDiffColor;
+    sc.h_uSpecColor = uSpecColor;
+    sc.h_uProjMatrix = uProjMatrix;
+    sc.h_uViewMatrix = uViewMatrix;
+    sc.h_uModelMatrix = uModelMatrix;
+    sc.h_uNormalMatrix = uNormalMatrix;
+    sc.h_uLightPos = uLightPos;
+    sc.h_uLightColor = uLightColor;
+    sc.h_uShininess = uShininess;
+    sc.h_uSpecStrength = uSpecStrength;
+    sc.h_uCamTrans = uCamTrans;
+    sc.h_aTexCoord = aTexCoord;
+    sc.h_uTexUnit = uTexUnit;
+    sc.h_uUseTex = uUseTex;
+}
+
+void initializeShaderConnection(int shader) {
+    glUseProgram(ShadeProg[shader]);
+
+    // get handles to attribute data
+    aPosition = safe_glGetAttribLocation(ShadeProg[shader], "aPosition");
+    aNormal = safe_glGetAttribLocation(ShadeProg[shader], "aNormal");
+
+    uAmbColor = safe_glGetUniformLocation(ShadeProg[shader], "uAmbColor");
+    uSpecColor = safe_glGetUniformLocation(ShadeProg[shader], "uSpecColor");
+    uDiffColor = safe_glGetUniformLocation(ShadeProg[shader], "uDiffColor");
+    uProjMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uProjMatrix");
+    uViewMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uViewMatrix");
+    uModelMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uModelMatrix");
+    uNormalMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uNormalMatrix");
+
+    uLightPos = safe_glGetUniformLocation(ShadeProg[shader], "uLightPos");
+    uLightColor = safe_glGetUniformLocation(ShadeProg[shader], "uLightColor");
+    uShininess = safe_glGetUniformLocation(ShadeProg[shader], "uShininess");
+    uSpecStrength = safe_glGetUniformLocation(ShadeProg[shader], "uSpecStrength");
+    uCamTrans = safe_glGetUniformLocation(ShadeProg[shader], "uCamTrans");
+
+    aTexCoord = safe_glGetAttribLocation(ShadeProg[shader], "aTexCoord");
+    uTexUnit = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit");
+    uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
+
+    std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
+}
+
 int main(int argc, char *argv[]) {
     g_hasWon = false;
     roomFloorHeight = vec3(0.f);
     roomCeilHeight = 0.f;
-    
+
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
-glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
     //set window size to screen size
     getScreenSize();
@@ -644,19 +710,39 @@ glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
-        glfwSetWindowTitle("The White Room");
+    glfwSetWindowTitle("The White Room");
 
     // OpenGL Setup
     Initialize();
     getGLversion();
-
-    // Shader Setup
-    if (!InstallShader("mesh_vert.glsl", "mesh_frag.glsl")) {
+    
+    // Shader Setup: Main Shader
+    if (!InstallShader("mesh_vert.glsl", "mesh_frag.glsl", 0)) {
         printf("Error installing shader!\n");
         return 1;
     }
+    
+    initializeShaderConnection(0);
     initializeShaderVariables();
-
+    
+    //laplace shader
+    if (!InstallShader("laplacian_vert.glsl", "laplacian_frag.glsl", 1)) {
+        printf("Error installing shader!\n");
+        return 1;
+    }
+    
+    initializeShaderConnection(1);
+    initializeLaplaceShaderVariables();
+    
+    //shadow shader
+    if (!InstallShader("laplacian_vert.glsl", "laplacian_frag.glsl", 2)) {
+        printf("Error installing shader!\n");
+        return 1;
+    }
+    
+    initializeShaderConnection(2);
+    initializeShadowShaderVariables();
+    
     //start the random counter
     srand(time(NULL));
 

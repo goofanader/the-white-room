@@ -23,7 +23,6 @@ Running::Running() {
     camAlpha = -0.545f;
     camBeta = -PI / 2.f - 1.f;
     camLookAt = glm::vec3(0.f);
-
     eventNum = 1;
 
     isFoot1 = true;
@@ -64,6 +63,9 @@ void Running::initializeCamera() {
             getRoomFloorHeight().y - playerCamera->getAABBmin().y, 20.f));
 
     camPrevTrans = playerCamera->trans;
+
+    prevAlpha = camAlpha;
+    prevBeta = camBeta;
 }
 
 void Running::initializeLight() {
@@ -109,7 +111,8 @@ Running::~Running() {
 }
 
 void Running::draw() {
-    GameObject *curr;
+    GameObject *curr, *radio;
+    bool hasRadio = false;
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
         curr = (*iter);
@@ -126,10 +129,26 @@ void Running::draw() {
 
         if (angle < 90.0f || curr->className() == "Room" || 
                 curr->className() == "Bookshelf") {
+            //Draw the highlight, so turn things off
+            glPolygonMode(GL_BACK, GL_LINE);
+            glLineWidth(5.f);
+            //glDisable(GL_CULL_FACE);
+            glCullFace(GL_FRONT);
+            glDisable(GL_DEPTH_TEST);
+            //curr->drawHighlight(playerCamera->trans, camLookAt, getLC()->lightPos,
+              //      getLC()->lightColor, getLC());
+       
+            //Now, go back to drawing the object like normal
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            //glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glEnable(GL_DEPTH_TEST);
+            
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                     getGC()->lightColor, getGC());
         }
     }
+    
     //====if you want to draw where the light is, uncomment code below.====//
     /*lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
           getGC()->lightColor, getGC());*/
@@ -148,11 +167,17 @@ void Running::update(float dt) {
 
             curr->update(dt, playerCamera);
 
+#if 1
             if (curr->doesCollide(playerCamera)) {
                 playerCamera->trans = camPrevTrans;
+                camAlpha = prevAlpha;
+                camBeta = prevBeta;
             }
+#endif
         }
         camPrevTrans = playerCamera->trans;
+        prevAlpha = camAlpha;
+        prevBeta = camBeta;
     }
 
     if (playerCamera->trans.x > ROOM_SIZE || playerCamera->trans.x < -ROOM_SIZE ||

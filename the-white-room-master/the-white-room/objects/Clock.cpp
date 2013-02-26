@@ -125,6 +125,10 @@ void Clock::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
     weight2->draw(cameraPos, lookAt, lightPos, lightColor, gc);
     weight3->draw(cameraPos, lookAt, lightPos, lightColor, gc);
 }
+void Clock::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
+        glm::vec3 lightColor, GameConstants* gc) {
+    body->drawHighlight(cameraPos, lookAt, lightPos, lightColor, gc);
+}
 void Clock::update(float dt, GameObject* playerCamera) {
     
 }

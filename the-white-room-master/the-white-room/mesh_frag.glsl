@@ -67,7 +67,7 @@ else specL = vec3(0.0);
 
   vec3 finColor = (diffL * 0.7 + specL * 0.7) /
     (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
-  gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, 1.0);
+  gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, uAmbColor.a);
 
 
     if (gl_FragCoord.x >= 397.0 && gl_FragCoord.x <= 403.0 &&

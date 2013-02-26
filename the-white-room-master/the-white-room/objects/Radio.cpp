@@ -30,7 +30,7 @@ Radio::Radio() {
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
     printOpenGLError();
-    LoadTexture((char *)"objects/meshes/radio/RadioUV.bmp", texNum);
+    LoadTexture((char *)"objects/meshes/radio/RadioUVSmall.bmp", texNum);
     printOpenGLError();
     hasTex = true;
 

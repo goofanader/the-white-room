@@ -9,7 +9,7 @@
 
 Plant6::Plant6() {
     GLuint faceNBO;
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/plants/Plant6.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/plants/Plant6New.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;

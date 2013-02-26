@@ -14,6 +14,6 @@ create MooseHead
 create Table
 create Plant1
 create Plant6
+create Radio
 create Knob100
 create Knob10
-create Radio
