@@ -12,8 +12,11 @@
 #include "objects/GameObject.h"
 
 #define IS_SOUND_ON true
+#define MAX_SHADERS 3
 
 GameConstants* getGC();
+GameConstants* getLC();
+GameConstants* getSC();
 unsigned int getWindowWidth();
 unsigned int getWindowHeight();
 std::string printVec3(glm::vec3 coordinates);
