@@ -177,7 +177,7 @@ void Event::ifObjectSelected(GameObject *curr) {
     if (name != "Book1" && name != "Book2" && name != "Book3") {
         curr->onEvent(soundPlayer);
     }
-
+    
     /*==================================================================
      * PUZZLE 1 LOGIC
      *==================================================================*/

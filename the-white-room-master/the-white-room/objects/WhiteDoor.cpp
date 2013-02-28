@@ -13,7 +13,7 @@
 WhiteDoor::WhiteDoor() {
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/door/Door.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
-    
+
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -31,8 +31,11 @@ WhiteDoor::WhiteDoor() {
     isClosed = true;
     timeSpent = 0.0;
 
+    depthMin = 0;
+    depthMax = 1;
+
     doorAngle = 180.f;
-    doScale(glm::vec3(ROOM_SIZE / 5.f,ROOM_SIZE / 5.f -.45f, ROOM_SIZE / 5.f));
+    doScale(glm::vec3(ROOM_SIZE / 5.f, ROOM_SIZE / 5.f - .45f, ROOM_SIZE / 5.f));
 
     doRotate(glm::vec3(0, 1, 0), doorAngle);
     doTranslate(glm::vec3(1.9f, getRoomFloorHeight().y - getAABBmin().y, ROOM_SIZE - .5f));
@@ -41,7 +44,7 @@ WhiteDoor::WhiteDoor() {
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
-    LoadTexture((char *)"objects/meshes/door/DoorUV.bmp", texNum);
+    LoadTexture((char *) "objects/meshes/door/DoorUV.bmp", texNum);
     hasTex = true;
     setNewBounds = false;
 }
@@ -58,7 +61,7 @@ void WhiteDoor::update(float dt, GameObject* playerCamera) {
             //doTranslate(glm::vec3(2.f, 0.f, -2.f));
             doRotate(glm::vec3(0, 1, 0), 1.f);
             float xMove = -.075f;
-            float zMove = -.065f;//-.3f;
+            float zMove = -.073f; //-.3f;
             doTranslate(glm::vec3(xMove, 0.f, zMove));
             timeSpent += (double) dt;
             //setNewBounds = true;
@@ -72,7 +75,7 @@ void WhiteDoor::update(float dt, GameObject* playerCamera) {
             AABBmax.z += 6.f;
             AABBmin.x += 14.f;
             AABBmax.x += 10.f;
-            
+
             AABBmin.x = -5.025f;
             AABBmax.x = -4.025f;
             AABBmin.z = 22.41f;
@@ -82,31 +85,32 @@ void WhiteDoor::update(float dt, GameObject* playerCamera) {
             std::cout << "; AABBmax=" << printVec3(AABBmax) << std::endl;
         }
 
-    }
-    
-    if (isHighlighted) {
-        highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
-
-        if (highlightColor.x > 1.f) {
-            highlightColor = vec3(1.f);
-        }
-        
-        highlightAlpha += HIGHLIGHT_SPEED;
-        if (highlightAlpha > 1.f) {
-            highlightAlpha = 1.f;
-        }
     } else {
-        isHighlightDisappearing = true;
-        highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
-        
-        if (highlightColor.x < 0.f) {
-            highlightColor = vec3(0.f);
-        }
-        
-        highlightAlpha -= HIGHLIGHT_SPEED;
-        if (highlightAlpha < 0.f) {
-            isHighlightDisappearing = false;
-            highlightAlpha = 0.f;
+
+        if (isHighlighted) {
+            highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x > 1.f) {
+                highlightColor = vec3(1.f);
+            }
+
+            highlightAlpha += HIGHLIGHT_SPEED;
+            if (highlightAlpha > 1.f) {
+                highlightAlpha = 1.f;
+            }
+        } else {
+            isHighlightDisappearing = true;
+            highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x < 0.f) {
+                highlightColor = vec3(0.f);
+            }
+
+            highlightAlpha -= HIGHLIGHT_SPEED;
+            if (highlightAlpha < 0.f) {
+                isHighlightDisappearing = false;
+                highlightAlpha = 0.f;
+            }
         }
     }
 }
@@ -114,10 +118,10 @@ void WhiteDoor::update(float dt, GameObject* playerCamera) {
 void WhiteDoor::onEvent(SoundPlayer *soundPlayer) {
     if (hasWon()) {
         if (isClosed && IS_SOUND_ON) {
-                soundPlayer->playSound("OpenDoor");
+            soundPlayer->playSound("OpenDoor");
         }
         isClosed = false;
-    } else if (IS_SOUND_ON){
+    } else if (IS_SOUND_ON) {
         soundPlayer->playSound("TryDoor");
     }
 }

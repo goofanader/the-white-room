@@ -21,6 +21,8 @@ Knob100::Knob100() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    
+    ambAlpha = 0.f;
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
@@ -58,6 +60,8 @@ Knob100::Knob100() {
     arrow->specStrength = 0.f;
     arrow->scale = glm::vec3(1.f);
     
+    arrow->ambAlpha = 0.f;
+    
     arrow->hasTex = false;
     
     arrow->doScale(vec3(.25f, .05f, .25f));
@@ -77,6 +81,16 @@ int Knob100::getStation() {
 
 void Knob100::update(float dt, GameObject *playerCamera) {
     if (isClicked) {
+        if (ambAlpha < 1.0) {
+            ambAlpha += HIGHLIGHT_SPEED;
+            arrow->ambAlpha += HIGHLIGHT_SPEED;
+
+            if (ambAlpha > 1.0) {
+                ambAlpha = 1.0f;
+                arrow->ambAlpha = 1.0f;
+            }
+        }
+        
         //make it so it always faces the player
         float rotY, rotA;
         vec3 up = glm::vec3(0.f, 1.f, 0.f);
@@ -138,9 +152,16 @@ void Knob100::update(float dt, GameObject *playerCamera) {
                 highlightAlpha = 0.f;
             }
         }
-    } else {
-        highlightColor = vec3(0.f);
+    } else if (!isClicked && ambAlpha > 0.f) {
+        ambAlpha -= HIGHLIGHT_SPEED;
+        arrow->ambAlpha -= HIGHLIGHT_SPEED;
+        if (ambAlpha < 0.f) {
+            ambAlpha = 0.f;
+            arrow->ambAlpha = 0.f;
+        }
+        
         highlightAlpha = 0.f;
+        highlightColor = vec3(0.f);
     }
 }
 
@@ -164,7 +185,7 @@ std::string Knob100::className() {
 
 void Knob100::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
-    if (isClicked) {
+    if (isClicked || (!isClicked && ambAlpha > 0.f)) {
         arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc);
         
         if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {

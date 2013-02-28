@@ -31,9 +31,10 @@ Knob10::Knob10() {
 
     rotating = 18.f;
     rotAnim = 0.f;
-    
+
     depthMin = .3;
     depthMax = 1.0;
+    ambAlpha = 0.f;
 
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1.f,0,0), rotating);
@@ -41,11 +42,11 @@ Knob10::Knob10() {
 
     station = 50;
     isClicked = false;
-    
+
     //Load in the select arrow
     arrow = new GameObject();
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/radio/Arrow.obj",
-            arrow->IBOlen, arrow->VBO, arrow->IBO, arrow->NBO, arrow->TBO, 
+            arrow->IBOlen, arrow->VBO, arrow->IBO, arrow->NBO, arrow->TBO,
             arrow->AABBmin, arrow->AABBmax);
     arrow->dir = vec3(1.f, 0.f, 0.f);
     arrow->speed = 0.f;
@@ -57,9 +58,10 @@ Knob10::Knob10() {
     arrow->shininess = 5;
     arrow->specStrength = 0.f;
     arrow->scale = glm::vec3(1.f);
-    
+    arrow->ambAlpha = 0.f;
+
     arrow->hasTex = false;
-    
+
     arrow->doScale(vec3(.25f, .05f, .25f));
     arrow->doTranslate(this->trans);
     arrow->doTranslate(vec3(0.f, getAABBmax().y - arrow->getAABBmin().y + .5f, 0.f));
@@ -77,6 +79,15 @@ int Knob10::getStation() {
 
 void Knob10::update(float dt, GameObject *playerCamera) {
     if (isClicked) {
+        if (ambAlpha < 1.0) {
+            ambAlpha += HIGHLIGHT_SPEED;
+            arrow->ambAlpha += HIGHLIGHT_SPEED;
+
+            if (ambAlpha > 1.0) {
+                ambAlpha = 1.0f;
+                arrow->ambAlpha = 1.0f;
+            }
+        }
         //make it so it always faces the player
         float rotY, rotA;
         vec3 up = glm::vec3(0.f, 1.f, 0.f);
@@ -101,14 +112,16 @@ void Knob10::update(float dt, GameObject *playerCamera) {
         doRotate(axis, rotA);
 
         doRotate(up, rotY);
-        if (rotAnim < rotating) { rotAnim += dt * 100; }
+        if (rotAnim < rotating) {
+            rotAnim += dt * 100;
+        }
         doRotate(glm::vec3(1.f, 0.f, 0.f), rotAnim);
         //doRotate(up, 90.f);
-        
+
         arrow->rotate = glm::mat4(1.f);
         arrow->doRotate(up, rotY);
         arrow->doRotate(axis, rotA);
-        arrow->doRotate(vec3(0,0,1), -90);
+        arrow->doRotate(vec3(0, 0, 1), -90);
 
         if (isHighlighted) {
             highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
@@ -135,9 +148,16 @@ void Knob10::update(float dt, GameObject *playerCamera) {
                 highlightAlpha = 0.f;
             }
         }
-    } else {
-        highlightColor = vec3(0.f);
+    } else if (!isClicked && ambAlpha > 0.f) {
+        ambAlpha -= HIGHLIGHT_SPEED;
+        arrow->ambAlpha -= HIGHLIGHT_SPEED;
+        if (ambAlpha < 0.f) {
+            ambAlpha = 0.f;
+            arrow->ambAlpha = 0.f;
+        }
+        
         highlightAlpha = 0.f;
+        highlightColor = vec3(0.f);
     }
 }
 
@@ -161,7 +181,7 @@ std::string Knob10::className() {
 
 void Knob10::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
-    if (isClicked) {
+    if (isClicked || (!isClicked && ambAlpha > 0.f)) {
         arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc);
         if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
             return;
