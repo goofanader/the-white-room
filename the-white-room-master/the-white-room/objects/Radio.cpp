@@ -25,7 +25,12 @@ Radio::Radio() {
     scale = glm::vec3(1.f);
     
     doScale(glm::vec3(2.f));
+
+    doRotate(glm::vec3(0.f, 1.f, 0.f), 180.f);
+
     doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,0.f));
+
+    doTranslate(glm::vec3(27.f, 0.f, 0.f));
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;

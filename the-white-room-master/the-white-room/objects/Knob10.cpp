@@ -25,15 +25,15 @@ Knob10::Knob10() {
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
     printOpenGLError();
-    LoadTexture((char *)"objects/meshes/radio/Knob2UV.bmp", texNum);
+    LoadTexture((char *)"objects/meshes/radio/Knob2UVbrass.bmp", texNum);
     printOpenGLError();
     hasTex = true;
     
     rotating = 90.f;
     
-    //doScale(glm::vec3(3.f));
+    doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(0,1,0), rotating);
-    doTranslate(glm::vec3(-10, 0, 0));
+    doTranslate(glm::vec3(27.f, 0, -1.f));
 }
 
 Knob10::Knob10(const Knob10& orig) {

@@ -35,6 +35,7 @@ Table::Table() {
     doScale(glm::vec3(ROOM_SIZE / 5.f, ROOM_SIZE / 4.f, ROOM_SIZE / 5.f));
     doTranslate(glm::vec3(0.f, 
             getRoomFloorHeight().y - getAABBmin().y, 0.f));
+    doTranslate(glm::vec3(27.f, 0.f, 0.f));
     //when we have the textures
 
  /*texNum = numTextures();
