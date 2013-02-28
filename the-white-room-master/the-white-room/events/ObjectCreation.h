@@ -21,6 +21,8 @@
 #define PLANT1 getPlant1Num()
 #define PLANT6 getPlant6Num()
 #define RADIO getRadioNum()
+#define KNOB10 getKnob10Num()
+#define KNOB100 getKnob100Num()
 
 using namespace std;
 

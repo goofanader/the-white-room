@@ -11,7 +11,7 @@
 
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
-#define HIGHLIGHT_SPEED .01f
+#define HIGHLIGHT_SPEED .03f
 
 using glm::ivec2;
 using glm::vec2;

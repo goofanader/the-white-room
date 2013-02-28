@@ -24,8 +24,10 @@ GameObject* createRadio() { return new Radio(); }
 GameObject* createKnob100() { return new Knob100(); }
 GameObject* createKnob10() { return new Knob10(); }
 GameObject* createTable() { return new Table(); }
+
 GameObject* createPlant1() { return new Plant1(); }
 GameObject* createPlant6() { return new Plant6(); }
+GameObject* createRoundTable() { return new RoundTable(); }
 
 GameObject* createChandelier() { return new Chandelier(); }
 
@@ -65,6 +67,7 @@ functionLookupTable[] = {
     { &createTable, "Table"},
     { &createKnob100, "Knob100"},
     { &createKnob10, "Knob10"},
+    { &createRoundTable, "RoundTable"},
     { &createFireplace, "Fireplace"},
     { NULL, NULL}
 };
@@ -78,7 +81,7 @@ GameObject* lookupAndCall(const string& name) {
 }
 
 int door, book1, book2, book3;
-int plant1, plant6, radio;
+int plant1, plant6, radio, knob10, knob100;
 
 void initializeIndices() {
     door = -1;
@@ -86,7 +89,7 @@ void initializeIndices() {
     book2 = -1;
     book3 = -1;
     
-    plant1 = plant6 = radio = -1;
+    plant1 = plant6 = radio = knob10 = knob100 = -1;
 }
 
 int getDoorNum() { return door; }
@@ -96,6 +99,8 @@ int getBook3Num() { return book3; }
 int getPlant1Num() { return plant1; }
 int getPlant6Num() { return plant6; }
 int getRadioNum() { return radio; }
+int getKnob10Num() { return knob10; }
+int getKnob100Num() { return knob100; }
 
 void setDoorNum(int index) {
     door = index;
@@ -116,6 +121,8 @@ void setBook3Num(int index) {
 void setPlant1Num(int index) { plant1 = index; }
 void setPlant6Num(int index) { plant6 = index; }
 void setRadioNum(int index) { radio = index; }
+void setKnob10Num(int index) { knob10 = index; }
+void setKnob100Num(int index) { knob100 = index; }
 
 struct {
     void (*fn)(int);
@@ -131,6 +138,8 @@ indexLookupTable[] = {
     { &setPlant1Num, "Plant1"},
     { &setPlant6Num, "Plant6"},
     { &setRadioNum, "Radio"},
+    { &setKnob10Num, "Knob10"},
+    { &setKnob100Num, "Knob100"},
     { NULL, NULL}
 };
 

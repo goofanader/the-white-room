@@ -29,7 +29,8 @@ Plant1::Plant1() {
     rotating = 90.f;
     
     doScale(glm::vec3(3.f));
-    doTranslate(glm::vec3(0.f,-3.85f - getAABBmin().y,4.5f));
+    doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x + 6.f,-3.1158f - getAABBmin().y,
+            ROOM_SIZE - getAABBmax().z - 12.f));
     //this->doScale(glm::vec3(3.f));
 }
 
