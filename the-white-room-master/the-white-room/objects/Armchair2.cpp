@@ -30,7 +30,7 @@ Armchair2::Armchair2() {
     doScale(glm::vec3(6.f));
     doRotate(glm::vec3(0.f, 1.f, 0.f), 90.f);
     doTranslate(glm::vec3(-20.f,getRoomFloorHeight().y - getAABBmin().y, -ROOM_SIZE + 5.f));
-    doTranslate(glm::vec3(10.f, 0.f, 5.f));
+    doTranslate(glm::vec3(5.f, 0.f, 5.f));
 
     //this->doScale(glm::vec3(3.f));
 

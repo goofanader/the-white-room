@@ -53,14 +53,17 @@ Safe::Safe() {
  
     body->doScale(glm::vec3(ROOM_SIZE / 10.f));
     door->doScale(1.f * body->scale);
-    
-    body->doTranslate(glm::vec3(0.f, 
-            getRoomFloorHeight().y - body->getAABBmin().y, -ROOM_SIZE - body->getAABBmin().z));
-    door->doTranslate(body->trans);
-    door->doTranslate(glm::vec3(1.f, -0.1f, 2.f));
+   
+    body->doRotate(glm::vec3(0.f, 1.f, 0.f), -90.f);
+    door->doRotate(glm::vec3(0.f, 1.f, 0.f), -90.f);
 
-    body->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
-    door->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
+    body->doTranslate(glm::vec3(ROOM_SIZE + body->getAABBmin().x, 
+            getRoomFloorHeight().y - body->getAABBmin().y, 0.f /*-ROOM_SIZE - body->getAABBmin().z)*/));
+    door->doTranslate(body->trans);
+    door->doTranslate(glm::vec3(-2.f, -0.1f, 1.f));
+
+    body->doTranslate(glm::vec3(0.f, 0.f, 20.f));
+    door->doTranslate(glm::vec3(0.f, 0.f, 20.f));
 
     AABBmin = body->getAABBmin();
     AABBmax = body->getAABBmax();
