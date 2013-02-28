@@ -191,7 +191,9 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[BOOK2].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-    } else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
+    }
+    //Got it in order! Move to the next puzzle.
+    else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()) {
         printf("clicked on Book1 in order, index %d\n", BOOK1);
         
@@ -202,7 +204,12 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[BOOK1].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-    } else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
+        
+        eventSwitches[KNOB10].getGameObject()->isClicked = true;
+        eventSwitches[KNOB100].getGameObject()->isClicked = true;
+    }
+    //Got the book order wrong, reset.
+    else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
             (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()))) {
         curr->onEvent(soundPlayer);
@@ -218,29 +225,26 @@ void Event::ifObjectSelected(GameObject *curr) {
      * PUZZLE 2 LOGIC
      *==================================================================*/
     if (eventSwitches[BOOK1].isSwitchOn()) {
-        if (name == "Knob100") {
-            curr->isClicked = true;
-        } else if (name == "Knob10") {
-            curr->isClicked = true;
-        }
+        if (name == "Knob100" || name == "Knob10") {
+            Knob100 *bigKnob = (Knob100*) eventSwitches[KNOB100].getGameObject();
+            Knob10 *smallKnob = (Knob10*) eventSwitches[KNOB10].getGameObject();
 
-        Knob100 *bigKnob = (Knob100*) eventSwitches[KNOB100].getGameObject();
-        Knob10 *smallKnob = (Knob10*) eventSwitches[KNOB10].getGameObject();
+            int station = bigKnob->getStation() + smallKnob->getStation();
 
-        int station = bigKnob->getStation() + smallKnob->getStation();
+            printf("station=%d\n", station);
+            if (station == 610) {
+                eventSwitches[RADIO].setSwitch(true);
+                setIfWon(true);
 
-        printf("station=%d\n", station);
-        if (station == 610) {
-            setIfWon(true);
-
-            //cause the white door to open
-            if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
-                eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
-                eventSwitches[WHITE_DOOR].setSwitch(true);
+                //cause the white door to open
+                if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
+                    eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
+                    eventSwitches[WHITE_DOOR].setSwitch(true);
+                }
             }
         }
     }
-    
+
     /*==================================================================
      * PUZZLE 3 LOGIC
      *==================================================================*/

@@ -8,7 +8,7 @@
 #include "Chandelier.h"
 
 Chandelier::Chandelier() {
-    
+
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/chandelier/Chandelier.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
@@ -51,4 +51,9 @@ bool Chandelier::doesCollide(GameObject* other) {
 
 std::string Chandelier::className() {
     return "Chandelier";
+}
+
+void Chandelier::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
+        glm::vec3 lightColor, GameConstants* gc) {
+    //don't do anything, it shouldn't be selectable
 }

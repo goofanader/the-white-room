@@ -20,6 +20,8 @@ public:
     virtual void onEvent(SoundPlayer *soundPlayer);
     std::string className();
     int getStation();
+    void draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc);
 private:
     float rotating;
     int station;
