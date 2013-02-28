@@ -29,7 +29,7 @@ SoundObject::~SoundObject() {
 
 FMOD_RESULT SoundObject::loadSound(
         FMOD::System *soundSystem, string fileName) {
-    return soundSystem->createSound(fileName.c_str(), FMOD_SOFTWARE, 0,
+    return soundSystem->createSound(fileName.c_str(), FMOD_3D, 0,
             &sound);
 }
 

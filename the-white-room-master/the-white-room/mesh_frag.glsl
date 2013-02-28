@@ -7,6 +7,7 @@ uniform vec4 uSpecColor;
 uniform vec4 uDiffColor;
 uniform int uUseTex;
 uniform sampler2D uTexUnit;
+uniform float uTime;
 
 varying vec3 normals;
 
@@ -58,6 +59,7 @@ else specL = vec3(0.0);
   if (uUseTex != 0) {
     diffL = texColor.xyz;
   }
+  diffL += ((sin(uTime) - 1.0) / 2.0);
   diffL *= NDotL * uLightColor.rgb;
 
   vec3 ambL = uAmbColor.rgb * uLightColor.rgb + vec3(.1, .1, .1) * uAmbColor.rgb;
@@ -65,10 +67,15 @@ else specL = vec3(0.0);
     ambL = texColor.xyz * uLightColor.rgb / 3.0 + vec3(.1, .1, .1) * texColor.xyz;
   }
 
-  vec3 finColor = (diffL * 0.7 + specL * 0.7) /
+  vec3 finColor =(diffL * 0.7 + specL * 0.7) /
     (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
-  gl_FragColor = vec4(finColor.r, finColor.g, finColor.b, uAmbColor.a);
+    finColor += 3.8/uTime/uTime;
+  gl_FragColor = vec4(
+    finColor.r, 
+    finColor.g, 
+    finColor.b, uAmbColor.a);
 
+    gl_FragColor.a = uAmbColor.a;
 
     if (gl_FragCoord.x >= 397.0 && gl_FragCoord.x <= 403.0 &&
         gl_FragCoord.y >= 297.0 && gl_FragCoord.y <= 303.0) {

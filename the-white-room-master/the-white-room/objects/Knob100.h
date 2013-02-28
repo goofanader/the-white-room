@@ -24,6 +24,7 @@ public:
         glm::vec3 lightColor, GameConstants* gc);
 private:
     float rotating;
+    float rotAnim;
     int station;
 };
 

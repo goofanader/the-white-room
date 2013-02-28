@@ -16,7 +16,6 @@ Plant6::Plant6() {
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
     ambColor = vec3(.75f);
-    diffColor = vec3(0.1, 0.74, 0.32);
     specColor = vec3(.5f);
     shininess = 5;
     specStrength = 0.f;

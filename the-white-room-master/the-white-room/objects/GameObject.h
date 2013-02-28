@@ -46,6 +46,7 @@ typedef struct GameConstants {
     GLuint h_uSpecStrength;
     GLuint h_uCamTrans;
     GLuint h_uUseTex;
+    GLuint h_uTime;
 } GameConstants;
 
 #include "../Main.h"

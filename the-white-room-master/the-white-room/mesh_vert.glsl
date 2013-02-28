@@ -15,6 +15,8 @@ uniform mat4 uTpModelMatrix;
 uniform vec3 uLightPos;
 uniform vec4 uLightColor;
 
+uniform float uTime;
+
 varying vec3 vNormal;
 varying vec3 normals;
 varying vec3 vLightDir;
@@ -37,4 +39,6 @@ void main() {
 
   vPosition = uViewMatrix * vPosition;
   gl_Position = uProjMatrix * vPosition;
+  if (uTime < 6.0) 
+    gl_Position += 1.0/uTime - 1.0/6.0;
 }

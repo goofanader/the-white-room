@@ -76,6 +76,7 @@ GLuint uShininess;
 GLuint uSpecStrength;
 GLuint uCamTrans;
 GLuint uUseTex;
+GLuint uTime;
 
 // Shader Handle
 GLuint ShadeProg[MAX_SHADERS];
@@ -610,6 +611,7 @@ void initializeShaderVariables() {
     gc.h_aTexCoord = aTexCoord;
     gc.h_uTexUnit = uTexUnit;
     gc.h_uUseTex = uUseTex;
+    gc.h_uTime = uTime;
 }
 
 void initializeLaplaceShaderVariables() {
@@ -636,6 +638,7 @@ void initializeLaplaceShaderVariables() {
     lc.h_aTexCoord = aTexCoord;
     lc.h_uTexUnit = uTexUnit;
     lc.h_uUseTex = uUseTex;
+    lc.h_uTime = uTime;
 }
 
 void initializeShadowShaderVariables() {
@@ -662,6 +665,7 @@ void initializeShadowShaderVariables() {
     sc.h_aTexCoord = aTexCoord;
     sc.h_uTexUnit = uTexUnit;
     sc.h_uUseTex = uUseTex;
+    sc.h_uTime = uTime;
 }
 
 void initializeShaderConnection(int shader) {
@@ -688,6 +692,7 @@ void initializeShaderConnection(int shader) {
     aTexCoord = safe_glGetAttribLocation(ShadeProg[shader], "aTexCoord");
     uTexUnit = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit");
     uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
+    uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
 
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
 }

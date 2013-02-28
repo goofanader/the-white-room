@@ -74,7 +74,8 @@ void Knob100::update(float dt, GameObject *playerCamera) {
         doRotate(axis, rotA);
 
         doRotate(up, rotY);
-        doRotate(glm::vec3(1.f, 0.f, 0.f), rotating);
+        if (rotAnim < rotating) { rotAnim += dt * 100; }
+        doRotate(glm::vec3(1.f, 0.f, 0.f), rotAnim);
 
         //doRotate(up, 90.f);
 

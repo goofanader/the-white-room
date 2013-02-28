@@ -25,6 +25,7 @@ public:
 
 private:
     float rotating;
+    float rotAnim;
     int station;
 };
 
