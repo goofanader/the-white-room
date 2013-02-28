@@ -13,6 +13,7 @@
 #include "../objects/Room.h"
 #include "../objects/Safe.h"
 #include "../objects/Armchair.h"
+#include "../objects/Armchair2.h"
 #include "../objects/Box1.h"
 #include "../objects/Box2.h"
 #include "../objects/Box3.h"

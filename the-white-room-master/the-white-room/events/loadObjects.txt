@@ -1,4 +1,4 @@
-numItems: 19
+numItems: 20
 # list of items to be created
 create Room
 create WhiteDoor
@@ -9,6 +9,7 @@ create Bookshelf
 create Clock
 create Safe
 create Armchair
+create Armchair2
 create Chandelier
 create MooseHead
 create Table
@@ -19,3 +20,4 @@ create Knob100
 create Knob10
 create RoundTable
 create Fireplace
+

@@ -14,6 +14,7 @@ GameObject* createDoor() { return new WhiteDoor(); }
 GameObject* createSafe() { return new Safe(); }
 
 GameObject* createArmchair() { return new Armchair(); }
+GameObject* createArmchair2() { return new Armchair2(); }
 
 GameObject* createBox1() { return new Box1(); }
 GameObject* createBox2() { return new Box2(); }
@@ -50,6 +51,7 @@ functionLookupTable[] = {
     { &createSafe, "Safe"},
     { &createRoom, "Room"},
     { &createArmchair, "Armchair"},
+    { &createArmchair2, "Armchair2"},
     { &createBox1, "Box1"},
     { &createBox2, "Box2"},
     { &createBox3, "Box3"},
