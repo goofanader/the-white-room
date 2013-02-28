@@ -140,7 +140,7 @@ void Running::draw() {
                 glCullFace(GL_FRONT);
                 //glDisable(GL_DEPTH_TEST);
                 //glDepthFunc(GL_NEVER);
-                glDepthRange(0.1, 1);
+                glDepthRange(curr->depthMin, curr->depthMax);
                 curr->drawHighlight(playerCamera->trans, camLookAt, getLC()->lightPos,
                         getLC()->lightColor, getLC());
 

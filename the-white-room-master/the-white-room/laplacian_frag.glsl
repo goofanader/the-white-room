@@ -76,7 +76,8 @@ void main() {
             gaussSum += temp * gaussKernel[i];
         }
 
-        gl_FragColor = uAmbColor;
+        float alpha = uAmbColor.a * vNormal.x;
+        gl_FragColor = uAmbColor;//vec4(uAmbColor.rgb, alpha);
     //}
     //else {
         sum = vec4(normals, 1.0);

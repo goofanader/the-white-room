@@ -26,6 +26,7 @@ private:
     float rotating;
     float rotAnim;
     int station;
+    GameObject *arrow;
 };
 
 #endif	/* KNOB100_H */

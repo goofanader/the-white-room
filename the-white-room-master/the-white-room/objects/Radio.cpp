@@ -48,7 +48,9 @@ Radio::~Radio() {
 }
 
 void Radio::onEvent(SoundPlayer *soundPlayer){
-    soundPlayer->playSound("RadioStatic");
+    if (isClicked) {
+        soundPlayer->playSound("RadioStatic"); 
+    }
 }
 
 std::string Radio::className() {

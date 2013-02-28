@@ -30,6 +30,10 @@ Knob100::Knob100() {
     hasTex = true;
 
     rotating = 18.f;
+    rotAnim = 0.f;
+    
+    depthMin = .3;
+    depthMax = 1.0;
 
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1,0,0), rotating);
@@ -37,6 +41,28 @@ Knob100::Knob100() {
 
     station = 1000;
     isClicked = false;
+    
+    //Load in the select arrow
+    arrow = new GameObject();
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/radio/Arrow.obj",
+            arrow->IBOlen, arrow->VBO, arrow->IBO, arrow->NBO, arrow->TBO, 
+            arrow->AABBmin, arrow->AABBmax);
+    arrow->dir = vec3(1.f, 0.f, 0.f);
+    arrow->speed = 0.f;
+    arrow->rotSpeed = 0.f;
+    arrow->rotAxis = vec3(0.f, 1.f, 0.f);
+    arrow->ambColor = vec3(0.f);
+    arrow->diffColor = vec3(1.f, 0.f, 0.f);
+    arrow->specColor = vec3(.5f);
+    arrow->shininess = 5;
+    arrow->specStrength = 0.f;
+    arrow->scale = glm::vec3(1.f);
+    
+    arrow->hasTex = false;
+    
+    arrow->doScale(vec3(.25f, .05f, .25f));
+    arrow->doTranslate(this->trans);
+    arrow->doTranslate(vec3(0.f, getAABBmax().y - arrow->getAABBmin().y + .5f, 0.f));
 }
 
 Knob100::Knob100(const Knob100& orig) {
@@ -72,11 +98,19 @@ void Knob100::update(float dt, GameObject *playerCamera) {
 
         this->rotate = glm::mat4(1.f);
         doRotate(axis, rotA);
-
+        
+        
         doRotate(up, rotY);
+        //doRotate(glm::vec3(1.f, 0.f, 0.f), rotating);
+        
         if (rotAnim < rotating) { rotAnim += dt * 100; }
         doRotate(glm::vec3(1.f, 0.f, 0.f), rotAnim);
-
+        
+        arrow->rotate = glm::mat4(1.f);
+        arrow->doRotate(up, rotY);
+        arrow->doRotate(axis, rotA);
+        arrow->doRotate(vec3(0,0,1), -90);
+        
         //doRotate(up, 90.f);
 
         if (isHighlighted) {
@@ -104,6 +138,9 @@ void Knob100::update(float dt, GameObject *playerCamera) {
                 highlightAlpha = 0.f;
             }
         }
+    } else {
+        highlightColor = vec3(0.f);
+        highlightAlpha = 0.f;
     }
 }
 
@@ -128,6 +165,8 @@ std::string Knob100::className() {
 void Knob100::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
     if (isClicked) {
+        arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        
         if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
             return;
         }

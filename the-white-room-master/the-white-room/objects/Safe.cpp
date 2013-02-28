@@ -36,6 +36,9 @@ Safe::Safe() {
     body->specAlpha = 1.0f;
     body->isClicked = false;
     
+    body->depthMin = 0;
+    body->depthMax = 1;
+    
     door->dir = vec3(1.f, 0.f, 0.f);
     door->speed = 0.f;
     door->rotSpeed = 0.f;

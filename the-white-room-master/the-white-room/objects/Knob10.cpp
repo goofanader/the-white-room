@@ -30,6 +30,10 @@ Knob10::Knob10() {
     hasTex = true;
 
     rotating = 18.f;
+    rotAnim = 0.f;
+    
+    depthMin = .3;
+    depthMax = 1.0;
 
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1.f,0,0), rotating);
@@ -37,6 +41,28 @@ Knob10::Knob10() {
 
     station = 50;
     isClicked = false;
+    
+    //Load in the select arrow
+    arrow = new GameObject();
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/radio/Arrow.obj",
+            arrow->IBOlen, arrow->VBO, arrow->IBO, arrow->NBO, arrow->TBO, 
+            arrow->AABBmin, arrow->AABBmax);
+    arrow->dir = vec3(1.f, 0.f, 0.f);
+    arrow->speed = 0.f;
+    arrow->rotSpeed = 0.f;
+    arrow->rotAxis = vec3(0.f, 1.f, 0.f);
+    arrow->ambColor = vec3(0.f);
+    arrow->diffColor = vec3(1.f, 0.f, 0.f);
+    arrow->specColor = vec3(.5f);
+    arrow->shininess = 5;
+    arrow->specStrength = 0.f;
+    arrow->scale = glm::vec3(1.f);
+    
+    arrow->hasTex = false;
+    
+    arrow->doScale(vec3(.25f, .05f, .25f));
+    arrow->doTranslate(this->trans);
+    arrow->doTranslate(vec3(0.f, getAABBmax().y - arrow->getAABBmin().y + .5f, 0.f));
 }
 
 Knob10::Knob10(const Knob10& orig) {
@@ -78,6 +104,11 @@ void Knob10::update(float dt, GameObject *playerCamera) {
         if (rotAnim < rotating) { rotAnim += dt * 100; }
         doRotate(glm::vec3(1.f, 0.f, 0.f), rotAnim);
         //doRotate(up, 90.f);
+        
+        arrow->rotate = glm::mat4(1.f);
+        arrow->doRotate(up, rotY);
+        arrow->doRotate(axis, rotA);
+        arrow->doRotate(vec3(0,0,1), -90);
 
         if (isHighlighted) {
             highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
@@ -104,6 +135,9 @@ void Knob10::update(float dt, GameObject *playerCamera) {
                 highlightAlpha = 0.f;
             }
         }
+    } else {
+        highlightColor = vec3(0.f);
+        highlightAlpha = 0.f;
     }
 }
 
@@ -128,6 +162,7 @@ std::string Knob10::className() {
 void Knob10::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
     if (isClicked) {
+        arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc);
         if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
             return;
         }

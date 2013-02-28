@@ -10,7 +10,7 @@
 
 MooseHead::MooseHead() {
     GLuint faceNBO;
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/moosehead/MooseHead.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/moosehead/MooseHead2.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -35,7 +35,7 @@ MooseHead::MooseHead() {
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
-    LoadTexture((char *) "objects/meshes/moosehead/MooseUV.bmp", texNum);
+    LoadTexture((char *) "objects/meshes/moosehead/MooseUV2.bmp", texNum);
     hasTex = true;
     //printf("%d\n", texNum);
 }

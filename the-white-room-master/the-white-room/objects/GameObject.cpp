@@ -50,6 +50,9 @@ GameObject::GameObject() {
     
     isHighlightDisappearing = false;
     isHighlighted = false;
+    
+    depthMin = .1;
+    depthMax = 1.0;
 }
 
 GameObject::~GameObject() {

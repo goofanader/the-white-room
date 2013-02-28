@@ -121,6 +121,7 @@ public:
     //glm::mat4 trans;
 
     bool isClicked, isHighlighted, isHighlightDisappearing;
+    float depthMin, depthMax;
 
     void printTrans();
     unsigned int numTextures();

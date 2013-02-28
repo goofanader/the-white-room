@@ -207,6 +207,7 @@ void Event::ifObjectSelected(GameObject *curr) {
         
         eventSwitches[KNOB10].getGameObject()->isClicked = true;
         eventSwitches[KNOB100].getGameObject()->isClicked = true;
+        eventSwitches[RADIO].getGameObject()->isClicked = true;
     }
     //Got the book order wrong, reset.
     else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
@@ -224,7 +225,7 @@ void Event::ifObjectSelected(GameObject *curr) {
     /*==================================================================
      * PUZZLE 2 LOGIC
      *==================================================================*/
-    if (eventSwitches[BOOK1].isSwitchOn()) {
+    if (eventSwitches[BOOK1].isSwitchOn() && !eventSwitches[RADIO].isSwitchOn()) {
         if (name == "Knob100" || name == "Knob10") {
             Knob100 *bigKnob = (Knob100*) eventSwitches[KNOB100].getGameObject();
             Knob10 *smallKnob = (Knob10*) eventSwitches[KNOB10].getGameObject();
@@ -235,6 +236,9 @@ void Event::ifObjectSelected(GameObject *curr) {
             if (station == 610) {
                 eventSwitches[RADIO].setSwitch(true);
                 setIfWon(true);
+                
+                eventSwitches[KNOB100].getGameObject()->isClicked = false;
+                eventSwitches[KNOB10].getGameObject()->isClicked = false;
 
                 //cause the white door to open
                 if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {

@@ -41,6 +41,9 @@ Clock::Clock() {
     body->diffAlpha = 1.f;
     body->specAlpha = 1.f;
     body->isClicked = false;
+    
+    body->depthMin = 0;
+    body->depthMax = 1;
 
     body->texNum = numTextures();
     body->textureEnum = GL_TEXTURE0 + body->texNum;
