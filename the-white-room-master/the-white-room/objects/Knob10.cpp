@@ -33,7 +33,7 @@ Knob10::Knob10() {
     
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1.f,0,0), rotating);
-    doTranslate(glm::vec3(27.f, 0, -1.f));
+    doTranslate(glm::vec3(27.f, 0, 1.f));
     
     station = 50;
 }
