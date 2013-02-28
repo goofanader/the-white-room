@@ -45,6 +45,11 @@ GameObject::GameObject() {
     diffColor = glm::vec3(.1f);
     diffAlpha = 1.f;
 
+    highlightColor = glm::vec3(0.f);
+    highlightAlpha = 0.f;
+    
+    isHighlightDisappearing = false;
+    isHighlighted = false;
 }
 
 GameObject::~GameObject() {
@@ -55,7 +60,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         return;
     }
-    
+
     printOpenGLError();
     glUseProgram(gc->shader);
     printOpenGLError();
@@ -109,9 +114,12 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 
     printOpenGLError();
     //pass colors, camera position, and light info to GPU
-    glUniform4f(gc->h_uAmbColor, ambColor.x, ambColor.y, ambColor.z, ambAlpha);
-    glUniform4f(gc->h_uSpecColor, specColor.x, specColor.y, specColor.z, specAlpha);
-    glUniform4f(gc->h_uDiffColor, diffColor.x, diffColor.y, diffColor.z, diffAlpha);
+    glUniform4f(gc->h_uAmbColor, ambColor.x + highlightColor.x,
+            ambColor.y + highlightColor.y, ambColor.z + highlightColor.z, ambAlpha);
+    glUniform4f(gc->h_uSpecColor, specColor.x + highlightColor.x, 
+            specColor.y + highlightColor.y, specColor.z + highlightColor.z, specAlpha);
+    glUniform4f(gc->h_uDiffColor, diffColor.x + highlightColor.x, 
+            diffColor.y + highlightColor.y, diffColor.z + highlightColor.z, diffAlpha);
     printOpenGLError();
     glUniform1f(gc->h_uShininess, shininess);
     glUniform1f(gc->h_uSpecStrength, specStrength);
@@ -134,7 +142,7 @@ void GameObject::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt,
     if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         return;
     }
-    
+
     printOpenGLError();
     glUseProgram(gc->shader);
     printOpenGLError();
@@ -168,23 +176,13 @@ void GameObject::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
     printOpenGLError();
-    
-    vec3 black = vec3(0, 0, 0);
-    float alpha = 1.f;
-    vec3 prevAmb = ambColor;
-    vec3 prevSpec = specColor;
-    vec3 prevDiff = diffColor;
-    
-    ambColor = specColor = diffColor = black;
+
     //pass colors, camera position, and light info to GPU
-    glUniform4f(gc->h_uAmbColor, ambColor.x, ambColor.y, ambColor.z, alpha);
+    glUniform4f(gc->h_uAmbColor, highlightColor.x, highlightColor.y, 
+            highlightColor.z, highlightAlpha);
     glUniform4f(gc->h_uSpecColor, specColor.x, specColor.y, specColor.z, specAlpha);
     glUniform4f(gc->h_uDiffColor, diffColor.x, diffColor.y, diffColor.z, diffAlpha);
-    
-    ambColor = prevAmb;
-    specColor = prevSpec;
-    diffColor = prevDiff;
-    
+
     glUniform1f(gc->h_uShininess, shininess);
     glUniform1f(gc->h_uSpecStrength, specStrength);
     glUniform3f(gc->h_uLightPos, lightPos.x, lightPos.y, lightPos.z);
@@ -201,7 +199,31 @@ void GameObject::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt,
 }
 
 void GameObject::update(float dt, GameObject* playerCamera) {
-    //default: do nothing.
+    if (isHighlighted) {
+        highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (highlightColor.x > 1.f) {
+            highlightColor = vec3(1.f);
+        }
+        
+        highlightAlpha += HIGHLIGHT_SPEED;
+        if (highlightAlpha > 1.f) {
+            highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (highlightColor.x < 0.f) {
+            highlightColor = vec3(0.f);
+        }
+        
+        highlightAlpha -= HIGHLIGHT_SPEED;
+        if (highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            highlightAlpha = 0.f;
+        }
+    }
 }
 
 void GameObject::doTranslate(glm::vec3 trans) {
@@ -303,7 +325,7 @@ glm::vec3 GameObject::getMinOrMax(bool isFindingMin) {
         min.z = max.z;
         max.z = temp;
     }
-    
+
     if (isFindingMin)
         return min;
     else

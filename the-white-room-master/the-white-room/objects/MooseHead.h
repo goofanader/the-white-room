@@ -17,6 +17,8 @@ public:
     MooseHead(const MooseHead& orig);
     virtual ~MooseHead();
     virtual void update(float dt, GameObject *playerCamera);
+    void drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc);
     float rotY;
     std::string className();
 private:

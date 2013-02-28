@@ -40,7 +40,7 @@ Running::Running() {
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
-    glfwDisable(GLFW_MOUSE_CURSOR);
+    //glfwDisable(GLFW_MOUSE_CURSOR);
 
     initializeCamera();
     initializeLight();
@@ -127,28 +127,34 @@ void Running::draw() {
         //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
         //printf("angle: %lf\n", angle);
 
-        if (angle < 90.0f || curr->className() == "Room" || 
+        if (angle < 90.0f || curr->className() == "Room" ||
                 curr->className() == "Bookshelf") {
-            //Draw the highlight, so turn things off
-            glPolygonMode(GL_BACK, GL_LINE);
-            glLineWidth(5.f);
-            //glDisable(GL_CULL_FACE);
-            glCullFace(GL_FRONT);
-            glDisable(GL_DEPTH_TEST);
-            //curr->drawHighlight(playerCamera->trans, camLookAt, getLC()->lightPos,
-              //      getLC()->lightColor, getLC());
-       
-            //Now, go back to drawing the object like normal
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            //glEnable(GL_CULL_FACE);
-            glCullFace(GL_BACK);
-            glEnable(GL_DEPTH_TEST);
-            
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                     getGC()->lightColor, getGC());
+            
+            if (curr->isHighlighted || curr->isHighlightDisappearing) {
+                //Draw the highlight, so turn things off
+                glPolygonMode(GL_BACK, GL_LINE);
+                glLineWidth(5.f);
+                //glDisable(GL_CULL_FACE);
+                glCullFace(GL_FRONT);
+                //glDisable(GL_DEPTH_TEST);
+                //glDepthFunc(GL_NEVER);
+                glDepthRange(0.1, 1);
+                curr->drawHighlight(playerCamera->trans, camLookAt, getLC()->lightPos,
+                        getLC()->lightColor, getLC());
+
+                //Now, go back to drawing the object like normal
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                //glEnable(GL_CULL_FACE);
+                glCullFace(GL_BACK);
+                //glEnable(GL_DEPTH_TEST);
+                //glDepthFunc(GL_LEQUAL);
+                glDepthRange(0, 1);
+            }
         }
     }
-    
+
     //====if you want to draw where the light is, uncomment code below.====//
     /*lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
           getGC()->lightColor, getGC());*/
@@ -157,16 +163,22 @@ void Running::draw() {
 void Running::update(float dt) {
     if (!isPaused()) {
         timeSpent += dt;
-        
+
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
 
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
             curr = (*iter);
-
+            
+            if (isMouseOverObject(curr)) {
+                curr->isHighlighted = true;
+            }
+            else {
+                curr->isHighlighted = false;
+            }
+            
             curr->update(dt, playerCamera);
-
 #if 1
             if (curr->doesCollide(playerCamera)) {
                 playerCamera->trans = camPrevTrans;
@@ -188,10 +200,119 @@ void Running::update(float dt) {
     }
 }
 
+bool Running::isMouseOverObject(GameObject *curr) {
+    float x, y, z, mag;
+    glm::vec3 translatedCam, reach;
+
+    float nx, ny, nz,
+            px, py, pz,
+            ox, oy, oz,
+            dx, dy, dz;
+
+    float t;
+    
+    glm::vec3 normalizedCam = camLookAt - playerCamera->trans;
+
+    dx = normalizedCam.x;
+    dy = normalizedCam.y;
+    dz = normalizedCam.z;
+
+    ox = playerCamera->trans.x;
+    oy = playerCamera->trans.y;
+    oz = playerCamera->trans.z;
+    
+    x = ((playerCamera->getAABBmin().x + playerCamera->getAABBmax().x) / 2.f)
+            - ((curr->getAABBmin().x + curr->getAABBmax().x) / 2.f);
+    y = ((playerCamera->getAABBmin().y + playerCamera->getAABBmax().y) / 2.f)
+            - ((curr->getAABBmin().y + curr->getAABBmax().y) / 2.f);
+    z = ((playerCamera->getAABBmin().z + playerCamera->getAABBmax().z) / 2.f)
+            - ((curr->getAABBmin().z + curr->getAABBmax().z) / 2.f);
+
+    //distance from current object
+
+    //printf("mag = %f\n",mag);
+
+    mag = sqrt(x * x + y * y + z * z);
+
+    //intersection b/n view vector and planes
+
+    //set normals to planes we're checking against
+    for (int i = 0; i < 6; i++) {
+        if (i == 0) {
+            nx = 0.f;
+            ny = 0.f;
+            nz = 1.f;
+
+            px = curr->getAABBmax().x;
+            py = curr->getAABBmax().y;
+            pz = curr->getAABBmax().z;
+        } else if (i == 1) {
+            nx = 1.f;
+            ny = 0.f;
+            nz = 0.f;
+
+            px = curr->getAABBmax().x;
+            py = curr->getAABBmax().y;
+            pz = curr->getAABBmax().z;
+        } else if (i == 2) {
+            nx = 0.f;
+            ny = 1.f;
+            nz = 0.f;
+
+            px = curr->getAABBmax().x;
+            py = curr->getAABBmax().y;
+            pz = curr->getAABBmax().z;
+        } else if (i == 3) {
+            nx = 0.f;
+            ny = 0.f;
+            nz = -1.f;
+
+            px = curr->getAABBmin().x;
+            py = curr->getAABBmin().y;
+            pz = curr->getAABBmin().z;
+        } else if (i == 4) {
+            nx = -1.f;
+            ny = 0.f;
+            nz = 0.f;
+
+            px = curr->getAABBmin().x;
+            py = curr->getAABBmin().y;
+            pz = curr->getAABBmin().z;
+        } else if (i == 5) {
+            nx = 0.f;
+            ny = -1.f;
+            nz = 0.f;
+
+            px = curr->getAABBmin().x;
+            py = curr->getAABBmin().y;
+            pz = curr->getAABBmin().z;
+        }
+
+        t = (nx * px + ny * py + nz * pz - nx * ox - ny * oy - nz * oz) /
+                (nx * dx + ny * dy + nz * dz);
+
+        reach.x = ox + dx * t;
+        reach.y = oy + dy * t;
+        reach.z = oz + dz * t;
+
+        //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
+
+        if (reach.x >= curr->getAABBmin().x && reach.x <= curr->getAABBmax().x &&
+                reach.y >= curr->getAABBmin().y && reach.y <= curr->getAABBmax().y &&
+                reach.z >= curr->getAABBmin().z && reach.z <= curr->getAABBmax().z &&
+                (glm::dot(normalizedCam, reach - playerCamera->trans)) > 0.f &&
+                mag <= MAX_CLICK_DISTANCE) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Running::mouseClicked(int button, int action) {
     float x, y, z, mag;
     glm::vec3 translatedCam, reach;
-    
+
     float nx, ny, nz,
             px, py, pz,
             ox, oy, oz,
@@ -205,109 +326,14 @@ void Running::mouseClicked(int button, int action) {
                 iter != objects.end(); iter++) {
             curr = (*iter);
 
-            glm::vec3 normalizedCam = camLookAt - playerCamera->trans;
+            if (isMouseOverObject(curr)) {
+                //print out what got clicked on
+                std::cout << "clicked on... " << curr->className();
+                std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());
+                std::cout << ", AABBmax=" << printVec3(curr->getAABBmax());
+                std::cout << std::endl;
 
-            dx = normalizedCam.x;
-            dy = normalizedCam.y;
-            dz = normalizedCam.z;
-
-            ox = playerCamera->trans.x;
-            oy = playerCamera->trans.y;
-            oz = playerCamera->trans.z;
-
-/*            x = playerCamera->trans.x - curr->trans.x;
-            y = playerCamera->trans.y - curr->trans.y;
-            z = playerCamera->trans.z - curr->trans.z;
-*/          x = ((playerCamera->getAABBmin().x + playerCamera->getAABBmax().x) / 2.f)
-                      - ((curr->getAABBmin().x + curr->getAABBmax().x) / 2.f);
-            y = ((playerCamera->getAABBmin().y + playerCamera->getAABBmax().y) / 2.f)
-                      - ((curr->getAABBmin().y + curr->getAABBmax().y) / 2.f);
-            z = ((playerCamera->getAABBmin().z + playerCamera->getAABBmax().z) / 2.f)
-                      - ((curr->getAABBmin().z + curr->getAABBmax().z) / 2.f);
-
-            //distance from current object
-
-            //printf("mag = %f\n",mag);
-
-            mag = sqrt(x * x + y * y + z * z);
-
-            //intersection b/n view vector and planes
-
-            //set normals to planes we're checking against
-            for (int i = 0; i < 6; i++) {
-                if (i == 0) {
-                    nx = 0.f;
-                    ny = 0.f;
-                    nz = 1.f;
-
-                    px = curr->getAABBmax().x;
-                    py = curr->getAABBmax().y;
-                    pz = curr->getAABBmax().z;
-                } else if (i == 1) {
-                    nx = 1.f;
-                    ny = 0.f;
-                    nz = 0.f;
-
-                    px = curr->getAABBmax().x;
-                    py = curr->getAABBmax().y;
-                    pz = curr->getAABBmax().z;
-                } else if (i == 2) {
-                    nx = 0.f;
-                    ny = 1.f;
-                    nz = 0.f;
-
-                    px = curr->getAABBmax().x;
-                    py = curr->getAABBmax().y;
-                    pz = curr->getAABBmax().z;
-                } else if (i == 3) {
-                    nx = 0.f;
-                    ny = 0.f;
-                    nz = -1.f;
-
-                    px = curr->getAABBmin().x;
-                    py = curr->getAABBmin().y;
-                    pz = curr->getAABBmin().z;
-                } else if (i == 4) {
-                    nx = -1.f;
-                    ny = 0.f;
-                    nz = 0.f;
-
-                    px = curr->getAABBmin().x;
-                    py = curr->getAABBmin().y;
-                    pz = curr->getAABBmin().z;
-                } else if (i == 5) {
-                    nx = 0.f;
-                    ny = -1.f;
-                    nz = 0.f;
-
-                    px = curr->getAABBmin().x;
-                    py = curr->getAABBmin().y;
-                    pz = curr->getAABBmin().z;
-                }
-
-                t = (nx * px + ny * py + nz * pz - nx * ox - ny * oy - nz * oz) /
-                        (nx * dx + ny * dy + nz * dz);
-
-                reach.x = ox + dx * t;
-                reach.y = oy + dy * t;
-                reach.z = oz + dz * t;
-
-                //printf("reach = %f, %f, %f\n",reach.x, reach.y, reach.z);
-
-                if (reach.x >= curr->getAABBmin().x && reach.x <= curr->getAABBmax().x &&
-                        reach.y >= curr->getAABBmin().y && reach.y <= curr->getAABBmax().y &&
-                        reach.z >= curr->getAABBmin().z && reach.z <= curr->getAABBmax().z &&
-                        (glm::dot(normalizedCam, reach - playerCamera->trans)) > 0.f &&
-                        mag <= MAX_CLICK_DISTANCE) {
-                    //print out what got clicked on
-                    std::cout << "clicked on... " << curr->className();
-                    std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());
-                    std::cout << ", AABBmax=" << printVec3(curr->getAABBmax());
-                    std::cout << std::endl;
-
-                    currEvent->ifObjectSelected(curr);
-                    break;
-                }
+                currEvent->ifObjectSelected(curr);
             }
         }
     }

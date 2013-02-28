@@ -46,6 +46,11 @@ MooseHead::MooseHead(const MooseHead& orig) {
 MooseHead::~MooseHead() {
 }
 
+void MooseHead::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc) {
+    //do nothing, we don't want a highlight for the moosehead. It's not selectable
+}
+
 void MooseHead::update(float dt, GameObject *playerCamera){
     //make it so it always faces the player
     /*float rotY, rotA;

@@ -11,6 +11,7 @@
 
 #define ROOM_SIZE 30.f
 #define ROOM_HEIGHT_DIVISION 3.f
+#define HIGHLIGHT_SPEED .01f
 
 using glm::ivec2;
 using glm::vec2;
@@ -102,6 +103,10 @@ public:
     float specAlpha;
     glm::vec3 diffColor;
     float diffAlpha;
+    
+    glm::vec3 highlightColor;
+    float highlightAlpha;
+    
     float shininess;
     float specStrength;
     int tag; //Misc information goes here
@@ -114,7 +119,7 @@ public:
     glm::vec3 trans;
     //glm::mat4 trans;
 
-    bool isClicked;
+    bool isClicked, isHighlighted, isHighlightDisappearing;
 
     void printTrans();
     unsigned int numTextures();

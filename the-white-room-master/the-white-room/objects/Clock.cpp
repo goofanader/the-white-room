@@ -131,6 +131,31 @@ void Clock::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 light
 }
 void Clock::update(float dt, GameObject* playerCamera) {
     
+    if (isHighlighted) {
+        body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (highlightColor.x > 1.f) {
+            body->highlightColor = vec3(1.f);
+        }
+        
+        body->highlightAlpha += HIGHLIGHT_SPEED;
+        if (body->highlightAlpha > 1.f) {
+            body->highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        body->highlightColor = body->highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (body->highlightColor.x < 0.f) {
+            body->highlightColor = vec3(0.f);
+        }
+        
+        body->highlightAlpha -= HIGHLIGHT_SPEED;
+        if (body->highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            body->highlightAlpha = 0.f;
+        }
+    }
 }
 bool Clock::doesCollide(GameObject* other) {
     return body->doesCollide(other);

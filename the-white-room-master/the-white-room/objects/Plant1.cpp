@@ -44,6 +44,32 @@ void Plant1::update(float dt, GameObject* playerCamera) {
         rotating++;
         doRotate(vec3(0,1,0), 1.f);
     }
+    
+    if (isHighlighted) {
+        highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (highlightColor.x > 1.f) {
+            highlightColor = vec3(1.f);
+        }
+        
+        highlightAlpha += HIGHLIGHT_SPEED;
+        if (highlightAlpha > 1.f) {
+            highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (highlightColor.x < 0.f) {
+            highlightColor = vec3(0.f);
+        }
+        
+        highlightAlpha -= HIGHLIGHT_SPEED;
+        if (highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            highlightAlpha = 0.f;
+        }
+    }
 }
 
 std::string Plant1::className() {

@@ -50,6 +50,11 @@ Table::Table(const Table& orig) {
 Table::~Table() {
 }
 
+void Table::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc) {
+    //do nothing, we don't want a highlight for the table. It's not selectable
+}
+
 std::string Table::className() {
     return "Table";
 }

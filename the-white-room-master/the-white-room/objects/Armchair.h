@@ -16,7 +16,8 @@ public:
     Armchair();
     Armchair(const Armchair& orig);
     virtual ~Armchair();
-    
+    void drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc);
     
     /*void draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
         glm::vec3 lightColor, GameConstants* gc);

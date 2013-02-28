@@ -76,7 +76,7 @@ void main() {
             gaussSum += temp * gaussKernel[i];
         }
 
-        gl_FragColor = vec4(sum.rgb, 1.0);// + texture2D(uTexUnit, vTexCoord.xy);//vec4(gaussSum.rgb, 1.0);// - vec4(sum.rgb, .5);
+        gl_FragColor = uAmbColor;
     //}
     //else {
         sum = vec4(normals, 1.0);

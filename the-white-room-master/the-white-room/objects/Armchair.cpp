@@ -45,6 +45,11 @@ Armchair::Armchair(const Armchair& orig) {
 Armchair::~Armchair() {
 }
 
+void Armchair::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc) {
+    //do nothing, we don't want a highlight for the armchair. It's not selectable
+}
+
 std::string Armchair::className() {
     return "Armchair";
 }

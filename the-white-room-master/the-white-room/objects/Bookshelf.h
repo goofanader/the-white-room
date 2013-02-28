@@ -18,7 +18,8 @@ public:
     virtual ~Bookshelf();
     void onEvent(SoundPlayer *soundPlayer);
     std::string className();
-    bool doesCollide(GameObject *other);
+    void drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc);
 private:
     glm::vec3 hitTestAABBmin;
     glm::vec3 hitTestAABBmax;

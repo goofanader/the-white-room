@@ -31,6 +31,7 @@ public:
     void draw();
     void update(float dt);
 
+    bool isMouseOverObject(GameObject *curr);
     void mouseClicked(int button, int action);
     void mouseMoved(int x, int y, float prevX, float prevY);
     void keyPressed(float dt, int keyDown[]);

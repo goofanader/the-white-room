@@ -52,22 +52,15 @@ Bookshelf::Bookshelf(const Bookshelf& orig) {
 Bookshelf::~Bookshelf() {
 }
 
+void Bookshelf::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+        glm::vec3 lightColor, GameConstants* gc) {
+    //do nothing, we don't want a highlight for the Bookshelf. It's not selectable
+}
+
 void Bookshelf::onEvent(SoundPlayer *soundPlayer) {
     //color = glm::vec3(1.f, 0.f, 0.f);
 }
 
 std::string Bookshelf::className() {
     return "Bookshelf";
-}
-
-bool Bookshelf::doesCollide(GameObject *other) {
-#if 0
-    return (this->hitTestAABBmin.x <= other->getAABBmax().x &&
-            //this->AABBmin.y <= other->AABBmax.y &&
-            this->hitTestAABBmin.z <= other->getAABBmax().z &&
-            this->hitTestAABBmax.x >= other->getAABBmin().x &&
-            //this->AABBmax.y >= other->AABBmin.y &&
-            this->hitTestAABBmax.z >= other->getAABBmin().z);
-#endif
-    return other->doesCollide(this);
 }

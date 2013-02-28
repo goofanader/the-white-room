@@ -87,12 +87,34 @@ void Safe::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
 
 void Safe::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
-    body->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+    body->drawHighlight(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 
 void Safe::update(float dt, GameObject* playerCamera){
-    if(this->ambColor != this->body->ambColor){
-        this->body->ambColor = this->ambColor;
+    if (isHighlighted) {
+        body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (body->highlightColor.x > 1.f) {
+            body->highlightColor = vec3(1.f);
+        }
+        
+        body->highlightAlpha += HIGHLIGHT_SPEED;
+        if (body->highlightAlpha > 1.f) {
+            body->highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        body->highlightColor = body->highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (body->highlightColor.x < 0.f) {
+            body->highlightColor = vec3(0.f);
+        }
+        
+        body->highlightAlpha -= HIGHLIGHT_SPEED;
+        if (body->highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            body->highlightAlpha = 0.f;
+        }
     }
 }
 
