@@ -194,6 +194,11 @@ void Event::ifObjectSelected(GameObject *curr) {
     } else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()) {
         printf("clicked on Book1 in order, index %d\n", BOOK1);
+        
+        if(!eventSwitches[BOOK1].isSwitchOn())
+            soundPlayer->playSound("RadioAppear2");
+
+
         eventSwitches[BOOK1].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);

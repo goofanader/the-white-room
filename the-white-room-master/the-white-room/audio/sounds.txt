@@ -7,6 +7,7 @@ TrySafe:audio/trySafe.wav
 BooksAppear:audio/booksAppear.wav
 TryBook:audio/tryBook.wav
 RadioAppear:audio/radioAppear.wav
+RadioAppear2:audio/radioAppear2.wav
 TryRadio:audio/tryRadio.wav
 RadioStatic:audio/radioStatic.wav
 Bell1:audio/bell1.wav
