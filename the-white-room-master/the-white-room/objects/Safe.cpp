@@ -58,6 +58,10 @@ Safe::Safe() {
             getRoomFloorHeight().y - body->getAABBmin().y, -ROOM_SIZE - body->getAABBmin().z));
     door->doTranslate(body->trans);
     door->doTranslate(glm::vec3(1.f, -0.1f, 2.f));
+
+    body->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
+    door->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
+    
     
     AABBmin = body->getAABBmin();
     AABBmax = body->getAABBmax();
