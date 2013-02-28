@@ -36,6 +36,7 @@ GameObject* createBook2() { return new Book2(); }
 GameObject* createBook3() { return new Book3(); }
 
 GameObject* createMooseHead() { return new MooseHead(); }
+GameObject* createFireplace() { return new Fireplace(); }
 
 struct {
     GameObject* (*fn)();
@@ -64,6 +65,7 @@ functionLookupTable[] = {
     { &createTable, "Table"},
     { &createKnob100, "Knob100"},
     { &createKnob10, "Knob10"},
+    { &createFireplace, "Fireplace"},
     { NULL, NULL}
 };
 

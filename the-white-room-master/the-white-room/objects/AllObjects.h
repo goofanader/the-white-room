@@ -30,6 +30,7 @@
 #include "../objects/Table.h"
 #include "../objects/Knob100.h"
 #include "../objects/Knob10.h"
+#include "../objects/Fireplace.h"
 
 #endif	/* ALLOBJECTS_H */
 
