@@ -15,3 +15,4 @@ Bell2:audio/bell2.wav
 Bell3:audio/bell3.wav
 BellTones:audio/threebells.wav
 TickTock:audio/clockTicking.wav
+RotatePlant:audio/rotatePlant.wav

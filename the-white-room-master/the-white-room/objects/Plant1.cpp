@@ -82,4 +82,7 @@ void Plant1::onEvent(SoundPlayer *soundPlayer) {
         rotating = 0.f;
     } else {
     }
+
+     soundPlayer->playSound("RotatePlant");
+
 }

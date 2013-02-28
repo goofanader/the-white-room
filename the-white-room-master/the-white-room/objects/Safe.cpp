@@ -50,7 +50,7 @@ Safe::Safe() {
     door->diffAlpha = 1.0f;
     door->specAlpha = 1.0f;
     door->isClicked = false;
-    
+ 
     body->doScale(glm::vec3(ROOM_SIZE / 10.f));
     door->doScale(1.f * body->scale);
     
@@ -61,8 +61,7 @@ Safe::Safe() {
 
     body->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
     door->doTranslate(glm::vec3(-20.f, 0.f, 0.f));
-    
-    
+
     AABBmin = body->getAABBmin();
     AABBmax = body->getAABBmax();
 
