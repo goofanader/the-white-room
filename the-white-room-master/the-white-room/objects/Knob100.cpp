@@ -34,12 +34,18 @@ Knob100::Knob100() {
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1,0,0), rotating);
     doTranslate(glm::vec3(27.f, 0, 1.f));
+    
+    station = 1000;
 }
 
 Knob100::Knob100(const Knob100& orig) {
 }
 
 Knob100::~Knob100() {
+}
+
+int Knob100::getStation() {
+    return station;
 }
 
 void Knob100::update(float dt, GameObject *playerCamera){
@@ -69,12 +75,44 @@ void Knob100::update(float dt, GameObject *playerCamera){
     doRotate(glm::vec3(1.f,0.f,0.f), rotating);
 
     //doRotate(up, 90.f);
+    
+    if (isHighlighted) {
+        highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (highlightColor.x > 1.f) {
+            highlightColor = vec3(1.f);
+        }
+        
+        highlightAlpha += HIGHLIGHT_SPEED;
+        if (highlightAlpha > 1.f) {
+            highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (highlightColor.x < 0.f) {
+            highlightColor = vec3(0.f);
+        }
+        
+        highlightAlpha -= HIGHLIGHT_SPEED;
+        if (highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            highlightAlpha = 0.f;
+        }
+    }
 }
 
 void Knob100::onEvent(SoundPlayer *soundPlayer){
     soundPlayer->playSound("TryRadio");
 
     rotating += 36.f;
+    
+    station += 100;
+    
+    if (station > 1500) {
+        station = 600;
+    }
 }
 
 std::string Knob100::className() { return "Knob100"; }

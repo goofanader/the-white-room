@@ -19,9 +19,11 @@ public:
     std::string className();
     virtual void update(float dt, GameObject *playerCamera);
     virtual void onEvent(SoundPlayer *soundPlayer);
+    int getStation();
 
 private:
     float rotating;
+    int station;
 };
 
 #endif	/* KNOB10_H */

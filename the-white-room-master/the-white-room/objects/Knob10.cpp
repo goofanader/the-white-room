@@ -34,12 +34,18 @@ Knob10::Knob10() {
     doScale(glm::vec3(0.75f));
     //doRotate(glm::vec3(1.f,0,0), rotating);
     doTranslate(glm::vec3(27.f, 0, -1.f));
+    
+    station = 50;
 }
 
 Knob10::Knob10(const Knob10& orig) {
 }
 
 Knob10::~Knob10() {
+}
+
+int Knob10::getStation() {
+    return station;
 }
 
 void Knob10::update(float dt, GameObject *playerCamera){
@@ -69,12 +75,44 @@ void Knob10::update(float dt, GameObject *playerCamera){
     doRotate(up, rotY);
     doRotate(glm::vec3(1.f,0.f,0.f),rotating);
     //doRotate(up, 90.f);
+    
+    if (isHighlighted) {
+        highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+        if (highlightColor.x > 1.f) {
+            highlightColor = vec3(1.f);
+        }
+        
+        highlightAlpha += HIGHLIGHT_SPEED;
+        if (highlightAlpha > 1.f) {
+            highlightAlpha = 1.f;
+        }
+    } else {
+        isHighlightDisappearing = true;
+        highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+        
+        if (highlightColor.x < 0.f) {
+            highlightColor = vec3(0.f);
+        }
+        
+        highlightAlpha -= HIGHLIGHT_SPEED;
+        if (highlightAlpha < 0.f) {
+            isHighlightDisappearing = false;
+            highlightAlpha = 0.f;
+        }
+    }
 }
 
 void Knob10::onEvent(SoundPlayer *soundPlayer){
     soundPlayer->playSound("TryRadio");
 
     rotating += 36.f;
+    
+    station += 10;
+    
+    if (station > 90) {
+        station = 0;
+    }
 }
 
 std::string Knob10::className() { return "Knob10"; }

@@ -37,5 +37,7 @@ int getBook3Num();
 int getPlant1Num();
 int getPlant6Num();
 int getRadioNum();
+int getKnob10Num();
+int getKnob100Num();
 #endif	/* OBJECTCREATION_H */
 

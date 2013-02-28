@@ -7,6 +7,8 @@
 
 #include "Event.h"
 #include "ObjectCreation.h"
+#include "objects/Knob100.h"
+#include "objects/Knob10.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -171,11 +173,11 @@ int Event::getSwitchNum() {
 
 void Event::ifObjectSelected(GameObject *curr) {
     std::string name = curr->className();
-    
+
     if (name != "Book1" && name != "Book2" && name != "Book3") {
         curr->onEvent(soundPlayer);
     }
-    
+
     /*==================================================================
      * PUZZLE 1 LOGIC
      *==================================================================*/
@@ -195,35 +197,48 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[BOOK1].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-        setIfWon(true);
-
-        //cause the white door to open
-        if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
-            eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
-            eventSwitches[WHITE_DOOR].setSwitch(true);
-        }
     } else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
             (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()))) {
         curr->onEvent(soundPlayer);
-        
+
         reinitializeSwitches(BOOK1, BOOK1 + 1);
         reinitializeSwitches(BOOK2, BOOK2 + 1);
         reinitializeSwitches(BOOK3, BOOK3 + 1);
         reinitializeSwitches(WHITE_DOOR, WHITE_DOOR + 1);
         printf("oh no! out of order :(\n");
     }
-    
+
     /*==================================================================
      * PUZZLE 2 LOGIC
      *==================================================================*/
-    if (name == "Plant1") {
-        
-    } else if (name == "Plant6") {
-        
-    } else if (name == "Radio") {
-        
+    if (eventSwitches[BOOK1].isSwitchOn()) {
+        if (name == "Knob100") {
+            curr->isClicked = true;
+        } else if (name == "Knob10") {
+            curr->isClicked = true;
+        }
+
+        Knob100 *bigKnob = (Knob100*) eventSwitches[KNOB100].getGameObject();
+        Knob10 *smallKnob = (Knob10*) eventSwitches[KNOB10].getGameObject();
+
+        int station = bigKnob->getStation() + smallKnob->getStation();
+
+        printf("station=%d\n", station);
+        if (station == 610) {
+            setIfWon(true);
+
+            //cause the white door to open
+            if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
+                eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
+                eventSwitches[WHITE_DOOR].setSwitch(true);
+            }
+        }
     }
+    
+    /*==================================================================
+     * PUZZLE 3 LOGIC
+     *==================================================================*/
 }
 
 bool Event::setSwitch(std::string className) {
