@@ -29,10 +29,10 @@ Knob10::Knob10() {
     printOpenGLError();
     hasTex = true;
     
-    rotating = 90.f;
+    rotating = 18.f;
     
     doScale(glm::vec3(0.75f));
-    //doRotate(glm::vec3(0,1,0), rotating);
+    //doRotate(glm::vec3(1.f,0,0), rotating);
     doTranslate(glm::vec3(27.f, 0, -1.f));
 }
 
@@ -63,10 +63,18 @@ void Knob10::update(float dt, GameObject *playerCamera){
         rotA = -rotA;
 
     this->rotate = glm::mat4(1.f);
+    //doRotate(glm::cross(up,axis), rotating);
     doRotate(axis,rotA);
 
     doRotate(up, rotY);
+    doRotate(glm::vec3(1.f,0.f,0.f),rotating);
     //doRotate(up, 90.f);
+}
+
+void Knob10::onEvent(SoundPlayer *soundPlayer){
+    soundPlayer->playSound("TryRadio");
+
+    rotating += 36.f;
 }
 
 std::string Knob10::className() { return "Knob10"; }

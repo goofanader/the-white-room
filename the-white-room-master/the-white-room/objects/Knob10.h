@@ -18,6 +18,7 @@ public:
     virtual ~Knob10();
     std::string className();
     virtual void update(float dt, GameObject *playerCamera);
+    virtual void onEvent(SoundPlayer *soundPlayer);
 
 private:
     float rotating;
