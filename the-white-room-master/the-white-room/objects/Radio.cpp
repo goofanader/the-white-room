@@ -43,7 +43,7 @@ Radio::~Radio() {
 }
 
 void Radio::onEvent(SoundPlayer *soundPlayer){
-    //soundPlayer->playSound("radioAppear");
+    soundPlayer->playSound("RadioStatic");
 }
 
 std::string Radio::className() {
