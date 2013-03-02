@@ -31,11 +31,13 @@ if (uUseTex != 0) {
     }
 
 if (uUseTex2 != 0) {
-    tColor = vec3(texture2D(uTexUnit2, vTexCoord));
-    if ((tColor.r > 0.3 || tColor.g > 0.3 || tColor.b > 0.3) &&
-      (sin(uTime) - 1.0)/2.0 < -0.7) {
-        texColor = vec4(tColor, 1.0) - (vec4(tColor, 1.0) - texColor)*
-            (((sin(uTime) - 1.0)/2.0) + 2.0)/(-0.7 + 2.0);
+    float T = mod(uTime, 24);
+    if (T >= 16.0 && T <= 20.0) {
+        tColor = vec3(texture2D(uTexUnit2, vTexCoord)) * 
+            (0.25*sin(6.2831853 * T / 4.0 - 1.570796) + 0.25);
+        texColor = texColor - 
+        (texColor - vec4(tColor, tColor.r)) *
+        (length(tColor) - 0.0)/(0.87735026 - 0.0);
     }
 }
 
@@ -81,7 +83,7 @@ else specL = vec3(0.0);
   gl_FragColor = vec4(
     finColor.r, 
     finColor.g, 
-    finColor.b, uAmbColor.a);
+    finColor.b, uUseTex2 != 0 ? texColor.a : uAmbColor.a);
 
     gl_FragColor.a = uAmbColor.a;
 
