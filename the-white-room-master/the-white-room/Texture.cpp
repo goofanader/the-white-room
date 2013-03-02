@@ -15,6 +15,7 @@ GLvoid LoadTexture(char* image_file, int texID) {
   }
   cout << "trying to load " << image_file << endl;
   if (!ImageLoad(image_file, TextureImage)) {
+      printf("failed to load image\n");
     exit(1);
   }  
   printOpenGLError();
@@ -38,6 +39,7 @@ GLvoid LoadTexture(char* image_file, int texID) {
     TextureImage->sizeX, TextureImage->sizeY,
     GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
   printOpenGLError();
+  printf("got here\n");
   
   free(TextureImage);
 }

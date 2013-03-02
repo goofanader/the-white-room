@@ -41,11 +41,13 @@ typedef struct GameConstants {
     GLuint h_uNormalMatrix;
     GLuint h_uLightPos;
     GLuint h_uTexUnit;
+    GLuint h_uTexUnit2;
     GLuint h_uLightColor;
     GLuint h_uShininess;
     GLuint h_uSpecStrength;
     GLuint h_uCamTrans;
     GLuint h_uUseTex;
+    GLuint h_uUseTex2;
     GLuint h_uTime;
 } GameConstants;
 
@@ -83,7 +85,7 @@ public:
     float speed;
     glm::vec3 rotAxis;
     float rotSpeed;
-    bool hasTex;
+    bool hasTex, hasTex2;
 
     // TODO: matrix transforms (orientation!)
     glm::vec3 AABBmin; //bounding box, I think
@@ -93,7 +95,7 @@ public:
     GLuint VBO;
     GLuint NBO;
     GLuint TBO;
-    int texNum;
+    int texNum, texNum2;
 
     GLenum textureEnum;
 
@@ -125,6 +127,7 @@ public:
 
     void printTrans();
     unsigned int numTextures();
+    unsigned int getSmokeNum();
     
 private:
     glm::vec3 getMinOrMax(bool isFindingMin);

@@ -61,6 +61,10 @@ Room::Room() {
         room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
         room[i].texNum = numTextures();
+        if (i == 3) {
+            room[i].texNum2 = numTextures();
+            room[i].hasTex2 = true;
+        }
         room[i].textureEnum = GL_TEXTURE0 + room[i].texNum;
         room[i].hasTex = true;
     }
@@ -77,8 +81,9 @@ Room::Room() {
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/EastUV.bmp", room[2].texNum);
     printOpenGLError();
+    LoadTexture((char *)"objects/meshes/room/WestUV_Leave.bmp", room[3].texNum2);
     LoadTexture((char *)"objects/meshes/room/WestUV.bmp", room[3].texNum);
-    printOpenGLError();
+ printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/NorthUV.bmp", room[4].texNum);
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/SouthUV.bmp", room[5].texNum);

@@ -12,6 +12,7 @@ MooseHead::MooseHead() {
     GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/moosehead/MooseHead2.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
+    printf("got here\n");
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -25,18 +26,21 @@ MooseHead::MooseHead() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    printf("got here2\n");
 
     isClicked = false;
     doScale(glm::vec3(ROOM_SIZE / 10.f));
     doRotate(glm::vec3(0, 1, 0), 180.f);
     doTranslate(glm::vec3(17.f, getRoomCeilHeight() - getAABBmax().y - 3.f, 
                 ROOM_SIZE + getAABBmin().z));
+    printf("got here3\n");
     //when we have the textures
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *) "objects/meshes/moosehead/MooseUV2.bmp", texNum);
     hasTex = true;
+    printf("got here\n");
     //printf("%d\n", texNum);
 }
 

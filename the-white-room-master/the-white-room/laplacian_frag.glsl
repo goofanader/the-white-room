@@ -7,6 +7,7 @@ uniform vec4 uSpecColor;
 uniform vec4 uDiffColor;
 //uniform int uUseTex;
 //uniform sampler2D uTexUnit;
+uniform sampler2D uSmokeUnit;
 
 varying vec3 normals;
 

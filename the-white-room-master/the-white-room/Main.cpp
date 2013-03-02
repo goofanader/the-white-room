@@ -71,11 +71,14 @@ GLuint uAmbColor, uSpecColor, uDiffColor;
 GLuint uLightPos;
 GLuint aTexCoord;
 GLuint uTexUnit;
+GLuint uTexUnit2;
+GLuint uSmokeUnit;
 GLuint uLightColor;
 GLuint uShininess;
 GLuint uSpecStrength;
 GLuint uCamTrans;
 GLuint uUseTex;
+GLuint uUseTex2;
 GLuint uTime;
 
 // Shader Handle
@@ -610,7 +613,9 @@ void initializeShaderVariables() {
     gc.h_uCamTrans = uCamTrans;
     gc.h_aTexCoord = aTexCoord;
     gc.h_uTexUnit = uTexUnit;
+    gc.h_uTexUnit2 = uTexUnit2;
     gc.h_uUseTex = uUseTex;
+    gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
 }
 
@@ -637,7 +642,9 @@ void initializeLaplaceShaderVariables() {
     lc.h_uCamTrans = uCamTrans;
     lc.h_aTexCoord = aTexCoord;
     lc.h_uTexUnit = uTexUnit;
+    lc.h_uTexUnit2 = uTexUnit2;
     lc.h_uUseTex = uUseTex;
+    lc.h_uUseTex2 = uUseTex2;
     lc.h_uTime = uTime;
 }
 
@@ -664,7 +671,9 @@ void initializeShadowShaderVariables() {
     sc.h_uCamTrans = uCamTrans;
     sc.h_aTexCoord = aTexCoord;
     sc.h_uTexUnit = uTexUnit;
+    sc.h_uTexUnit2 = uTexUnit2;
     sc.h_uUseTex = uUseTex;
+    sc.h_uUseTex2 = uUseTex2;
     sc.h_uTime = uTime;
 }
 
@@ -691,7 +700,9 @@ void initializeShaderConnection(int shader) {
 
     aTexCoord = safe_glGetAttribLocation(ShadeProg[shader], "aTexCoord");
     uTexUnit = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit");
+    uTexUnit2 = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit2");
     uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
+    uUseTex2 = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex2");
     uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
 
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
@@ -705,7 +716,7 @@ int main(int argc, char *argv[]) {
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
-    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 8);
 
     //set window size to screen size
     getScreenSize();

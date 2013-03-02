@@ -35,8 +35,9 @@ GameObject::GameObject() {
     tag = 0;
     isClicked = false;
 
-    texNum = -1;
+    texNum = texNum2 = -1;
     hasTex = false;
+    hasTex2 = false;
 
     ambColor = glm::vec3(.75f);
     ambAlpha = 1.f;
@@ -110,11 +111,33 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
         printOpenGLError();
         glBindTexture(GL_TEXTURE_2D, texNum);
         printOpenGLError();
+//NPR stuff
+        /*safe_glUniform1i(gc->h_uSmokeUnit, getSmokeNum());
+        printOpenGLError();
+        glActiveTexture(GL_TEXTURE0 + getSmokeNum());
+        printOpenGLError();
+        glBindTexture(GL_TEXTURE_2D, getSmokeNum());
+        printOpenGLError();*/
+    
+
+        if (hasTex2) {
+            safe_glUniform1i(gc->h_uTexUnit2, texNum2);
+            printOpenGLError();
+            glActiveTexture(texNum2 + GL_TEXTURE0);
+            printOpenGLError();
+            glBindTexture(GL_TEXTURE_2D, texNum2);
+            printOpenGLError();
+        }
+
+
         glDisable(GL_TEXTURE_2D);
     }
     printOpenGLError();
     safe_glUniform1i(gc->h_uUseTex, hasTex ? 1 : 0);
+    safe_glUniform1i(gc->h_uUseTex2, hasTex2 ? 1 : 0);
     printOpenGLError();
+
+    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
     printOpenGLError();
@@ -304,6 +327,17 @@ void GameObject::resetEvent(SoundPlayer *soundPlayer) {
 unsigned int GameObject::numTextures() {
     static int counter = 0;
     return counter++;
+}
+
+unsigned int GameObject::getSmokeNum() {
+    static int num = -1;
+
+    if (num == -1) {
+        num = numTextures();
+        LoadTexture((char *)"objects/meshes/White-Smoke.bmp", num);
+    }
+
+    return num;
 }
 
 glm::vec3 GameObject::getMinOrMax(bool isFindingMin) {

@@ -167,7 +167,7 @@ void Knob100::update(float dt, GameObject *playerCamera) {
 
 void Knob100::onEvent(SoundPlayer *soundPlayer) {
     if (isClicked) {
-        soundPlayer->playSound("TryRadio");
+        //soundPlayer->playSound("TryRadio");
 
         rotating += 36.f;
 

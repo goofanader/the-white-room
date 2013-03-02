@@ -41,6 +41,7 @@ GameObject* createBook3() { return new Book3(); }
 GameObject* createMooseHead() { return new MooseHead(); }
 GameObject* createFireplace() { return new Fireplace(); }
 
+
 struct {
     GameObject* (*fn)();
     const char* key;

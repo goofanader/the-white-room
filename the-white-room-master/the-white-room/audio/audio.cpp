@@ -131,9 +131,12 @@ SoundPlayer::~SoundPlayer() {
 
 void SoundPlayer::playSound(string sName) {
     if(soundMap.find(sName) != soundMap.end()) {
+        //the "true" variable pauses the sound and prevents it from playing
+        //we use this to set up the channel
         result = soundSystem->playSound(FMOD_CHANNEL_FREE, 
-                soundMap[sName]->sound, 0, &channel);
+                soundMap[sName]->sound, true, &channel);
         ERRCHECK(result);
+        ERRCHECK(channel->setPaused(false));
     }
 }
 
@@ -141,8 +144,9 @@ void SoundPlayer::playContinuous(string sName) {
     if(soundMap.find(sName) != soundMap.end()) {
         soundMap[sName]->sound->setMode(FMOD_LOOP_NORMAL);
         result = soundSystem->playSound(FMOD_CHANNEL_FREE, 
-                soundMap[sName]->sound, 0, &channel);
+                soundMap[sName]->sound, true, &channel);
         ERRCHECK(result);
+        ERRCHECK(channel->setPaused(false));
     }
 }
 

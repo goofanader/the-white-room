@@ -5,8 +5,8 @@ uniform vec3 uCamTrans;
 uniform vec4 uAmbColor;
 uniform vec4 uSpecColor;
 uniform vec4 uDiffColor;
-uniform int uUseTex;
-uniform sampler2D uTexUnit;
+uniform int uUseTex, uUseTex2;
+uniform sampler2D uTexUnit, uTexUnit2;
 uniform float uTime;
 
 varying vec3 normals;
@@ -28,8 +28,16 @@ void main() {
 
 if (uUseTex != 0) {
         texColor = vec4(texture2D(uTexUnit, vTexCoord));
-        tColor = vec3(texture2D(uTexUnit, vTexCoord));
     }
+
+if (uUseTex2 != 0) {
+    tColor = vec3(texture2D(uTexUnit2, vTexCoord));
+    if ((tColor.r > 0.3 || tColor.g > 0.3 || tColor.b > 0.3) &&
+      (sin(uTime) - 1.0)/2.0 < -0.7) {
+        texColor = vec4(tColor, 1.0) - (vec4(tColor, 1.0) - texColor)*
+            (((sin(uTime) - 1.0)/2.0) + 2.0)/(-0.7 + 2.0);
+    }
+}
 
 vec3 specL;
     if (NDotL > 0.0) {
