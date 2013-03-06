@@ -32,7 +32,7 @@ Room::Room() {
             room[2].IBOlen, room[2].VBO, room[2].IBO, room[2].NBO, room[2].TBO,
             room[2].AABBmin, room[2].AABBmax);
 
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallWest1.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomWallWest.obj",
             room[3].IBOlen, room[3].VBO, room[3].IBO, room[3].NBO, room[3].TBO,
             room[3].AABBmin, room[3].AABBmax);
 
@@ -81,7 +81,7 @@ Room::Room() {
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/EastUV.bmp", room[2].texNum);
     printOpenGLError();
-    LoadTexture((char *)"objects/meshes/room/WestUV_Leave.bmp", room[3].texNum2);
+    LoadTexture((char *)"objects/meshes/room/WestUV_Spot.bmp", room[3].texNum2);
     LoadTexture((char *)"objects/meshes/room/WestUV.bmp", room[3].texNum);
  printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/NorthUV.bmp", room[4].texNum);

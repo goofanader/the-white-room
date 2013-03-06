@@ -37,7 +37,7 @@ if (uUseTex2 != 0) {
             (0.25*sin(6.2831853 * T / 4.0 - 1.570796) + 0.25);
         texColor = texColor - 
         (texColor - vec4(tColor, tColor.r)) *
-        (length(tColor) - 0.0)/(0.87735026 - 0.0);
+        (length(tColor) - 0.0)/(0.57735026 - 0.0);
     }
 }
 
