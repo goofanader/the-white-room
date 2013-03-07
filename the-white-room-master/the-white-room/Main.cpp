@@ -97,19 +97,15 @@ int keyDown[128] = {0};
 RenderingHelper ModelTrans;
 
 // NEEDS FIXING *****************************************
-glm::vec3 cameraPosition = gc.lightPos;
-GLfloat lightPosition[3] = {0.0f, 0.0f, 0.0f};
-
-const int shadowMapSize = 512;
-GLuint shadowMapTexture;
-
-GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat dimwhite[4] = {0.0f, 0.0f, 0.0f, 1.0f};
-GLfloat black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-
-GLfloat lightProjectionMatrix[16], lightViewMatrix[16];
-GLfloat cameraProjectionMatrix[16], cameraViewMatrix[16];
-
+  
+    const int shadowMapSize = 128;
+    GLuint shadowMapTexture;
+    GLuint shadowMapBuffer;
+    GLuint uLightProjMatrix;
+    GLuint uLightViewMatrix;
+    GLuint uLightDir;
+    
+    
 GameConstants* getGC() {
     return &gc; //this is a lot of data being pushed onto the stack...
 }
@@ -225,55 +221,68 @@ void advanceState(State* newState) {
     currState = newState;
 }
 
-void Initialize() {
-    //enable alpha for color
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+void Initialize() {    
+    
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+   // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+    
 
-    //create shadow map texture
+         //create shadow map texture
     glGenTextures(1, &shadowMapTexture);
     glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapSize,
             shadowMapSize, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
     glEnable(GL_TEXTURE_2D);
+    //nearest neighbor algorithm
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    //no border between shadow maps
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+ 
+    // GLfloat border[] = {0.0f, 0.0f, 0.0f, 0.0f};
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+    
+    //bind default
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    //create depth buffer
+    glGenFramebuffers(1, &shadowMapBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
+    
+    //no color
+    glDrawBuffer(GL_NONE);
+    
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        printf("error in framebuffer\n");
+        exit(-1);
+    }
 
+    //bind default
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    //setting color, etc.
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
+    
+    //set up light matrices
+    glm::vec3 lightPos = glm::vec3(0, 8, 0);
+    glm::vec3 lightDir = glm::vec3(0, 0, 0);
 
-    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-    glMaterialf(GL_FRONT, GL_SHININESS, 16.0f);
+    glm::mat4 LightViewMatrix = glm::lookAt(lightPos, lightPos + lightDir, vec3(0, 1, 0));
+    // glm::mat4 projMat = glm::perspective (FOV_deg, aspect, nearClip, farClip);
+    glm::mat4 LightProjMatrix = glm::perspective(90.0f, 1.0f, 1.0f, 15.0f);
 
-    //initializing matrices
-    glPushMatrix();
+    safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
+    safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
+    
+    
+    
+    
 
-    glLoadIdentity();
-    gluPerspective(45.0f, (float) windowWidth / windowHeight, 1.0f, 100.0f);
-    glGetFloatv(GL_MODELVIEW_MATRIX, cameraProjectionMatrix);
-
-    glLoadIdentity();
-    gluLookAt(cameraPosition[0], cameraPosition[1], cameraPosition[2],
-            0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f);
-    glGetFloatv(GL_MODELVIEW_MATRIX, cameraViewMatrix);
-
-    glLoadIdentity();
-    gluPerspective(45.0f, 1.0f, 2.0f, 8.0f);
-    glGetFloatv(GL_MODELVIEW_MATRIX, lightProjectionMatrix);
-
-    glLoadIdentity();
-    gluLookAt(lightPosition[0], lightPosition[1], lightPosition[2],
-            0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f);
-    glGetFloatv(GL_MODELVIEW_MATRIX, lightViewMatrix);
-
-    glPopMatrix();
-
+    //enable alpha for color
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    
     glClearColor(0.f, 0.f, 0.0f, 1.0f);
 
     glClearDepth(1.0f);
@@ -302,140 +311,20 @@ void Draw() {
 }
 
 void Shadow() {
-    // 1st pass - draw light's POV
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(lightProjectionMatrix);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(lightViewMatrix);
-
-    //viewport same size as shadow map
-    glViewport(0, 0, shadowMapSize, shadowMapSize);
-
-    //draw back faces to shadowmap
-    glCullFace(GL_FRONT);
-    glShadeModel(GL_FLAT);
-    glColorMask(0, 0, 0, 0);
-
-    //draw scene
-    //Draw();
-
-    //read depth buffer into shadow map texture
-    glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0,
-            shadowMapSize, shadowMapSize);
-
-    //restore states
-    glCullFace(GL_BACK);
-    glShadeModel(GL_SMOOTH);
-    glColorMask(1, 1, 1, 1);
-
-
-    //second pass (draw scene from camera's POV):
-    //light set to brightness of shadowed areas. clear depth buffer,
-    //set up matrices to camera's POV, use viewport that covers whole window
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(cameraProjectionMatrix);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(cameraViewMatrix);
-
-    glViewport(0, 0, windowWidth, windowHeight);
-
-    //dim light to represent shadow
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);
-    glLightfv(GL_LIGHT1, GL_AMBIENT, dimwhite);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, dimwhite);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, black);
-    glEnable(GL_LIGHT1);
-    glEnable(GL_LIGHTING);
-
-    //draw scene
-    //   Draw();
-
-
-    //third pass(shadow calculations):
-    //bright light w/ full brightness to illuminate unshadowed objects
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
-
-    //texture matrix (eye space -> light's clip space)
-    //using column major
-    static GLfloat biasMatrix[16] ={0.5f, 0.0f, 0.0f, 0.0f,
-        0.0f, 0.5f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.5f, 1.0f};
-    //bias from [-1, 1] to [0,1]
-
-    GLfloat textureMatrix[16];
-    for (int i = 0; i < 16; i++) {
-        textureMatrix[i] = biasMatrix[i] * lightProjectionMatrix[i] * lightViewMatrix[i];
-    }
-    GLfloat row1[] = {textureMatrix[0], textureMatrix[4], textureMatrix[8], textureMatrix[12]};
-    GLfloat row2[] = {textureMatrix[1], textureMatrix[5], textureMatrix[9], textureMatrix[13]};
-    GLfloat row3[] = {textureMatrix[2], textureMatrix[6], textureMatrix[10], textureMatrix[14]};
-    GLfloat row4[] = {textureMatrix[3], textureMatrix[7], textureMatrix[11], textureMatrix[15]};
-    //texture coordinate generation
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, row1);
-    glEnable(GL_TEXTURE_GEN_S);
-
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, row2);
-    glEnable(GL_TEXTURE_GEN_T);
-
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, row3);
-    glEnable(GL_TEXTURE_GEN_R);
-
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, row4);
-    glEnable(GL_TEXTURE_GEN_Q);
-
-    //bind & enable shadow map texture
-    glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
-    glEnable(GL_TEXTURE_2D);
-
-    //shadow comparison
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE);
-
-    //(r <= texture) means not in shadow (true)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-
-    //intensity result
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-
-    //alpha test to discard false comparisons (alpha < 0.99)
-    glAlphaFunc(GL_GEQUAL, 0.99f);
-    glEnable(GL_ALPHA_TEST);
-
-    //draw scene
+    
+    
+    //store depth map, 1 per depth map tex
+ //   glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
+ //   glClear(GL_DEPTH_BUFFER_BIT);
+ //   glViewport(0, 0, shadowMapSize, shadowMapSize);
+    
+    // render into texture using tex size
     Draw();
-
-    //disable textures and texgen
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_TEXTURE_GEN_S);
-    glDisable(GL_TEXTURE_GEN_T);
-    glDisable(GL_TEXTURE_GEN_R);
-    glDisable(GL_TEXTURE_GEN_Q);
-
-    //restore other states
-    glDisable(GL_LIGHTING);
-    glDisable(GL_ALPHA_TEST);
-
-    //reset matrices
-    glMatrixMode(GL_PROJECTION);
-    //glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    //glPopMatrix();
-
-    glFinish();
-    glfwSwapBuffers();
-    //glutPostRedisplay();
-    //Draw();
+    
+ //   glViewport(0, 0, windowWidth, windowHeight);
+ //  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
 }
 
 std::string printVec3(glm::vec3 coordinates) {
@@ -575,9 +464,8 @@ void gameLoop() {
             timeAccumulator = 0;
         }
 
-
+        Shadow();
         Draw();
-        //Shadow();
         oldTime = curTime;
         //don't calculate time based off of how long we slept
         //base it off of when the next loop starts
@@ -617,6 +505,9 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
     gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
+    
+    gc.h_uLightProjMatrix = uLightProjMatrix;
+    gc.h_uLightViewMatrix = uLightViewMatrix;
 }
 
 void initializeLaplaceShaderVariables() {
@@ -675,6 +566,15 @@ void initializeShadowShaderVariables() {
     sc.h_uUseTex = uUseTex;
     sc.h_uUseTex2 = uUseTex2;
     sc.h_uTime = uTime;
+    
+    gc.h_uLightProjMatrix = uLightProjMatrix;
+    gc.h_uLightViewMatrix = uLightViewMatrix;
+    
+    glUseProgram(gc.shader);
+    shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
+    glUseProgram(0);
+    
+    sc.ShadowMap = shadowMapTexture;
 }
 
 void initializeShaderConnection(int shader) {
@@ -704,7 +604,7 @@ void initializeShaderConnection(int shader) {
     uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
     uUseTex2 = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex2");
     uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
-
+    
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
 }
 
@@ -749,9 +649,9 @@ int main(int argc, char *argv[]) {
     
     initializeShaderConnection(1);
     initializeLaplaceShaderVariables();
-    
+
     //shadow shader
-    if (!InstallShader("laplacian_vert.glsl", "laplacian_frag.glsl", 2)) {
+    if (!InstallShader("shadow_vert.glsl", "shadow_frag.glsl", 2)) {
         printf("Error installing shader!\n");
         return 1;
     }

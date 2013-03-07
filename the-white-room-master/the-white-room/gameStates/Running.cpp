@@ -99,7 +99,7 @@ void Running::loadObjectsFromEvent() {
     }
 
     if (clockSound) {
-        clockSound->onEvent(soundPlayer);
+        //clockSound->onEvent(soundPlayer);
     }
 }
 
@@ -113,6 +113,16 @@ Running::~Running() {
 void Running::draw() {
     GameObject *curr, *radio;
     bool hasRadio = false;
+    
+    // shadow 1st-pass:
+    // for loop of the below, BUT ignore highlight code. Change the call of
+    // "getGC()" to "getSC()"
+    
+    
+    //shadow 2nd-pass:
+    // draw objects, use "getGC()". Make sure highlight draw if-else statement
+    // is there.
+    
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
         curr = (*iter);
@@ -155,9 +165,20 @@ void Running::draw() {
         }
     }
 
+    for (std::set<GameObject*>::iterator iter = objects.begin();
+            iter != objects.end(); iter++) {
+        curr = (*iter);
+        
+        if(curr->className() != "Room" && curr->className() != "Chandelier") {
+        //change player camera and camlookat
+           curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                    getSC()->lightColor, getSC());
+        }
+    }
+    
     //====if you want to draw where the light is, uncomment code below.====//
-    /*lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-          getGC()->lightColor, getGC());*/
+    lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+          getGC()->lightColor, getGC());
 }
 
 void Running::update(float dt) {
