@@ -15,7 +15,7 @@ Knob100::Knob100() {
     speed = 0.f;
     rotSpeed = 0.f;
     rotAxis = vec3(0.f, 1.f, 0.f);
-    ambColor = vec3(.75f);
+    ambColor = vec3(1.7f);
     diffColor = vec3(0.1, 0.74, 0.32);
     specColor = vec3(.5f);
     shininess = 5;
