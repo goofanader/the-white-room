@@ -21,7 +21,7 @@ varying float lDist;
 
 void main() {
       //gl_FragColor = vec4(uColor, 1.0);
-  
+  /*
   vec4 texColor;
   vec3 tColor;
   vec3 nNormal = normalize(vNormal);
@@ -40,9 +40,9 @@ vec3 specL;
 
       float VdotR = clamp(
         pow(max(dot(R, V), 0.0), uShininess), 0.0, 1.0);
-      /*specL.x *= VdotR;
-      specL.y *= VdotR;
-      specL.z *= VdotR;*/
+      //specL.x *= VdotR;
+      //specL.y *= VdotR;
+      //specL.z *= VdotR;
       
           
       specL *= VdotR;// * uLightColor.rgb;// * uSpecStrength;
@@ -62,17 +62,17 @@ else specL = vec3(0.0);
     (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
     finColor += 3.8/uTime/uTime;
     
-    /*
-    vec4 sc = shadowCoord / shadowCoord.w;
-    float epsilon = 0.0;  //increase to remove artifacts
-    float depth = texture2D(shadowMap, sc.xy).x;
     
-    if(depth + epsilon < sc.z) {
-        finColor *= 0.3;
-    }
-    */
+    //vec4 sc = shadowCoord / shadowCoord.w;
+    //float epsilon = 0.0;  //increase to remove artifacts
+    //float depth = texture2D(shadowMap, sc.xy).x;
+    
+    //if(depth + epsilon < sc.z) {
+    //    finColor *= 0.3;
+    //}
+    
     finColor *= 0.1;
-    
+            
   gl_FragColor = vec4(
     finColor.r, 
     finColor.g, 
@@ -84,7 +84,8 @@ else specL = vec3(0.0);
         gl_FragCoord.y >= 297.0 && gl_FragCoord.y <= 303.0) {
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
+    */
     
-    
+    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0);
    //depth written automatically (shadow mapping)
 }

@@ -165,20 +165,58 @@ void Running::draw() {
         }
     }
 
+    // shadows - uses light color field to differentiate which to cast
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
         curr = (*iter);
         
         if(curr->className() != "Room" && curr->className() != "Chandelier") {
-        //change player camera and camlookat
+            
+           // floor shadow
            curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
-                    getSC()->lightColor, getSC());
+                    vec3(0.0, 0.0, 0.0), getSC());
+           
+           // fireplace wall shadow
+           if(curr->className() == "Armchair" || curr->className() == "Armchair2" || curr->className() == "Fireplace") {
+              curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                    vec3(1.0, 0.0, 0.0), getSC());
+           }
+           
+           // door wall shadow
+           if(curr->className() == "WhiteDoor" || curr->className() == "RoundTable" || curr->className() == "Clock" || curr->className() == "MooseHead") {
+              curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                    vec3(0.0, 1.0, 0.0), getSC());
+           }
+           
+           // bookcase wall shadow
+           if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Bookshelf") {
+              curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                    vec3(0.0, 0.0, 1.0), getSC());
+           }
+           
+           // radio wall shadow
+           if(curr->className() == "Table" || curr->className() == "Radio" || curr->className() == "Safe") {
+              curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                    vec3(1.0, 1.0, 1.0), getSC());
+           }
+              
+            // plants' shadow on table
+           //if(curr->className() == "Plant1" || curr->className() == "Plant6") {
+           //    curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+           //      vec3(1.0, 1.0, 0.0), getSC());
+           //}
+              
+           // radio's shadow on table
+           if(curr->className() == "Radio") {
+               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                 vec3(0.0, 1.0, 1.0), getSC());
+           }
         }
     }
     
     //====if you want to draw where the light is, uncomment code below.====//
-    lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-          getGC()->lightColor, getGC());
+    //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+    //      getGC()->lightColor, getGC());
 }
 
 void Running::update(float dt) {

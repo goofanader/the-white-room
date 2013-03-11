@@ -96,15 +96,16 @@ int keyDown[128] = {0};
 
 RenderingHelper ModelTrans;
 
-// NEEDS FIXING *****************************************
-  
+
+/* 
+ * shadow map info 
     const int shadowMapSize = 128;
     GLuint shadowMapTexture;
     GLuint shadowMapBuffer;
     GLuint uLightProjMatrix;
     GLuint uLightViewMatrix;
     GLuint uLightDir;
-    
+ */   
     
 GameConstants* getGC() {
     return &gc; //this is a lot of data being pushed onto the stack...
@@ -222,7 +223,7 @@ void advanceState(State* newState) {
 }
 
 void Initialize() {    
-    
+    /*
    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
    // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
@@ -274,9 +275,7 @@ void Initialize() {
 
     safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
     safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
-    
-    
-    
+    */
     
 
     //enable alpha for color
@@ -320,7 +319,6 @@ void Shadow() {
  //   glViewport(0, 0, shadowMapSize, shadowMapSize);
     
     // render into texture using tex size
-    Draw();
     
  //   glViewport(0, 0, windowWidth, windowHeight);
  //  glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -464,7 +462,6 @@ void gameLoop() {
             timeAccumulator = 0;
         }
 
-        Shadow();
         Draw();
         oldTime = curTime;
         //don't calculate time based off of how long we slept
@@ -505,9 +502,6 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
     gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
-    
-    gc.h_uLightProjMatrix = uLightProjMatrix;
-    gc.h_uLightViewMatrix = uLightViewMatrix;
 }
 
 void initializeLaplaceShaderVariables() {
@@ -567,14 +561,10 @@ void initializeShadowShaderVariables() {
     sc.h_uUseTex2 = uUseTex2;
     sc.h_uTime = uTime;
     
-    gc.h_uLightProjMatrix = uLightProjMatrix;
-    gc.h_uLightViewMatrix = uLightViewMatrix;
-    
-    glUseProgram(gc.shader);
-    shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
-    glUseProgram(0);
-    
-    sc.ShadowMap = shadowMapTexture;
+    //glUseProgram(gc.shader);
+    //shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
+    //glUseProgram(0);
+    //sc.ShadowMap = shadowMapTexture;
 }
 
 void initializeShaderConnection(int shader) {
