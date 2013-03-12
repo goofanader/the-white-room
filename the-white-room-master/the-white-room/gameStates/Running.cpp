@@ -175,7 +175,7 @@ void Running::draw() {
            // floor shadow
            curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 0.0, 0.0), getSC());
-           
+            
            // fireplace wall shadow
            if(curr->className() == "Armchair" || curr->className() == "Armchair2" || curr->className() == "Fireplace") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
@@ -183,7 +183,7 @@ void Running::draw() {
            }
            
            // door wall shadow
-           if(curr->className() == "WhiteDoor" || curr->className() == "RoundTable" || curr->className() == "Clock" || curr->className() == "MooseHead") {
+           if(curr->className() == "RoundTable" || curr->className() == "Clock" || curr->className() == "MooseHead") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 1.0, 0.0), getSC());
            }
