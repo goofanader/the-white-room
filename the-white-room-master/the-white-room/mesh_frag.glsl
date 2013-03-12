@@ -19,7 +19,7 @@ varying float lDist;
 
 void main() {
     //gl_FragColor = vec4(uColor, 1.0);
-  
+    
   vec4 texColor;
   vec3 tColor;
   vec3 nNormal = normalize(vNormal);
@@ -85,8 +85,16 @@ else specL = vec3(0.0);
     finColor.g, 
     finColor.b, uUseTex2 != 0 ? texColor.a : uAmbColor.a);
 
-    gl_FragColor.a = uAmbColor.a;
+  vec4 fogColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+  const float LOG2 = 1.442695;
+  float z = 1.0 - (gl_FragCoord.z / gl_FragCoord.w) / 10.0;
+  float fogFactor = exp2( -gl_Fog.density * gl_Fog.density * z *  z *  LOG2 );
+  fogFactor = clamp(fogFactor, 0.0, 1.0);
 
+  gl_FragColor = mix(fogColor, gl_FragColor, fogFactor);
+  
+    gl_FragColor.a = uAmbColor.a;
+    
     if (gl_FragCoord.x >= 397.0 && gl_FragCoord.x <= 403.0 &&
         gl_FragCoord.y >= 297.0 && gl_FragCoord.y <= 303.0) {
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
