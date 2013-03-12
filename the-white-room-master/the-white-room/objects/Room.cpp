@@ -81,7 +81,7 @@ Room::Room() {
     printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/EastUV.bmp", room[2].texNum);
     printOpenGLError();
-    LoadTexture((char *)"objects/meshes/room/WestUV_Spot.bmp", room[3].texNum2);
+    LoadNonMipmap((char *)"objects/meshes/room/WestUV_Spot.bmp", room[3].texNum2);
     LoadTexture((char *)"objects/meshes/room/WestUV.bmp", room[3].texNum);
  printOpenGLError();
     LoadTexture((char *)"objects/meshes/room/NorthUV.bmp", room[4].texNum);

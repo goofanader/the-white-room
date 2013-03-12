@@ -18,5 +18,6 @@ static unsigned int getint(FILE *fp);
 static unsigned int getshort(FILE *fp);
 
 GLvoid LoadTexture(char *image_file, int texID);
+GLvoid LoadNonMipmap(char *image_file, int texID);
 
 int ImageLoad(char *filename, Image *image);

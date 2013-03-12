@@ -44,6 +44,44 @@ GLvoid LoadTexture(char* image_file, int texID) {
   free(TextureImage);
 }
 
+GLvoid LoadNonMipmap(char* image_file, int texID) {
+  TextureImage = (Image *) malloc(sizeof(Image));
+  if (TextureImage == NULL) {
+    printf("Error allocating space for image");
+    exit(1);
+  }
+  cout << "trying to load " << image_file << endl;
+  if (!ImageLoad(image_file, TextureImage)) {
+      printf("failed to load image\n");
+    exit(1);
+  }  
+  printOpenGLError();
+  
+  glBindTexture(GL_TEXTURE_2D, texID);
+  printOpenGLError();
+  printf("%d\n", texID);
+  /*  cheap scaling when image smaller than texture*/
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,
+    GL_LINEAR); 
+  printOpenGLError();
+  /*  cheap scaling when image bigger than texture */    
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,
+    GL_LINEAR);
+  printOpenGLError();
+  
+  /*  2d texture, level of detail 0 (normal), 3 components (red, green, blue),            */
+  /*  x size from image, y size from image,                                              */    
+  /*  border 0 (normal), rgb color data, unsigned byte data, data  */ 
+  glTexImage2D(GL_TEXTURE_2D, 0, 3,
+    TextureImage->sizeX, TextureImage->sizeY,
+    0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
+  printOpenGLError();
+  printf("got here\n");
+  
+  free(TextureImage);
+   
+}
+
 
 /* BMP file loader loads a 24-bit bmp file only */
 
