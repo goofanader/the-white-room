@@ -92,31 +92,37 @@ void Knob10::update(float dt, GameObject *playerCamera) {
         float rotY, rotA;
         vec3 up = glm::vec3(0.f, 1.f, 0.f);
 
+        //get object location in room relative to player
         vec3 loc = playerCamera->trans - this->trans;
 
+        //get a side axis for rotation up and down
         vec3 axis = glm::cross(up, loc);
-        //vec3 axis = up * loc;
 
-        if (loc.z == 0 && loc.x == 0)
-            rotY = 0;
-        else
-            rotY = atan2(loc.x, loc.z) * 180.0 / 3.14 - 90;
+        rotY = atan2(loc.x, loc.z) * 180.0 / 3.14;
+        rotY -= 90;
 
-        rotA = 90 - asin(glm::length(axis) / (glm::length(loc))) * 180.0 / 3.14;
+        rotA = asin(glm::length(axis) / (glm::length(loc))) * 180.0 / 3.14;
+        rotA = 90 - rotA;
 
-        if (loc.y > 0)
-            rotA = -rotA;
+        //rotA = atan2(loc.y, loc.z) * 180.0 / 3.14;
+        //rotA = 90 - rotA;
 
+        //reset rotation matrix
         this->rotate = glm::mat4(1.f);
+
         //doRotate(glm::cross(up,axis), rotating);
         doRotate(axis, rotA);
 
         doRotate(up, rotY);
+        
+        //add on rotation for station to tune to
         if (rotAnim < rotating) {
             rotAnim += dt * 100;
         }
         doRotate(glm::vec3(1.f, 0.f, 0.f), rotAnim);
         //doRotate(up, 90.f);
+
+        //billboard the marking arrows
 
         arrow->rotate = glm::mat4(1.f);
         arrow->doRotate(up, rotY);
