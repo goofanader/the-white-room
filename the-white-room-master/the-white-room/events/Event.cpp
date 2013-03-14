@@ -245,7 +245,7 @@ void Event::ifObjectSelected(GameObject *curr) {
 
                 Safe *temp = (Safe*) (eventSwitches[SAFE].getGameObject());
                 temp->isOpen = true;
-                temp->onEvent(soundPlayer);
+                soundPlayer->playSound("OpenSafe");
             }
         }
     }
@@ -266,60 +266,72 @@ void Event::ifObjectSelected(GameObject *curr) {
             tempDiamond->isHeld = false;
             tempSpade->isHeld = false;
             tempClub->isHeld = false;
+            soundPlayer->playSound("GetKey");
         } else if (curr->className() == "DiamondKey" && !tempDiamond->isInKeyhole) {
             tempDiamond->isHeld = true;
             
             tempHeart->isHeld = false;
             tempSpade->isHeld = false;
             tempClub->isHeld = false;
+            soundPlayer->playSound("GetKey");
         } else if (curr->className() == "SpadeKey" && !tempSpade->isInKeyhole) {
             tempSpade->isHeld = true;
             
             tempDiamond->isHeld = false;
             tempHeart->isHeld = false;
             tempClub->isHeld = false;
+            soundPlayer->playSound("GetKey");
         } else if (curr->className() == "ClubKey" && !tempClub->isInKeyhole) {
             tempClub->isHeld = true;
             
             tempDiamond->isHeld = false;
             tempSpade->isHeld = false;
             tempHeart->isHeld = false;
+            soundPlayer->playSound("GetKey");
         }
 
         //====Handle Holding the Heart Key====//
         if (curr->className() == "Box4" && tempHeart->isHeld) {
             tempHeart->isInKeyhole = true;
             tempHeart->isHeld = false;
+            soundPlayer->playSound("UseKey");
         } else if (tempHeart->isHeld && (curr->className() == "Box2" || 
                 curr->className() == "Box3" || curr->className() == "Box1")) {
             tempHeart->isHeld = false;
+            soundPlayer->playSound("TryKey");
         }
         
         //====Handle Holding the Diamond Key====//
         if (curr->className() == "Box2" && tempDiamond->isHeld) {
             tempDiamond->isInKeyhole = true;
             tempDiamond->isHeld = false;
+            soundPlayer->playSound("UseKey");
         } else if (tempDiamond->isHeld && (curr->className() == "Box4" || 
                 curr->className() == "Box3" || curr->className() == "Box1")) {
             tempDiamond->isHeld = false;
+            soundPlayer->playSound("TryKey");
         }
         
         //====Handle Holding the Spade Key====//
         if (curr->className() == "Box1" && tempSpade->isHeld) {
             tempSpade->isInKeyhole = true;
             tempSpade->isHeld = false;
+            soundPlayer->playSound("UseKey");
         } else if (tempSpade->isHeld && (curr->className() == "Box2" || 
                 curr->className() == "Box3" || curr->className() == "Box4")) {
             tempSpade->isHeld = false;
+            soundPlayer->playSound("TryKey");
         }
         
         //====Handle Holding the Club Key====//
         if (curr->className() == "Box3" && tempClub->isHeld) {
             tempClub->isInKeyhole = true;
             tempClub->isHeld = false;
+            soundPlayer->playSound("UseKey");
         } else if (tempClub->isHeld && (curr->className() == "Box2" || 
                 curr->className() == "Box4" || curr->className() == "Box1")) {
             tempClub->isHeld = false;
+            soundPlayer->playSound("TryKey");
         }
         
 #if 1

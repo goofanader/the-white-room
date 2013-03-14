@@ -53,7 +53,7 @@ Knob10::Knob10() {
     arrow->rotSpeed = 0.f;
     arrow->rotAxis = vec3(0.f, 1.f, 0.f);
     arrow->ambColor = vec3(0.f);
-    arrow->diffColor = vec3(1.f, 0.f, 0.f);
+    arrow->diffColor = vec3(0.f, 1.f, 0.f);
     arrow->specColor = vec3(.5f);
     arrow->shininess = 5;
     arrow->specStrength = 0.f;

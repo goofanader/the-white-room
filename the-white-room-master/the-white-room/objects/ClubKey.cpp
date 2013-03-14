@@ -21,6 +21,12 @@ ClubKey::ClubKey() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    
+    depthMin = 0;
+    depthMax = 1;
+    
+    highlightColor = vec3(0.f);
+    highlightAlpha = 0.f;
 
     //Translate to be inside safe
     doRotate(vec3(0, 0, 1), 90);
@@ -105,6 +111,32 @@ void ClubKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         doRotate(vec3(0, 0, 1), 90);
         doTranslate(vec3(ROOM_SIZE + getAABBmin().x - 2,
                 getRoomFloorHeight().y - getAABBmin().y + .5, 19.7f));
+
+        if (isHighlighted) {
+            highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x > 1.f) {
+                highlightColor = vec3(1.f);
+            }
+
+            highlightAlpha += HIGHLIGHT_SPEED;
+            if (highlightAlpha > 1.f) {
+                highlightAlpha = 1.f;
+            }
+        } else {
+            isHighlightDisappearing = true;
+            highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x < 0.f) {
+                highlightColor = vec3(0.f);
+            }
+
+            highlightAlpha -= HIGHLIGHT_SPEED;
+            if (highlightAlpha < 0.f) {
+                isHighlightDisappearing = false;
+                highlightAlpha = 0.f;
+            }
+        }
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         this->rotate = glm::mat4(1.f);

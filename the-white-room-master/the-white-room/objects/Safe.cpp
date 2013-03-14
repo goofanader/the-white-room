@@ -13,7 +13,7 @@
 Safe::Safe() {
     isOpen = false;
     timeSpent = 0.f;
-    
+
     body = new GameObject();
     door = new GameObject();
 
@@ -112,13 +112,13 @@ void Safe::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
 
     if (isHighlighted && !isOpen) {
         body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
-        
+
         if (body->highlightColor.x > 1.f) {
             body->highlightColor = vec3(1.f);
         }
 
         body->highlightAlpha += HIGHLIGHT_SPEED;
-        
+
         if (body->highlightAlpha > 1.f) {
             body->highlightAlpha = 1.f;
         }
@@ -137,7 +137,7 @@ void Safe::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         body->highlightAlpha -= HIGHLIGHT_SPEED;
         if (isOpen)
             door->highlightAlpha -= HIGHLIGHT_SPEED;
-        
+
         if (body->highlightAlpha < 0.f) {
             isHighlightDisappearing = false;
             body->highlightAlpha = 0.f;
@@ -150,7 +150,7 @@ void Safe::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
 bool Safe::doesCollide(GameObject* other) {
     if (!isOpen)
         return body->doesCollide(other);
-    
+
     if (body->doesCollide(other)) return true;
     if (door->doesCollide(other)) return true;
     return false;
@@ -158,11 +158,8 @@ bool Safe::doesCollide(GameObject* other) {
 
 void Safe::onEvent(SoundPlayer *soundPlayer) {
     if (IS_SOUND_ON) {
-        if (!isOpen)
-                soundPlayer->playSound("TrySafe");
-        else if (isOpen && !hasDoorSoundPlayed) {
-            hasDoorSoundPlayed = true;
-            soundPlayer->playSound("OpenSafe");
+        if (!isOpen) {
+            soundPlayer->playSound("TrySafe");
         }
     }
 }

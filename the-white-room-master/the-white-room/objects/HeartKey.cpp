@@ -22,6 +22,12 @@ HeartKey::HeartKey() {
     specStrength = 0.f;
     scale = glm::vec3(1.f);
     
+    depthMin = 0;
+    depthMax = 1;
+    
+    highlightColor = vec3(0.f);
+    highlightAlpha = 0.f;
+    
     //Translate to sit on the picture frame
     doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
             getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
@@ -104,6 +110,32 @@ void HeartKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
             getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
         
         this->rotate = glm::mat4(1.f);
+
+        if (isHighlighted) {
+            highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x > 1.f) {
+                highlightColor = vec3(1.f);
+            }
+
+            highlightAlpha += HIGHLIGHT_SPEED;
+            if (highlightAlpha > 1.f) {
+                highlightAlpha = 1.f;
+            }
+        } else {
+            isHighlightDisappearing = true;
+            highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x < 0.f) {
+                highlightColor = vec3(0.f);
+            }
+
+            highlightAlpha -= HIGHLIGHT_SPEED;
+            if (highlightAlpha < 0.f) {
+                isHighlightDisappearing = false;
+                highlightAlpha = 0.f;
+            }
+        }
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         doTranslate(vec3(4.73f,-.45f,-ROOM_SIZE - getAABBmin().z + 2.5f));

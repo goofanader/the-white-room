@@ -21,11 +21,17 @@ DiamondKey::DiamondKey() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
+    
+    depthMin = 0;
+    depthMax = 1;
+    
+    highlightColor = vec3(0.f);
+    highlightAlpha = 0.f;
 
     //Translate to hang from moose head horns
     doRotate(vec3(1, 0, 0), -90);
-    initTranslate = glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 3.f,
-            ROOM_SIZE + getAABBmin().z - .5f);
+    initTranslate = glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 3.4f,
+            ROOM_SIZE + getAABBmin().z - 1.5f);
     doTranslate(initTranslate);
     //doRotate(vec3(0,1,0), 90);
     texNum = numTextures();
@@ -105,6 +111,32 @@ void DiamondKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         trans = vec3(0.f);
         doRotate(vec3(1, 0, 0), -90);
         doTranslate(initTranslate);
+
+        if (isHighlighted) {
+            highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x > 1.f) {
+                highlightColor = vec3(1.f);
+            }
+
+            highlightAlpha += HIGHLIGHT_SPEED;
+            if (highlightAlpha > 1.f) {
+                highlightAlpha = 1.f;
+            }
+        } else {
+            isHighlightDisappearing = true;
+            highlightColor = highlightColor - vec3(HIGHLIGHT_SPEED);
+
+            if (highlightColor.x < 0.f) {
+                highlightColor = vec3(0.f);
+            }
+
+            highlightAlpha -= HIGHLIGHT_SPEED;
+            if (highlightAlpha < 0.f) {
+                isHighlightDisappearing = false;
+                highlightAlpha = 0.f;
+            }
+        }
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         this->rotate = glm::mat4(1.f);

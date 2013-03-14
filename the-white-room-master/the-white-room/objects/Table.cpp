@@ -8,7 +8,7 @@
 #include "Table.h"
 
 Table::Table() {
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Table3.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Radio_Table.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
