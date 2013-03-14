@@ -23,7 +23,11 @@ SpadeKey::SpadeKey() {
     //Translate to be on top of armchair
     doTranslate(glm::vec3(15.f,getRoomFloorHeight().y - getAABBmin().y + 10, -ROOM_SIZE + 10.f));
     isVisible = false;
-    
+    texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
+    LoadTexture((char *)"objects/meshes/keys/Key_SpadeUV.bmp", texNum);
+    hasTex = true;
+
     doRotate(vec3(0,0,1), 90);
 }
 

@@ -24,7 +24,11 @@ DiamondKey::DiamondKey() {
     
     doRotate(vec3(1,0,0), 90);
     //doRotate(vec3(0,1,0), 90);
-    
+    texNum = numTextures();
+    textureEnum = GL_TEXTURE0 + texNum;
+    LoadTexture((char *)"objects/meshes/keys/Key_DiamondUV.bmp", texNum);
+    hasTex = true;
+
     isVisible = false;
 }
 
