@@ -228,7 +228,9 @@ printOpenGLError();
            }
            
            // bookcase wall shadow
-           if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Bookshelf") {
+           //if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Bookshelf") {
+            if(curr->className() == "RoundTable" /*|| curr->className() == "Plant6" || curr->className() == "Plant1"*/ || curr->className() == "Bookshelf") {
+
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 0.0, 1.0), getSC());
               printOpenGLError();
