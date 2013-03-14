@@ -23,6 +23,7 @@ GameObject* createTable() { return new Table(); }
 
 GameObject* createPlant1() { return new Plant1(); }
 GameObject* createPlant6() { return new Plant6(); }
+GameObject* createPlant0() { return new Plant0(); }
 GameObject* createRoundTable() { return new RoundTable(); }
 
 GameObject* createChandelier() { return new Chandelier(); }
@@ -61,6 +62,7 @@ functionLookupTable[] = {
     { &createRadio, "Radio"},
     { &createPlant1, "Plant1"},
     { &createPlant6, "Plant6"},
+    { &createPlant0, "Plant0"},
     { &createChandelier, "Chandelier"},
     { &createClock, "Clock"},
     { &createBookshelf, "Bookshelf"},

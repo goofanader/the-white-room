@@ -1,4 +1,4 @@
-numItems: 28
+numItems: 29
 # list of items to be created
 create Room
 create WhiteDoor
@@ -15,6 +15,7 @@ create MooseHead
 create Table
 create Plant1
 create Plant6
+create Plant0
 create Radio
 create Knob100
 create Knob10
