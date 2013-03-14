@@ -13,6 +13,8 @@
 
 class DiamondKey : public GameObject {
 public:
+    bool isHeld, isInKeyhole;
+
     DiamondKey();
     DiamondKey(const DiamondKey& orig);
     virtual ~DiamondKey();
@@ -20,6 +22,8 @@ public:
     bool doesCollide(GameObject* other);
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
+
 };
 
 #endif	/* DIAMONDKEY_H */

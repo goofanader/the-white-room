@@ -7,6 +7,9 @@
 
 #include "SpadeKey.h"
 
+#define KEY_DISTANCE 2.f
+
+
 SpadeKey::SpadeKey() {
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/keys/Key_Spade.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
@@ -48,4 +51,60 @@ std::string SpadeKey::className() {
 }
 
 void SpadeKey::onEvent(SoundPlayer* soundPlayer) {
+}
+
+
+void SpadeKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
+    if (isHeld) {
+        //move key to in front of player
+        trans = vec3(0.f);
+        doTranslate((camLookAt - playerCamera->trans) * vec3(KEY_DISTANCE) + playerCamera->trans);
+        
+        //make it so it always faces the player
+        float rotY, rotA;
+        vec3 up = glm::vec3(0.f, 1.f, 0.f);
+
+        //get object location in room relative to player
+        vec3 loc = playerCamera->trans - this->trans;
+
+        //get a side axis for rotation up and down
+        vec3 axis = glm::cross(up, loc);
+
+        rotY = atan2(loc.x, loc.z) * 180.0 / 3.14;
+        //rotY -= 90;
+
+        rotA = asin(glm::length(axis) / (glm::length(loc))) * 180.0 / 3.14;
+        rotA = 90 - rotA;
+
+        if(loc.y > 0)
+            rotA = -rotA;
+        
+        //reset rotation matrix
+        this->rotate = glm::mat4(1.f);
+
+        //doRotate(glm::cross(up,axis), rotating);
+        doRotate(axis, rotA);
+        doRotate(up, rotY);
+
+        vec3 relative = glm::cross(axis, loc);
+        relative = glm::normalize(relative);
+        axis = glm::normalize(axis);
+        loc = glm::normalize(loc);
+
+        axis *= 2.1f;
+        relative *= 1.5;
+
+        doTranslate(relative);
+        doTranslate(axis);
+
+        loc = -loc;
+        doTranslate(loc);
+
+    } else if (!isInKeyhole) {
+        trans = vec3(0.f);
+        doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
+            getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
+    } else if (isInKeyhole) {
+        isVisible = false;
+    }
 }

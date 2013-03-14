@@ -13,6 +13,8 @@
 
 class ClubKey : public GameObject {
 public:
+    bool isHeld, isInKeyhole;
+
     ClubKey();
     ClubKey(const ClubKey& orig);
     virtual ~ClubKey();
@@ -20,6 +22,7 @@ public:
     bool doesCollide(GameObject* other);
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
 };
 
 #endif	/* CLUBKEY_H */

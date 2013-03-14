@@ -8,7 +8,7 @@
 #include "RoundTable.h"
 
 RoundTable::RoundTable() {
-    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/RoundTable.obj",
+    MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/table/Plant_Table.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
@@ -27,7 +27,7 @@ RoundTable::RoundTable() {
     
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
-    LoadTexture((char *)"objects/meshes/table/tableUV.bmp", texNum);
+    LoadTexture((char *)"objects/meshes/table/Plant_TableUV.bmp", texNum);
     hasTex = true;
 
     isClicked = false;

@@ -13,6 +13,8 @@
 
 class SpadeKey : public GameObject {
 public:
+    bool isHeld, isInKeyhole;
+
     SpadeKey();
     SpadeKey(const SpadeKey& orig);
     virtual ~SpadeKey();
@@ -20,6 +22,8 @@ public:
     bool doesCollide(GameObject* other);
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
+
 };
 
 #endif	/* SPADEKEY_H */
