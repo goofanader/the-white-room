@@ -36,7 +36,6 @@ WestPainting::WestPainting() {
     textureEnum = GL_TEXTURE0 + texNum;
     LoadTexture((char *)"objects/meshes/paintings/TallPaintingUV2.bmp", texNum);
     hasTex = true;
-    //printf("%d\n", texNum);
 }
 
 WestPainting::WestPainting(const WestPainting& orig) {

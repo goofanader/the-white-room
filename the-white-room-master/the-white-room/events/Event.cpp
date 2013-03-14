@@ -7,10 +7,7 @@
 
 #include "Event.h"
 #include "ObjectCreation.h"
-#include "objects/Knob100.h"
-#include "objects/Knob10.h"
-#include "objects/Safe.h"
-#include "objects/HeartKey.h"
+#include "objects/AllObjects.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -265,17 +262,54 @@ void Event::ifObjectSelected(GameObject *curr) {
      * PUZZLE 3 LOGIC
      *==================================================================*/
     if (eventSwitches[BOOK1].isSwitchOn() && eventSwitches[RADIO].isSwitchOn()) {
-        if (curr->className() == "HeartKey") {
-            HeartKey *temp = (HeartKey *)curr;
+        HeartKey *tempHeart = (HeartKey*) (eventSwitches[HEART].getGameObject());
+        DiamondKey *tempDiamond = (DiamondKey*) (eventSwitches[DIAMOND].getGameObject());
+        SpadeKey *tempSpade = (SpadeKey*) (eventSwitches[SPADE].getGameObject());
+        ClubKey *tempClub = (ClubKey*) (eventSwitches[CLUB].getGameObject());
+        
+        //Change what key is held
+        if (curr->className() == "HeartKey" && !tempHeart->isInKeyhole) {
+            tempHeart->isHeld = true;
             
-            temp->isHeld = true;
+            tempDiamond->isHeld = false;
+            tempSpade->isHeld = false;
+            tempClub->isHeld = false;
+        } else if (curr->className() == "DiamondKey" && !tempDiamond->isInKeyhole) {
+            tempDiamond->isHeld = true;
+            
+            tempHeart->isHeld = false;
+            tempSpade->isHeld = false;
+            tempClub->isHeld = false;
+        } else if (curr->className() == "SpadeKey" && !tempSpade->isInKeyhole) {
+            tempSpade->isHeld = true;
+            
+            tempDiamond->isHeld = false;
+            tempHeart->isHeld = false;
+            tempClub->isHeld = false;
+        } else if (curr->className() == "ClubKey" && !tempClub->isInKeyhole) {
+            tempClub->isHeld = true;
+            
+            tempDiamond->isHeld = false;
+            tempSpade->isHeld = false;
+            tempHeart->isHeld = false;
         }
-#if 0
-        setIfWon(true);
-        //cause the white door to open
-        if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
-            eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
-            eventSwitches[WHITE_DOOR].setSwitch(true);
+
+        //====Handle Holding the Heart Key====//
+        if (curr->className() == "Box1" && tempHeart->isHeld) { //remember to change this to box4
+            tempHeart->isInKeyhole = true;
+            tempHeart->isHeld = false;
+        } else if (tempHeart->isHeld && (curr->className() == "Box2" || 
+                curr->className() == "Box3" || curr->className() == "Box4")) {
+            tempHeart->isHeld = false;
+        }
+#if 1
+        if (tempHeart->isInKeyhole) {//&& all the other keys...
+            setIfWon(true);
+            //cause the white door to open
+            if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
+                eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
+                eventSwitches[WHITE_DOOR].setSwitch(true);
+            }
         }
 #endif
     }

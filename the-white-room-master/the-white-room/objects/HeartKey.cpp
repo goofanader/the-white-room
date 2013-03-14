@@ -102,7 +102,13 @@ void HeartKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         trans = vec3(0.f);
         doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
             getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
+        
+        this->rotate = glm::mat4(1.f);
     } else if (isInKeyhole) {
-        isVisible = false;
+        trans = vec3(0.f);
+        doTranslate(vec3(4.73f,-.45f,-ROOM_SIZE - getAABBmin().z + 2.5f));
+        //isVisible = false;
+        
+        this->rotate = glm::mat4(1.f);
     }
 }

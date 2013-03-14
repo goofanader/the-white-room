@@ -9,11 +9,10 @@
 
 #define KEY_DISTANCE 2.f
 
-
 ClubKey::ClubKey() {
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/keys/Key_Club.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
-    
+
     dir = vec3(1.f, 0.f, 0.f);
     speed = 0.f;
     rotSpeed = 0.f;
@@ -22,18 +21,18 @@ ClubKey::ClubKey() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    
+
     //Translate to be inside safe
-    doTranslate(vec3(ROOM_SIZE + getAABBmin().x - 2, 
+    doRotate(vec3(0, 0, 1), 90);
+    doTranslate(vec3(ROOM_SIZE + getAABBmin().x - 2,
             getRoomFloorHeight().y - getAABBmin().y + .5, 19.7f));
 
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
-    LoadTexture((char *)"objects/meshes/keys/Key_ClubUV.bmp", texNum);
+    LoadTexture((char *) "objects/meshes/keys/Key_ClubUV.bmp", texNum);
     hasTex = true;
 
-    isVisible = false;
-    doRotate(vec3(0,0,1), 90);
+    isVisible = isHeld = isInKeyhole = false;
 }
 
 ClubKey::ClubKey(const ClubKey& orig) {
@@ -58,7 +57,7 @@ void ClubKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         //move key to in front of player
         trans = vec3(0.f);
         doTranslate((camLookAt - playerCamera->trans) * vec3(KEY_DISTANCE) + playerCamera->trans);
-        
+
         //make it so it always faces the player
         float rotY, rotA;
         vec3 up = glm::vec3(0.f, 1.f, 0.f);
@@ -75,9 +74,9 @@ void ClubKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         rotA = asin(glm::length(axis) / (glm::length(loc))) * 180.0 / 3.14;
         rotA = 90 - rotA;
 
-        if(loc.y > 0)
+        if (loc.y > 0)
             rotA = -rotA;
-        
+
         //reset rotation matrix
         this->rotate = glm::mat4(1.f);
 
@@ -100,10 +99,15 @@ void ClubKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         doTranslate(loc);
 
     } else if (!isInKeyhole) {
+        this->rotate = glm::mat4(1.f);
         trans = vec3(0.f);
-        doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
-            getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
+
+        doRotate(vec3(0, 0, 1), 90);
+        doTranslate(vec3(ROOM_SIZE + getAABBmin().x - 2,
+                getRoomFloorHeight().y - getAABBmin().y + .5, 19.7f));
     } else if (isInKeyhole) {
-        isVisible = false;
+        trans = vec3(0.f);
+        this->rotate = glm::mat4(1.f);
+        doTranslate(vec3(3.73f,-.45f,-ROOM_SIZE - getAABBmin().z + 2.5f));
     }
 }

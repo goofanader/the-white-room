@@ -26,13 +26,15 @@ Box1::Box1() {
     
     cube->AABBmin = vec3(1.f) / 2.f * -1.f;
     cube->AABBmax = vec3(1.f) / 2.f;
-    cube->doTranslate(vec3(4.f,-1.f,4.f));
+    cube->doTranslate(vec3(4.7f,-.6f,-ROOM_SIZE - cube->getAABBmin().z + 2.f));
     
-    AABBmin = cube->AABBmin;
-    AABBmax = cube->AABBmax;
+    AABBmin = cube->getAABBmin();
+    AABBmax = cube->getAABBmax();
     //setTrans(vec3(4.f,-1.f,4.f));
     
     this->ambColor = cube->ambColor;
+    
+    hasTex = false;
 }
 
 Box1::Box1(const Box1& orig) {
@@ -43,7 +45,7 @@ Box1::~Box1() {
 
 void Box1::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {
-    if (DRAW_CUBE)
+    if (false)
         cube->draw(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 
