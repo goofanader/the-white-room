@@ -396,7 +396,7 @@ bool Running::isMouseOverObject(GameObject *curr) {
 }
 
 void Running::mouseClicked(int button, int action) {
-    float x, y, z, mag;
+    /*float x, y, z, mag;
     glm::vec3 translatedCam, reach;
 
     float nx, ny, nz,
@@ -404,7 +404,7 @@ void Running::mouseClicked(int button, int action) {
             ox, oy, oz,
             dx, dy, dz;
 
-    float t;
+    float t;*/
     GameObject* curr;
 
     if (action == GLFW_RELEASE) {

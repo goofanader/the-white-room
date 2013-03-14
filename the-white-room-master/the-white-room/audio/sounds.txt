@@ -1,10 +1,7 @@
-Click:audio/click.wav
 GameStart:audio/gameStart.wav
 TryDoor:audio/tryDoor.wav
-OpenDoor:audio/DoorWoodOpen_02.wav
-SafeAppear:audio/safeAppear.wav
+OpenDoor:audio/openDoor.wav
 TrySafe:audio/trySafe.wav
-BooksAppear:audio/booksAppear.wav
 TryBook:audio/tryBook.wav
 RadioAppear:audio/radioAppear.wav
 RadioAppear2:audio/radioAppear2.wav
@@ -16,3 +13,4 @@ Bell3:audio/bell3.wav
 BellTones:audio/threebells.wav
 TickTock:audio/clockTicking.wav
 RotatePlant:audio/rotatePlant.wav
+OpenSafe:audio/openSafe.wav
