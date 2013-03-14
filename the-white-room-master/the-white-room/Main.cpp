@@ -386,6 +386,8 @@ void Keyboard(int key, int state) {
             std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;
             // Quit program
         case 'Q':
+            //delete currState;
+
             exit(EXIT_SUCCESS);
             break;
     }

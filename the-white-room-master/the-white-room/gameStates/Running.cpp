@@ -44,6 +44,17 @@ Running::Running() {
 
     initializeCamera();
     initializeLight();
+
+    //initialize uniform spatial subdivision values
+
+    for(int i = 0; i < (int) ROOM_SIZE * 2; i++){
+        for(int j = 0; j < (int) ROOM_SIZE * 2; j++){
+            for(int k = 0; k < (int) ROOM_HEIGHT_DIVISION *2; k++){
+                objectArray[i][j][k] = NULL;
+            }      
+        }
+    }
+
 }
 
 void Running::initializeCamera() {
@@ -95,6 +106,22 @@ void Running::loadObjectsFromEvent() {
             if (newObject->className() == "Clock") {
                 clockSound = newObject;
             }
+
+            if(newObject->className() == "Bookcase"){
+                //special case
+            }else{
+                //objectArray[(int) math.floor(newObject->trans.x)][(int) math.floor(newObject->trans.y)][(int) math.floor(newObject->trans.z)] = newObject;
+
+                for(int j = (int) floor(newObject->getAABBmin().x); j < (int) floor(newObject->getAABBmax().x); j++){
+                    for(int k = (int) floor(newObject->getAABBmin().y); k < (int) floor(newObject->getAABBmax().y); k++){
+                        for(int l = (int) floor(newObject->getAABBmin().z); l < (int) floor(newObject->getAABBmax().z); l++){
+                            //std::cout << newObject->className() << " j = " << j << " k = " << k << " l = " << l << "\n";
+                            objectArray[j + (int) ROOM_SIZE][k + (int) ROOM_SIZE][l + (int) ROOM_SIZE] = newObject;
+                        }
+                    }
+                }
+            }
+
         }
     }
 
