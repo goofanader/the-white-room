@@ -16,3 +16,4 @@ RotatePlant:audio/rotatePlant.wav
 OpenSafe:audio/openSafe.wav
 GetKey:audio/getKey.wav
 UseKey:audio/useKey.wav
+TryKey:audio/tryKey.wav
