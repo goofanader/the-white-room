@@ -94,7 +94,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glEnableVertexAttribArray(gc->h_aNormal);
     glBindBuffer(GL_ARRAY_BUFFER, NBO);
     safe_glVertexAttribPointer(gc->h_aNormal, 3, GL_FLOAT, GL_TRUE, 0, 0);
-
+    printOpenGLError();
     if (hasTex) {
         printOpenGLError();
         glEnable(GL_TEXTURE_2D);

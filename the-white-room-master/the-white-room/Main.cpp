@@ -693,9 +693,8 @@ int main(int argc, char *argv[]) {
     getGLversion();
     
     // Shader Setup: Main Shader
-    if (!InstallComplexShader(
+    if (!InstallShader(
                 "mesh_vert.glsl", 
-                "mesh_geom.glsl", 
                 "mesh_frag.glsl", 0)) {
         printf("Error installing shader!\n");
         return 1;

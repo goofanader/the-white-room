@@ -17,25 +17,25 @@ uniform vec4 uLightColor;
 
 uniform float uTime;
 
-varying vec3 gNormal;
-varying vec3 gnormals;
-varying vec3 gLightDir;
-varying vec3 gThePosition;
-varying vec2 gTexCoord;
-varying float gDist;
+varying vec3 vNormal;
+varying vec3 normals;
+varying vec3 vLightDir;
+varying vec3 vThePosition;
+varying vec2 vTexCoord;
+varying float lDist;
 
 void main() {
   vec4 vPosition;
 
-  gTexCoord = aTexCoord;
+  vTexCoord = aTexCoord;
 
   /* First model transforms */
   vPosition = uModelMatrix * vec4(aPosition, 1.0);
-  gThePosition = vPosition.xyz;
-  gDist = length(-gThePosition + uLightPos);
-  gnormals = aNormal;
-  gLightDir = uLightPos - gThePosition;
-  gNormal = normalize(uNormalMatrix * vec4(gnormals, 1.0)).xyz;
+  vThePosition = vPosition.xyz;
+  lDist = length(-vThePosition + uLightPos);
+  normals = aNormal;
+  vLightDir = uLightPos - vThePosition;
+  vNormal = normalize(uNormalMatrix * vec4(normals, 1.0)).xyz;
 
   vPosition = uViewMatrix * vPosition;
   gl_Position = uProjMatrix * vPosition;
