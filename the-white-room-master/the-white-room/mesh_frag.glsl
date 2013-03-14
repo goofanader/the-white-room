@@ -31,13 +31,13 @@ if (uUseTex != 0) {
     }
 
 if (uUseTex2 != 0) {
-    float T = mod(uTime, 4);
-    if (T >= 0.0 && T <= 4.0) {
+    float T = mod(uTime, 24);
+    if (T > 9.0 && T < 14.0) {
         tColor = vec3(texture2D(uTexUnit2, vTexCoord)) * 
-            (1.0 - 0.50*sin(6.2831853 * (T - 0.0) / 4.0));
+            (0.50*sin(6.2831853 * (T - 9.0) / 6.0) + 0.5);
         texColor = texColor - 
-        (texColor - vec4(tColor, tColor.r)) *
-        clamp((1.73205080757 - length(tColor))/(1.73205080757 - 0.0), 1.0, 0.0);
+        (texColor - vec4(tColor, 1.0)) *
+        (length(tColor) - 0.0)/(length(vec3(1.0)) - 0.0);
     }
 }
 
