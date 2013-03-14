@@ -69,20 +69,35 @@ void HeartKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         vec3 axis = glm::cross(up, loc);
 
         rotY = atan2(loc.x, loc.z) * 180.0 / 3.14;
-        rotY -= 90;
+        //rotY -= 90;
 
         rotA = asin(glm::length(axis) / (glm::length(loc))) * 180.0 / 3.14;
         rotA = 90 - rotA;
 
-        //rotA = atan2(loc.y, loc.z) * 180.0 / 3.14;
-        //rotA = 90 - rotA;
-
+        if(loc.y > 0)
+            rotA = -rotA;
+        
         //reset rotation matrix
         this->rotate = glm::mat4(1.f);
 
         //doRotate(glm::cross(up,axis), rotating);
         doRotate(axis, rotA);
         doRotate(up, rotY);
+
+        vec3 relative = glm::cross(axis, loc);
+        relative = glm::normalize(relative);
+        axis = glm::normalize(axis);
+        loc = glm::normalize(loc);
+
+        axis *= 2.1f;
+        relative *= 1.5;
+
+        doTranslate(relative);
+        doTranslate(axis);
+
+        loc = -loc;
+        doTranslate(loc);
+
     } else if (!isInKeyhole) {
         trans = vec3(0.f);
         doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 

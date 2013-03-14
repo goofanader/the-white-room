@@ -154,7 +154,7 @@ void Running::draw() {
             iter != objects.end(); iter++) {
         curr = (*iter);
         
-        std::cout << "Drawing " << curr->className() << std::endl;
+        //std::cout << "Drawing " << curr->className() << std::endl;
 
         glm::vec3 objPos = (curr->getAABBmax() + curr->getAABBmin())*0.5f - playerCamera->trans;
         glm::vec3 lookDir = camLookAt - playerCamera->trans;
