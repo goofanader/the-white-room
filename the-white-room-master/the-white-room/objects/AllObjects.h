@@ -38,6 +38,9 @@
 #include "../objects/WidePainting.h"
 #include "../objects/WestPainting.h"
 #include "../objects/Box1.h"
+#include "../objects/Box2.h"
+#include "../objects/Box3.h"
+#include "../objects/Box4.h"
 
 #endif	/* ALLOBJECTS_H */
 

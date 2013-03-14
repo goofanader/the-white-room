@@ -158,7 +158,8 @@ bool Safe::doesCollide(GameObject* other) {
 
 void Safe::onEvent(SoundPlayer *soundPlayer) {
     if (IS_SOUND_ON) {
-        soundPlayer->playSound("TrySafe");
+        if (!isOpen)
+                soundPlayer->playSound("TrySafe");
     }
 }
 
