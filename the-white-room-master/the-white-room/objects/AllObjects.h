@@ -34,6 +34,8 @@
 #include "../objects/RoundTable.h"
 #include "../objects/Fireplace.h"
 #include "../objects/EastPainting.h"
+#include "../objects/WidePainting.h"
+#include "../objects/WestPainting.h"
 
 #endif	/* ALLOBJECTS_H */
 

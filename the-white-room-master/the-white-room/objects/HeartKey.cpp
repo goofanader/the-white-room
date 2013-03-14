@@ -22,7 +22,7 @@ HeartKey::HeartKey() {
     
     //Translate to sit on the picture frame
     doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
-            getRoomCeilHeight() - getAABBmax().y - 7.8f, -17.f));
+            getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
     isVisible = false;
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;

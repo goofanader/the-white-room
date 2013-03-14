@@ -110,26 +110,17 @@ void Safe::update(float dt, GameObject* playerCamera) {
         timeSpent++;
     }
 
-    if (isHighlighted) {
+    if (isHighlighted && !isOpen) {
         body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
-        if (isOpen)
-            door->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
-
+        
         if (body->highlightColor.x > 1.f) {
             body->highlightColor = vec3(1.f);
-            if (isOpen)
-                door->highlightColor = vec3(1.f);
         }
 
         body->highlightAlpha += HIGHLIGHT_SPEED;
-        if (isOpen)
-            door->highlightAlpha += HIGHLIGHT_SPEED;
         
         if (body->highlightAlpha > 1.f) {
             body->highlightAlpha = 1.f;
-            
-            if (isOpen)
-                door->highlightAlpha = 1.f;
         }
     } else {
         isHighlightDisappearing = true;

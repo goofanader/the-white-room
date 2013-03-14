@@ -1,13 +1,13 @@
 /* 
- * File:   EastPainting.cpp
+ * File:   WestPainting.cpp
  * Author: goofanader
  * 
  * Created on March 13, 2013, 9:12 PM
  */
 
-#include "EastPainting.h"
+#include "WestPainting.h"
 
-EastPainting::EastPainting() {
+WestPainting::WestPainting() {
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/paintings/TallPainting.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     dir = vec3(1.f, 0.f, 0.f);
@@ -28,8 +28,8 @@ EastPainting::EastPainting() {
     isVisible = true;
     
     doScale(vec3(3.5f));
-    doRotate(vec3(0,1,0), 90);
-    doTranslate(vec3(-ROOM_SIZE - getAABBmin().x, 
+    doRotate(vec3(0,1,0), -90);
+    doTranslate(vec3(ROOM_SIZE + getAABBmin().x, 
             getRoomCeilHeight() - getAABBmax().y - 2.f, -17.f));
     /*texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
@@ -38,17 +38,17 @@ EastPainting::EastPainting() {
     printf("%d\n", texNum);*/
 }
 
-EastPainting::EastPainting(const EastPainting& orig) {
+WestPainting::WestPainting(const WestPainting& orig) {
 }
 
-EastPainting::~EastPainting() {
+WestPainting::~WestPainting() {
 }
 
-std::string EastPainting::className() {
-    return "EastPainting";
+std::string WestPainting::className() {
+    return "WestPainting";
 }
 
-void EastPainting::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
+void WestPainting::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
         glm::vec3 lightColor, GameConstants* gc) {
     //do nothing, we don't want a highlight for the armchair. It's not selectable
 }

@@ -42,6 +42,8 @@ GameObject* createSpadeKey() { return new SpadeKey(); }
 GameObject* createClubKey() { return new ClubKey(); }
 
 GameObject* createEastPainting() { return new EastPainting(); }
+GameObject* createWidePainting() { return new WidePainting(); }
+GameObject* createWestPainting() { return new WestPainting(); }
 
 struct {
     GameObject* (*fn)();
@@ -74,6 +76,8 @@ functionLookupTable[] = {
     { &createSpadeKey, "SpadeKey"},
     { &createClubKey, "ClubKey"},
     { &createEastPainting, "EastPainting"},
+    { &createWidePainting, "WidePainting"},
+    { &createWestPainting, "WestPainting"},
     { NULL, NULL}
 };
 

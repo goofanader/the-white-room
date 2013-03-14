@@ -174,7 +174,7 @@ int Event::getSwitchNum() {
 
 void Event::ifObjectSelected(GameObject *curr) {
     std::string name = curr->className();
-    /*eventSwitches[BOOK1].setSwitch(true);
+    eventSwitches[BOOK1].setSwitch(true);
     eventSwitches[BOOK2].setSwitch(true);
     eventSwitches[BOOK3].setSwitch(true);
     eventSwitches[RADIO].setSwitch(true);
@@ -182,7 +182,7 @@ void Event::ifObjectSelected(GameObject *curr) {
     eventSwitches[HEART].getGameObject()->isVisible = true;
     eventSwitches[SPADE].getGameObject()->isVisible = true;
     eventSwitches[DIAMOND].getGameObject()->isVisible = true;
-    eventSwitches[CLUB].getGameObject()->isVisible = true;*/
+    eventSwitches[CLUB].getGameObject()->isVisible = true;
     
     if (name != "Book1" && name != "Book2" && name != "Book3") {
         curr->onEvent(soundPlayer);

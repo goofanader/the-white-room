@@ -1,21 +1,21 @@
 /* 
- * File:   EastPainting.h
+ * File:   WidePainting.h
  * Author: goofanader
  *
  * Created on March 13, 2013, 9:12 PM
  */
 
-#ifndef EASTPAINTING_H
-#define	EASTPAINTING_H
+#ifndef WIDEPAINTING_H
+#define	WIDEPAINTING_H
 
 #include "GameObject.h"
 #include "MeshLoader.h"
 
-class EastPainting : public GameObject {
+class WidePainting : public GameObject {
 public:
-    EastPainting();
-    EastPainting(const EastPainting& orig);
-    virtual ~EastPainting();
+    WidePainting();
+    WidePainting(const WidePainting& orig);
+    virtual ~WidePainting();
     std::string className();
     void drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
         glm::vec3 lightColor, GameConstants* gc);
@@ -23,5 +23,5 @@ private:
 
 };
 
-#endif	/* EASTPAINTING_H */
+#endif	/* WIDEPAINTING_H */
 

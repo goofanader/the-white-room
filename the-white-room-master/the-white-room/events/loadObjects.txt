@@ -1,4 +1,4 @@
-numItems: 25
+numItems: 27
 # list of items to be created
 create Room
 create WhiteDoor
@@ -25,3 +25,5 @@ create SpadeKey
 create ClubKey
 create DiamondKey
 create EastPainting
+create WidePainting
+create WestPainting
