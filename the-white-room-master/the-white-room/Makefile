@@ -1,7 +1,7 @@
 linux:
-	echo ""
+	@echo ""
 	#g++ -I. *.cpp objects/*.cpp gameStates/*.cpp events/*.cpp libglfw.a -lX11 -lGL -lGLU -lrt -lm -lXrandr -pthread -DGL_GLEXT_PROTOTYPES -o The-White-Room
-	echo ""
+	@echo ""
 	g++ -I. *.cpp objects/*.cpp gameStates/*.cpp events/*.cpp audio/*.cpp $< audio/FMOD/api/lib/libfmodex64.so  libglfw.a -lX11 -lGL -lGLU -lrt -lm -lXrandr -pthread -DGL_GLEXT_PROTOTYPES -o The-White-Room
 
 glfw:

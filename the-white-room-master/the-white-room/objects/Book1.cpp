@@ -37,8 +37,7 @@ Book1::Book1() {
     //doTranslate(glm::vec3(-15.5f,-8.f - 6.f,0.f));
     doTranslate(glm::vec3(-ROOM_SIZE + 3.0f, -3.f, 0.0f));
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/bookshelf/book1UV.bmp", texNum);
     hasTex = true;
     /*AABBmin.x -= 1.f;

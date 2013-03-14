@@ -45,8 +45,7 @@ Clock::Clock() {
     body->depthMin = 0;
     body->depthMax = 1;
 
-    body->texNum = numTextures();
-    body->textureEnum = GL_TEXTURE0 + body->texNum;
+    glGenTextures(1, &(body->texNum));
     LoadTexture((char *)"objects/meshes/clock/ClockUV.bmp", body->texNum);
     body->hasTex = true;
 

@@ -95,7 +95,7 @@ public:
     GLuint VBO;
     GLuint NBO;
     GLuint TBO;
-    int texNum, texNum2;
+    GLuint texNum, texNum2;
 
     GLenum textureEnum;
 

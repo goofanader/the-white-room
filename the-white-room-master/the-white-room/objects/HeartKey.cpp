@@ -32,8 +32,8 @@ HeartKey::HeartKey() {
     doTranslate(vec3(-ROOM_SIZE - getAABBmin().x + .25, 
             getRoomCeilHeight() - getAABBmax().y - 7.9f, -15.f));
     isVisible = false;
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+
+    glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/keys/Key_HeartUV.bmp", texNum);
     hasTex = true;
     

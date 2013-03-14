@@ -154,12 +154,15 @@ void Running::draw() {
             iter != objects.end(); iter++) {
         curr = (*iter);
 
+        printOpenGLError();
         glm::vec3 objPos = (curr->getAABBmax() + curr->getAABBmin())*0.5f - playerCamera->trans;
         glm::vec3 lookDir = camLookAt - playerCamera->trans;
+        printOpenGLError();
 
         float objPoslen = sqrt(objPos.x * objPos.x + objPos.y * objPos.y + objPos.z * objPos.z);
         float lookAtlen = sqrt(lookDir.x * lookDir.x + lookDir.y * lookDir.y + lookDir.z * lookDir.z);
         float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / PI;
+printOpenGLError();
 
         //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
         //printf("angle: %lf\n", angle);
@@ -188,6 +191,8 @@ void Running::draw() {
                 //glEnable(GL_DEPTH_TEST);
                 //glDepthFunc(GL_LEQUAL);
                 glDepthRange(0, 1);
+                printOpenGLError();
+
             }
         }
     }
@@ -196,35 +201,44 @@ void Running::draw() {
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
         curr = (*iter);
-        
+        printOpenGLError();
+
         if(curr->className() != "Room" && curr->className() != "Chandelier") {
-            
+            printOpenGLError();
+
            // floor shadow
            curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 0.0, 0.0), getSC());
-            
+            printOpenGLError();
+
            // fireplace wall shadow
            if(curr->className() == "Armchair" || curr->className() == "Armchair2" || curr->className() == "Fireplace") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(1.0, 0.0, 0.0), getSC());
+              printOpenGLError();
+
            }
            
            // door wall shadow
            if(curr->className() == "RoundTable" || curr->className() == "Clock" || curr->className() == "MooseHead") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 1.0, 0.0), getSC());
+printOpenGLError();
+
            }
            
            // bookcase wall shadow
            if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Bookshelf") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 0.0, 1.0), getSC());
+              printOpenGLError();
            }
            
            // radio wall shadow
            if(curr->className() == "Table" || curr->className() == "Radio" || curr->className() == "Safe") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(1.0, 1.0, 1.0), getSC());
+              printOpenGLError();
            }
               
             // plants' shadow on table
@@ -237,6 +251,7 @@ void Running::draw() {
            if(curr->className() == "Radio") {
                curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                  vec3(0.0, 1.0, 1.0), getSC());
+               printOpenGLError();
            }
         }
     }

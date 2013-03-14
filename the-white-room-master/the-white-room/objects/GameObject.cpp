@@ -96,22 +96,22 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     safe_glVertexAttribPointer(gc->h_aNormal, 3, GL_FLOAT, GL_TRUE, 0, 0);
 
     if (hasTex) {
-        //printOpenGLError();
+        printOpenGLError();
         glEnable(GL_TEXTURE_2D);
-        //printOpenGLError();
-        safe_glUniform1i(gc->h_uTexUnit, texNum);
-        //printOpenGLError();
+        printOpenGLError();
+        safe_glUniform1i(gc->h_uTexUnit, 0);
+        printOpenGLError();
         safe_glEnableVertexAttribArray(gc->h_aTexCoord);
-        //printOpenGLError();
+        printOpenGLError();
         glBindBuffer(GL_ARRAY_BUFFER, TBO);
-        //printOpenGLError();
+        printOpenGLError();
         safe_glVertexAttribPointer(
                 gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        //printOpenGLError();
-        glActiveTexture(textureEnum);
-        //printOpenGLError();
+        printOpenGLError();
+        glActiveTexture(GL_TEXTURE0);
+        printOpenGLError();
         glBindTexture(GL_TEXTURE_2D, texNum);
-        //printOpenGLError();
+        printOpenGLError();
 //NPR stuff
         /*safe_glUniform1i(gc->h_uSmokeUnit, getSmokeNum());
         printOpenGLError();
@@ -122,9 +122,9 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     
 
         if (hasTex2) {
-            safe_glUniform1i(gc->h_uTexUnit2, texNum2);
+            safe_glUniform1i(gc->h_uTexUnit2, 1);
             printOpenGLError();
-            glActiveTexture(texNum2 + GL_TEXTURE0);
+            glActiveTexture(GL_TEXTURE1);
             printOpenGLError();
             glBindTexture(GL_TEXTURE_2D, texNum2);
             printOpenGLError();
@@ -133,15 +133,15 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 
         glDisable(GL_TEXTURE_2D);
     }
-    //printOpenGLError();
+    printOpenGLError();
     safe_glUniform1i(gc->h_uUseTex, hasTex ? 1 : 0);
     safe_glUniform1i(gc->h_uUseTex2, hasTex2 ? 1 : 0);
-    //printOpenGLError();
+    printOpenGLError();
 
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-    //printOpenGLError();
+    printOpenGLError();
     //pass colors, camera position, and light info to GPU
     glUniform4f(gc->h_uAmbColor, ambColor.x + highlightColor.x,
             ambColor.y + highlightColor.y, ambColor.z + highlightColor.z, ambAlpha);
@@ -149,14 +149,14 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             specColor.y + highlightColor.y, specColor.z + highlightColor.z, specAlpha);
     glUniform4f(gc->h_uDiffColor, diffColor.x + highlightColor.x, 
             diffColor.y + highlightColor.y, diffColor.z + highlightColor.z, diffAlpha);
-    //printOpenGLError();
+    printOpenGLError();
     glUniform1f(gc->h_uShininess, shininess);
     glUniform1f(gc->h_uSpecStrength, specStrength);
-    //printOpenGLError();
+    printOpenGLError();
     glUniform3f(gc->h_uLightPos, lightPos.x, lightPos.y, lightPos.z);
     glUniform4f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z, gc->lightAlpha);
     glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
-    //printOpenGLError();
+    printOpenGLError();
     
   //  safe_glUniform1i(gc->ShadowMap, GL_TEXTURE0);
    // printOpenGLError();
@@ -165,11 +165,13 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
 //    glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 
     glDrawElements(GL_TRIANGLES, IBOlen, GL_UNSIGNED_SHORT, 0);
+    printOpenGLError();
 
     safe_glDisableVertexAttribArray(gc->h_aNormal);
     safe_glDisableVertexAttribArray(gc->h_aPosition);
     safe_glDisableVertexAttribArray(gc->h_aTexCoord);
     glUseProgram(0);
+    printOpenGLError();
 }
 
 void GameObject::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt,

@@ -32,8 +32,7 @@ Radio::Radio() {
 
     doTranslate(glm::vec3(27.f, 0.f, 0.f));
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     printOpenGLError();
     LoadTexture((char *) "objects/meshes/radio/RadioUVSmall.bmp", texNum);
     printOpenGLError();

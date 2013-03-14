@@ -34,8 +34,8 @@ DiamondKey::DiamondKey() {
             ROOM_SIZE + getAABBmin().z - 1.5f);
     doTranslate(initTranslate);
     //doRotate(vec3(0,1,0), 90);
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+
+    glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/keys/Key_DiamondUV.bmp", texNum);
     hasTex = true;
 

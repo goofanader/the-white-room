@@ -32,8 +32,7 @@ WidePainting::WidePainting() {
     doTranslate(vec3(ROOM_SIZE + getAABBmin().x, 
             getRoomCeilHeight() - getAABBmax().y - 2.f, 0.f));
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/paintings/WidePaintingUV.bmp", texNum);
     hasTex = true;
     //printf("%d\n", texNum);

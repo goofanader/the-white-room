@@ -33,8 +33,7 @@ ClubKey::ClubKey() {
     doTranslate(vec3(ROOM_SIZE + getAABBmin().x - 2,
             getRoomFloorHeight().y - getAABBmin().y + .5, 19.7f));
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/keys/Key_ClubUV.bmp", texNum);
     hasTex = true;
 

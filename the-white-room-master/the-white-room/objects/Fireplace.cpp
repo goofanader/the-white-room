@@ -32,8 +32,7 @@ Fireplace::Fireplace() {
     doTranslate(glm::vec3(0.f, getRoomFloorHeight().y - getAABBmin().y, -ROOM_SIZE + getAABBmax().z));
     //when we have the textures
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/fireplace/marbleUV.bmp", texNum);
     hasTex = true;
     //printf("%d\n", texNum);

@@ -35,8 +35,7 @@ Armchair::Armchair() {
     //this->doScale(glm::vec3(3.f));
 
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
     hasTex = true;
     printf("%d\n", texNum);

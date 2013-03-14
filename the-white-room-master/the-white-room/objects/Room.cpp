@@ -60,12 +60,11 @@ Room::Room() {
         room[i].shininess = 1.f;
         room[i].specStrength = 3.f;
         room[i].scale = glm::vec3(1.f);
-        room[i].texNum = numTextures();
+        glGenTextures(1, &room[i].texNum);
         if (i == 3) {
-            room[i].texNum2 = numTextures();
+            glGenTextures(1, &room[i].texNum2);
             room[i].hasTex2 = true;
         }
-        room[i].textureEnum = GL_TEXTURE0 + room[i].texNum;
         room[i].hasTex = true;
     }
     

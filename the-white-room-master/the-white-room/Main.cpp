@@ -169,6 +169,68 @@ void SetModel() {
             glm::value_ptr(glm::transpose(glm::inverse(ModelTrans.modelViewMatrix))));
 }
 
+bool InstallComplexShader(
+        std::string const & vShaderName,
+        std::string const & gShaderName,
+        std::string const & fShaderName, int shader) {
+    GLuint VS; // handles to shader object
+    GLuint GS;
+    GLuint FS; // handles to frag shader object
+    GLint vCompiled, gCompiled, fCompiled, linked; // status of shader
+
+    VS = glCreateShader(GL_VERTEX_SHADER);
+    GS = glCreateShader(GL_GEOMETRY_SHADER);
+    FS = glCreateShader(GL_FRAGMENT_SHADER);
+
+    // load the source
+    char const * vSource = textFileRead(vShaderName);
+    char const * gSource = textFileRead(gShaderName);
+    char const * fSource = textFileRead(fShaderName);
+    glShaderSource(VS, 1, & vSource, NULL);
+    glShaderSource(GS, 1, & gSource, NULL);
+    glShaderSource(FS, 1, & fSource, NULL);
+
+    // compile shader and print log
+    glCompileShader(VS);
+    printOpenGLError();
+    glGetShaderiv(VS, GL_COMPILE_STATUS, & vCompiled);
+    printShaderInfoLog(VS);
+
+    glCompileShader(GS);
+    printOpenGLError();
+    glGetShaderiv(GS, GL_COMPILE_STATUS, & gCompiled);
+    printShaderInfoLog(GS);
+
+    // compile shader and print log
+    glCompileShader(FS);
+    printOpenGLError();
+    glGetShaderiv(FS, GL_COMPILE_STATUS, & fCompiled);
+    printShaderInfoLog(FS);
+
+    if (!vCompiled || !gCompiled || !fCompiled) {
+        std::cerr << "Error compiling either shader " << vShaderName <<
+                " or " << gShaderName <<
+                " or " << fShaderName << std::endl;
+        return false;
+    }
+
+    // create a program object and attach the compiled shader
+    ShadeProg[shader] = glCreateProgram();
+    glAttachShader(ShadeProg[shader], VS);
+    glAttachShader(ShadeProg[shader], GS);
+    glAttachShader(ShadeProg[shader], FS);
+
+    glLinkProgram(ShadeProg[shader]);
+
+    // check shader status requires helper functions
+    printOpenGLError();
+    glGetProgramiv(ShadeProg[shader], GL_LINK_STATUS, &linked);
+    printProgramInfoLog(ShadeProg[shader]);
+    
+    return true;
+
+}    
+
 bool InstallShader(std::string const & vShaderName, std::string const & fShaderName,
         int shader) {
     GLuint VS; // handles to shader object
@@ -304,6 +366,7 @@ void Draw() {
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
     currState->draw();
+    printOpenGLError();
 
     glfwSwapBuffers();
     printOpenGLError();
@@ -463,8 +526,13 @@ void gameLoop() {
             currState->update(timeAccumulator);
             timeAccumulator = 0;
         }
+        //it's expensive to update thousands of particles
+        //so update once a frame and let the particle updater handle
+        //errors from large time steps
+        //updateParticles(glfwGetTime() - oldTime, particleSystem);
 
         Draw();
+        //DrawParticles(particleSystem);
         oldTime = curTime;
         //don't calculate time based off of how long we slept
         //base it off of when the next loop starts
@@ -625,7 +693,10 @@ int main(int argc, char *argv[]) {
     getGLversion();
     
     // Shader Setup: Main Shader
-    if (!InstallShader("mesh_vert.glsl", "mesh_frag.glsl", 0)) {
+    if (!InstallComplexShader(
+                "mesh_vert.glsl", 
+                "mesh_geom.glsl", 
+                "mesh_frag.glsl", 0)) {
         printf("Error installing shader!\n");
         return 1;
     }

@@ -30,8 +30,7 @@ Chandelier::Chandelier() {
             getRoomCeilHeight() - getAABBmax().y + .5f, 0.f));
     //this->doScale(glm::vec3(3.f));
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/chandelier/chandUV.bmp", texNum);
     hasTex = true;
 

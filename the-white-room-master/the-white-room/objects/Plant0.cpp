@@ -19,8 +19,8 @@ Plant0::Plant0() {
     shininess = 5;
     specStrength = 0.f;
     scale = glm::vec3(1.f);
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+
+    glGenTextures(1, &texNum);
     printOpenGLError();
     //Plant0 is able to use Plant1 or Plant6's UV
     LoadTexture((char *)"objects/meshes/plants/Plant1UV.bmp", texNum);

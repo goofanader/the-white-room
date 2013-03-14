@@ -34,8 +34,8 @@ SpadeKey::SpadeKey() {
     doTranslate(glm::vec3(13.f, getRoomFloorHeight().y - getAABBmin().y + 3,
             -ROOM_SIZE + 10.f));
     isVisible = isHeld = isInKeyhole = false;
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+
+    glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/keys/Key_SpadeUV.bmp", texNum);
     hasTex = true;
 }

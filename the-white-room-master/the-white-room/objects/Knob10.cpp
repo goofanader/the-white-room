@@ -22,8 +22,7 @@ Knob10::Knob10() {
     specStrength = 0.f;
     scale = glm::vec3(1.f);
 
-    texNum = numTextures();
-    textureEnum = GL_TEXTURE0 + texNum;
+    glGenTextures(1, &texNum);
     printOpenGLError();
     LoadTexture((char *) "objects/meshes/radio/Knob2UVbrass.bmp", texNum);
     printOpenGLError();
@@ -225,7 +224,7 @@ void Knob10::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
             printOpenGLError();
             glEnable(GL_TEXTURE_2D);
             printOpenGLError();
-            safe_glUniform1i(gc->h_uTexUnit, texNum);
+            safe_glUniform1i(gc->h_uTexUnit, 0);
             printOpenGLError();
             safe_glEnableVertexAttribArray(gc->h_aTexCoord);
             printOpenGLError();
@@ -234,7 +233,7 @@ void Knob10::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
             safe_glVertexAttribPointer(
                     gc->h_aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, 0);
             printOpenGLError();
-            glActiveTexture(textureEnum);
+            glActiveTexture(GL_TEXTURE0);
             printOpenGLError();
             glBindTexture(GL_TEXTURE_2D, texNum);
             printOpenGLError();
