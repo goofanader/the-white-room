@@ -34,6 +34,7 @@ private:
     GameObject* door;
     
     float timeSpent;
+    bool hasDoorSoundPlayed;
 };
 
 #endif	/* SAFE_H */

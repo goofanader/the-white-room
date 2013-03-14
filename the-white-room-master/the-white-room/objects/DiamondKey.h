@@ -23,7 +23,8 @@ public:
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
     void update(float dt, GameObject* playerCamera, vec3 camLookAt);
-
+private:
+    glm::vec3 initTranslate;
 };
 
 #endif	/* DIAMONDKEY_H */

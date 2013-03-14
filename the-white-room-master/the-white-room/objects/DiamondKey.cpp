@@ -24,8 +24,9 @@ DiamondKey::DiamondKey() {
 
     //Translate to hang from moose head horns
     doRotate(vec3(1, 0, 0), -90);
-    doTranslate(glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 4.f,
-            ROOM_SIZE + getAABBmin().z - 1.1f));
+    initTranslate = glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 3.f,
+            ROOM_SIZE + getAABBmin().z - .5f);
+    doTranslate(initTranslate);
     //doRotate(vec3(0,1,0), 90);
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
@@ -103,8 +104,7 @@ void DiamondKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
         rotate = mat4(1.f);
         trans = vec3(0.f);
         doRotate(vec3(1, 0, 0), -90);
-        doTranslate(glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 4.f,
-                ROOM_SIZE + getAABBmin().z - 1.1f));
+        doTranslate(initTranslate);
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         this->rotate = glm::mat4(1.f);

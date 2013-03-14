@@ -245,6 +245,7 @@ void Event::ifObjectSelected(GameObject *curr) {
 
                 Safe *temp = (Safe*) (eventSwitches[SAFE].getGameObject());
                 temp->isOpen = true;
+                temp->onEvent(soundPlayer);
             }
         }
     }

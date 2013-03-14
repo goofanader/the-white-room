@@ -160,6 +160,10 @@ void Safe::onEvent(SoundPlayer *soundPlayer) {
     if (IS_SOUND_ON) {
         if (!isOpen)
                 soundPlayer->playSound("TrySafe");
+        else if (isOpen && !hasDoorSoundPlayed) {
+            hasDoorSoundPlayed = true;
+            soundPlayer->playSound("OpenSafe");
+        }
     }
 }
 

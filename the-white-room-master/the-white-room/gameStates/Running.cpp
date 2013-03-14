@@ -126,7 +126,7 @@ void Running::loadObjectsFromEvent() {
     }
 
     if (clockSound) {
-        //clockSound->onEvent(soundPlayer);
+        clockSound->onEvent(soundPlayer);
     }
 }
 
