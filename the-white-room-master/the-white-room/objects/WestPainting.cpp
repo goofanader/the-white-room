@@ -31,11 +31,12 @@ WestPainting::WestPainting() {
     doRotate(vec3(0,1,0), -90);
     doTranslate(vec3(ROOM_SIZE + getAABBmin().x, 
             getRoomCeilHeight() - getAABBmax().y - 2.f, -17.f));
-    /*texNum = numTextures();
+
+    texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;
-    LoadTexture((char *)"objects/meshes/armchair/ChairTexture.bmp", texNum);
+    LoadTexture((char *)"objects/meshes/paintings/TallPaintingUV2.bmp", texNum);
     hasTex = true;
-    printf("%d\n", texNum);*/
+    //printf("%d\n", texNum);
 }
 
 WestPainting::WestPainting(const WestPainting& orig) {
