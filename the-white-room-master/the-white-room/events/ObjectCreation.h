@@ -23,6 +23,11 @@
 #define RADIO getRadioNum()
 #define KNOB10 getKnob10Num()
 #define KNOB100 getKnob100Num()
+#define HEART getHeartKeyNum()
+#define SPADE getSpadeKeyNum()
+#define CLUB getClubKeyNum()
+#define DIAMOND getDiamondKeyNum()
+#define SAFE getSafeNum()
 
 using namespace std;
 
@@ -39,5 +44,11 @@ int getPlant6Num();
 int getRadioNum();
 int getKnob10Num();
 int getKnob100Num();
+int getHeartKeyNum();
+int getDiamondKeyNum();
+int getClubKeyNum();
+int getSpadeKeyNum();
+int getSafeNum();
+
 #endif	/* OBJECTCREATION_H */
 

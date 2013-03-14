@@ -1,4 +1,4 @@
-numItems: 20
+numItems: 24
 # list of items to be created
 create Room
 create WhiteDoor
@@ -20,4 +20,7 @@ create Knob100
 create Knob10
 create RoundTable
 create Fireplace
-
+create HeartKey
+create SpadeKey
+create ClubKey
+create DiamondKey

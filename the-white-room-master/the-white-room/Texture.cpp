@@ -39,7 +39,6 @@ GLvoid LoadTexture(char* image_file, int texID) {
     TextureImage->sizeX, TextureImage->sizeY,
     GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
   printOpenGLError();
-  printf("got here\n");
   
   free(TextureImage);
 }

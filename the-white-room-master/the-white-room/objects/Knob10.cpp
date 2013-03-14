@@ -41,7 +41,7 @@ Knob10::Knob10() {
     doTranslate(glm::vec3(27.f, 0, 1.f));
 
     station = 50;
-    isClicked = false;
+    isClicked = isVisible = false;
 
     //Load in the select arrow
     arrow = new GameObject();
@@ -160,6 +160,7 @@ void Knob10::update(float dt, GameObject *playerCamera) {
         if (ambAlpha < 0.f) {
             ambAlpha = 0.f;
             arrow->ambAlpha = 0.f;
+            isVisible = false;
         }
         
         highlightAlpha = 0.f;

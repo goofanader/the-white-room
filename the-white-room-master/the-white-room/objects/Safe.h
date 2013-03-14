@@ -14,6 +14,8 @@
 
 class Safe : public GameObject {
 public:
+    bool isOpen;
+    
     Safe();
     Safe(const Safe& orig);
     virtual ~Safe();
@@ -30,6 +32,8 @@ public:
 private:
     GameObject* body;
     GameObject* door;
+    
+    float timeSpent;
 };
 
 #endif	/* SAFE_H */

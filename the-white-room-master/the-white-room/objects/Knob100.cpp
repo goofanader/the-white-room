@@ -42,7 +42,7 @@ Knob100::Knob100() {
     doTranslate(glm::vec3(27.f, 0, -1.f));
 
     station = 1000;
-    isClicked = false;
+    isClicked = isVisible = false;
     
     //Load in the select arrow
     arrow = new GameObject();

@@ -16,11 +16,6 @@ GameObject* createSafe() { return new Safe(); }
 GameObject* createArmchair() { return new Armchair(); }
 GameObject* createArmchair2() { return new Armchair2(); }
 
-GameObject* createBox1() { return new Box1(); }
-GameObject* createBox2() { return new Box2(); }
-GameObject* createBox3() { return new Box3(); }
-GameObject* createBox4() { return new Box4(); }
-
 GameObject* createRadio() { return new Radio(); }
 GameObject* createKnob100() { return new Knob100(); }
 GameObject* createKnob10() { return new Knob10(); }
@@ -41,6 +36,10 @@ GameObject* createBook3() { return new Book3(); }
 GameObject* createMooseHead() { return new MooseHead(); }
 GameObject* createFireplace() { return new Fireplace(); }
 
+GameObject* createHeartKey() { return new HeartKey(); }
+GameObject* createDiamondKey() { return new DiamondKey(); }
+GameObject* createSpadeKey() { return new SpadeKey(); }
+GameObject* createClubKey() { return new ClubKey(); }
 
 struct {
     GameObject* (*fn)();
@@ -53,10 +52,6 @@ functionLookupTable[] = {
     { &createRoom, "Room"},
     { &createArmchair, "Armchair"},
     { &createArmchair2, "Armchair2"},
-    { &createBox1, "Box1"},
-    { &createBox2, "Box2"},
-    { &createBox3, "Box3"},
-    { &createBox4, "Box4"},
     { &createRadio, "Radio"},
     { &createPlant1, "Plant1"},
     { &createPlant6, "Plant6"},
@@ -72,6 +67,10 @@ functionLookupTable[] = {
     { &createKnob10, "Knob10"},
     { &createRoundTable, "RoundTable"},
     { &createFireplace, "Fireplace"},
+    { &createHeartKey, "HeartKey"},
+    { &createDiamondKey, "DiamondKey"},
+    { &createSpadeKey, "SpadeKey"},
+    { &createClubKey, "ClubKey"},
     { NULL, NULL}
 };
 
@@ -85,6 +84,7 @@ GameObject* lookupAndCall(const string& name) {
 
 int door, book1, book2, book3;
 int plant1, plant6, radio, knob10, knob100;
+int clubKey, spadeKey, diamondKey, heartKey, safe;
 
 void initializeIndices() {
     door = -1;
@@ -93,6 +93,10 @@ void initializeIndices() {
     book3 = -1;
     
     plant1 = plant6 = radio = knob10 = knob100 = -1;
+    
+    clubKey = spadeKey = diamondKey = heartKey = -1;
+    
+    safe = -1;
 }
 
 int getDoorNum() { return door; }
@@ -104,6 +108,11 @@ int getPlant6Num() { return plant6; }
 int getRadioNum() { return radio; }
 int getKnob10Num() { return knob10; }
 int getKnob100Num() { return knob100; }
+int getClubKeyNum() { return clubKey; }
+int getSpadeKeyNum() { return spadeKey; }
+int getDiamondKeyNum() { return diamondKey; }
+int getHeartKeyNum() { return heartKey; }
+int getSafeNum() { return safe; }
 
 void setDoorNum(int index) {
     door = index;
@@ -126,6 +135,11 @@ void setPlant6Num(int index) { plant6 = index; }
 void setRadioNum(int index) { radio = index; }
 void setKnob10Num(int index) { knob10 = index; }
 void setKnob100Num(int index) { knob100 = index; }
+void setHeartKeyNum(int index) { heartKey = index; }
+void setDiamondKeyNum(int index) { diamondKey = index; }
+void setClubKeyNum(int index) { clubKey = index; }
+void setSpadeKeyNum(int index) { spadeKey = index; }
+void setSafeNum(int index) { safe = index; }
 
 struct {
     void (*fn)(int);
@@ -143,6 +157,12 @@ indexLookupTable[] = {
     { &setRadioNum, "Radio"},
     { &setKnob10Num, "Knob10"},
     { &setKnob100Num, "Knob100"},
+    
+    { &setHeartKeyNum, "HeartKey"},
+    { &setDiamondKeyNum, "DiamondKey"},
+    { &setSpadeKeyNum, "SpadeKey"},
+    { &setClubKeyNum, "ClubKey"},
+    { &setSafeNum, "Safe"},
     { NULL, NULL}
 };
 

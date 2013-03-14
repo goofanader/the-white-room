@@ -9,6 +9,7 @@
 #include "ObjectCreation.h"
 #include "objects/Knob100.h"
 #include "objects/Knob10.h"
+#include "objects/Safe.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -177,7 +178,7 @@ void Event::ifObjectSelected(GameObject *curr) {
     if (name != "Book1" && name != "Book2" && name != "Book3") {
         curr->onEvent(soundPlayer);
     }
-    
+
     /*==================================================================
      * PUZZLE 1 LOGIC
      *==================================================================*/
@@ -191,25 +192,25 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[BOOK2].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-    }
-    //Got it in order! Move to the next puzzle.
+    }        //Got it in order! Move to the next puzzle.
     else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()) {
         printf("clicked on Book1 in order, index %d\n", BOOK1);
-        
-        if(!eventSwitches[BOOK1].isSwitchOn())
+
+        if (!eventSwitches[BOOK1].isSwitchOn())
             soundPlayer->playSound("RadioAppear2");
 
 
         eventSwitches[BOOK1].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-        
+
         eventSwitches[KNOB10].getGameObject()->isClicked = true;
+        eventSwitches[KNOB10].getGameObject()->isVisible = true;
         eventSwitches[KNOB100].getGameObject()->isClicked = true;
+        eventSwitches[KNOB100].getGameObject()->isVisible = true;
         eventSwitches[RADIO].getGameObject()->isClicked = true;
-    }
-    //Got the book order wrong, reset.
+    }        //Got the book order wrong, reset.
     else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
             (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()))) {
@@ -235,16 +236,17 @@ void Event::ifObjectSelected(GameObject *curr) {
             printf("station=%d\n", station);
             if (station == 610) {
                 eventSwitches[RADIO].setSwitch(true);
-                setIfWon(true);
                 
                 eventSwitches[KNOB100].getGameObject()->isClicked = false;
                 eventSwitches[KNOB10].getGameObject()->isClicked = false;
 
-                //cause the white door to open
-                if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
-                    eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
-                    eventSwitches[WHITE_DOOR].setSwitch(true);
-                }
+                eventSwitches[HEART].getGameObject()->isVisible = true;
+                eventSwitches[SPADE].getGameObject()->isVisible = true;
+                eventSwitches[DIAMOND].getGameObject()->isVisible = true;
+                eventSwitches[CLUB].getGameObject()->isVisible = true;
+                
+                Safe *temp = (Safe*)(eventSwitches[SAFE].getGameObject());
+                temp->isOpen = true;
             }
         }
     }
@@ -252,6 +254,16 @@ void Event::ifObjectSelected(GameObject *curr) {
     /*==================================================================
      * PUZZLE 3 LOGIC
      *==================================================================*/
+    if (eventSwitches[BOOK1].isSwitchOn() && eventSwitches[RADIO].isSwitchOn()) {
+#if 0
+        setIfWon(true);
+        //cause the white door to open
+        if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
+            eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
+            eventSwitches[WHITE_DOOR].setSwitch(true);
+        }
+#endif
+    }
 }
 
 bool Event::setSwitch(std::string className) {

@@ -164,8 +164,8 @@ void Running::draw() {
         //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
         //printf("angle: %lf\n", angle);
 
-        if (angle < 90.0f || curr->className() == "Room" ||
-                curr->className() == "Bookshelf") {
+        if (curr->isVisible && (angle < 90.0f || curr->className() == "Room" ||
+                curr->className() == "Bookshelf")) {
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                     getGC()->lightColor, getGC());
             
