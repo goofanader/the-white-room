@@ -33,6 +33,7 @@
 #include "../objects/Knob10.h"
 #include "../objects/RoundTable.h"
 #include "../objects/Fireplace.h"
+#include "../objects/EastPainting.h"
 
 #endif	/* ALLOBJECTS_H */
 

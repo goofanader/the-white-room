@@ -21,7 +21,9 @@ SpadeKey::SpadeKey() {
     scale = glm::vec3(1.f);
     
     //Translate to be on top of armchair
-    doTranslate(glm::vec3(15.f,getRoomFloorHeight().y - getAABBmin().y + 10, -ROOM_SIZE + 10.f));
+    doTranslate(glm::vec3(13.f,getRoomFloorHeight().y - getAABBmin().y + 3,
+            -ROOM_SIZE + 10.f));
+    doScale(glm::vec3(.9f));
     isVisible = false;
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;

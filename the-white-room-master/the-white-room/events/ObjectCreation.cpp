@@ -41,6 +41,8 @@ GameObject* createDiamondKey() { return new DiamondKey(); }
 GameObject* createSpadeKey() { return new SpadeKey(); }
 GameObject* createClubKey() { return new ClubKey(); }
 
+GameObject* createEastPainting() { return new EastPainting(); }
+
 struct {
     GameObject* (*fn)();
     const char* key;
@@ -71,6 +73,7 @@ functionLookupTable[] = {
     { &createDiamondKey, "DiamondKey"},
     { &createSpadeKey, "SpadeKey"},
     { &createClubKey, "ClubKey"},
+    { &createEastPainting, "EastPainting"},
     { NULL, NULL}
 };
 

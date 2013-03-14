@@ -21,8 +21,9 @@ DiamondKey::DiamondKey() {
     scale = glm::vec3(1.f);
     
     //Translate to hang from moose head horns
-    
-    doRotate(vec3(1,0,0), 90);
+    doTranslate(glm::vec3(14.3f, getRoomCeilHeight() - getAABBmax().y - 4.f, 
+                ROOM_SIZE + getAABBmin().z - 1.1f));
+    doRotate(vec3(1,0,0), -90);
     //doRotate(vec3(0,1,0), 90);
     texNum = numTextures();
     textureEnum = GL_TEXTURE0 + texNum;

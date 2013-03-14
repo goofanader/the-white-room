@@ -174,7 +174,16 @@ int Event::getSwitchNum() {
 
 void Event::ifObjectSelected(GameObject *curr) {
     std::string name = curr->className();
+    /*eventSwitches[BOOK1].setSwitch(true);
+    eventSwitches[BOOK2].setSwitch(true);
+    eventSwitches[BOOK3].setSwitch(true);
+    eventSwitches[RADIO].setSwitch(true);
 
+    eventSwitches[HEART].getGameObject()->isVisible = true;
+    eventSwitches[SPADE].getGameObject()->isVisible = true;
+    eventSwitches[DIAMOND].getGameObject()->isVisible = true;
+    eventSwitches[CLUB].getGameObject()->isVisible = true;*/
+    
     if (name != "Book1" && name != "Book2" && name != "Book3") {
         curr->onEvent(soundPlayer);
     }
@@ -192,7 +201,7 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[BOOK2].setSwitch(true);
         curr->isClicked = true;
         curr->onEvent(soundPlayer);
-    }        //Got it in order! Move to the next puzzle.
+    }//Got it in order! Move to the next puzzle.
     else if (name == "Book1" && eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()) {
         printf("clicked on Book1 in order, index %d\n", BOOK1);
@@ -210,7 +219,7 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[KNOB100].getGameObject()->isClicked = true;
         eventSwitches[KNOB100].getGameObject()->isVisible = true;
         eventSwitches[RADIO].getGameObject()->isClicked = true;
-    }        //Got the book order wrong, reset.
+    }//Got the book order wrong, reset.
     else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
             (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
             eventSwitches[BOOK2].isSwitchOn()))) {
@@ -236,7 +245,7 @@ void Event::ifObjectSelected(GameObject *curr) {
             printf("station=%d\n", station);
             if (station == 610) {
                 eventSwitches[RADIO].setSwitch(true);
-                
+
                 eventSwitches[KNOB100].getGameObject()->isClicked = false;
                 eventSwitches[KNOB10].getGameObject()->isClicked = false;
 
@@ -244,8 +253,8 @@ void Event::ifObjectSelected(GameObject *curr) {
                 eventSwitches[SPADE].getGameObject()->isVisible = true;
                 eventSwitches[DIAMOND].getGameObject()->isVisible = true;
                 eventSwitches[CLUB].getGameObject()->isVisible = true;
-                
-                Safe *temp = (Safe*)(eventSwitches[SAFE].getGameObject());
+
+                Safe *temp = (Safe*) (eventSwitches[SAFE].getGameObject());
                 temp->isOpen = true;
             }
         }
