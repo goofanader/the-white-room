@@ -21,6 +21,7 @@
 #include "../objects/Radio.h"
 #include "../objects/Plant1.h"
 #include "../objects/Plant6.h"
+#include "../objects/Plant0.h"
 #include "../objects/Chandelier.h"
 #include "../objects/Clock.h"
 #include "../objects/Bookshelf.h"

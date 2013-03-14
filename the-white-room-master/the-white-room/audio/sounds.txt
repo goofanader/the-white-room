@@ -14,3 +14,5 @@ BellTones:audio/threebells.wav
 TickTock:audio/clockTicking.wav
 RotatePlant:audio/rotatePlant.wav
 OpenSafe:audio/openSafe.wav
+GetKey:audio/getKey.wav
+UseKey:audio/useKey.wav

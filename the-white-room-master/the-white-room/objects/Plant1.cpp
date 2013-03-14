@@ -30,7 +30,7 @@ Plant1::Plant1() {
     
     doScale(glm::vec3(3.f));
     doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x + 1.f,-3.4745f - getAABBmin().y,
-            ROOM_SIZE - getAABBmax().z - 12.f));
+            ROOM_SIZE - getAABBmax().z - 9.5f));
     //this->doScale(glm::vec3(3.f));
 }
 

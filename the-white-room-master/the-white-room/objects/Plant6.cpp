@@ -33,7 +33,7 @@ Plant6::Plant6() {
     doScale(glm::vec3(3.f));
     doRotate(glm::vec3(0,1,0), 180);
     doTranslate(glm::vec3(-ROOM_SIZE - getAABBmin().x + 1.f,-3.4745f - getAABBmin().y,
-            ROOM_SIZE - getAABBmax().z - 8.f));
+            ROOM_SIZE - getAABBmax().z - 6.f));
 }
 
 Plant6::Plant6(const Plant6& orig) {
