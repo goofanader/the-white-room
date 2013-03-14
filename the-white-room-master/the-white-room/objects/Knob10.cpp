@@ -77,7 +77,7 @@ int Knob10::getStation() {
     return station;
 }
 
-void Knob10::update(float dt, GameObject *playerCamera) {
+void Knob10::update(float dt, GameObject *playerCamera, vec3 camLookAt) {
     if (isClicked) {
         if (ambAlpha < 1.0) {
             ambAlpha += HIGHLIGHT_SPEED;

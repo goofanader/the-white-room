@@ -63,7 +63,7 @@ public:
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
     virtual void drawHighlight(glm::vec3 cameraPs, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
-    virtual void update(float dt, GameObject* playerCamera);
+    virtual void update(float dt, GameObject* playerCamera, vec3 camLookAt);
     virtual std::string className();
     virtual bool doesCollide(GameObject *other);
     void doTranslate(glm::vec3 trans);

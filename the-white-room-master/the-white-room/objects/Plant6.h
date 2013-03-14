@@ -18,7 +18,7 @@ public:
     virtual ~Plant6();
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
-    void update(float dt, GameObject* playerCamera);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
 private:
     float rotating;
 };

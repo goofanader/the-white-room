@@ -41,6 +41,8 @@ GameObject* createDiamondKey() { return new DiamondKey(); }
 GameObject* createSpadeKey() { return new SpadeKey(); }
 GameObject* createClubKey() { return new ClubKey(); }
 
+GameObject* createBox1() { return new Box1; }
+
 GameObject* createEastPainting() { return new EastPainting(); }
 GameObject* createWidePainting() { return new WidePainting(); }
 GameObject* createWestPainting() { return new WestPainting(); }
@@ -78,6 +80,7 @@ functionLookupTable[] = {
     { &createEastPainting, "EastPainting"},
     { &createWidePainting, "WidePainting"},
     { &createWestPainting, "WestPainting"},
+    { &createBox1, "Box1"},
     { NULL, NULL}
 };
 

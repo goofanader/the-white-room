@@ -233,7 +233,7 @@ void GameObject::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt,
     glUseProgram(0);
 }
 
-void GameObject::update(float dt, GameObject* playerCamera) {
+void GameObject::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     if (isHighlighted) {
         highlightColor = highlightColor + vec3(HIGHLIGHT_SPEED);
 

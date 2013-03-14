@@ -16,7 +16,7 @@ public:
     Knob100();
     Knob100(const Knob100& orig);
     virtual ~Knob100();
-    virtual void update(float dt, GameObject *playerCamera);
+    virtual void update(float dt, GameObject *playerCamera, vec3 camLookAt);
     virtual void onEvent(SoundPlayer *soundPlayer);
     std::string className();
     int getStation();

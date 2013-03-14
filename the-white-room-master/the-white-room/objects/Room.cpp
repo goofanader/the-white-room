@@ -147,7 +147,7 @@ void Room::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
     }
 }
 
-void Room::update(float dt, GameObject* playerCamera) {
+void Room::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     for (int i = 0; i < NUM_WALLS; i++) {
         //room[i].update((float) (dt));
         //AKA hardcoding the bounds of the room....

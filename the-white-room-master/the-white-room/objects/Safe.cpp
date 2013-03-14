@@ -101,7 +101,7 @@ void Safe::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightP
         door->drawHighlight(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 
-void Safe::update(float dt, GameObject* playerCamera) {
+void Safe::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     if (isOpen && timeSpent < 90.f) {
         door->doRotate(glm::vec3(0, 1, 0), 1.f);
         float xMove = -.009f;

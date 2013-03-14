@@ -23,7 +23,7 @@ public:
         glm::vec3 lightColor, GameConstants* gc);
     void drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
         glm::vec3 lightColor, GameConstants* gc);
-    void update(float dt, GameObject* playerCamera);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
     bool doesCollide(GameObject* other);
 
     void onEvent(SoundPlayer *soundPlayer);

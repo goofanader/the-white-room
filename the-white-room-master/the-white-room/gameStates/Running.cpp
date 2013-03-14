@@ -153,6 +153,8 @@ void Running::draw() {
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
         curr = (*iter);
+        
+        std::cout << "Drawing " << curr->className() << std::endl;
 
         glm::vec3 objPos = (curr->getAABBmax() + curr->getAABBmin())*0.5f - playerCamera->trans;
         glm::vec3 lookDir = camLookAt - playerCamera->trans;
@@ -264,7 +266,7 @@ void Running::update(float dt) {
                 curr->isHighlighted = false;
             }
             
-            curr->update(dt, playerCamera);
+            curr->update(dt, playerCamera, camLookAt);
 #if 1
             if (curr->doesCollide(playerCamera)) {
                 playerCamera->trans = camPrevTrans;

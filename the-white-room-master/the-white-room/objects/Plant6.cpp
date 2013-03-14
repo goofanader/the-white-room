@@ -42,7 +42,7 @@ Plant6::Plant6(const Plant6& orig) {
 Plant6::~Plant6() {
 }
 
-void Plant6::update(float dt, GameObject* playerCamera) {
+void Plant6::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     if (rotating < 90.f) {
         rotating++;
         doRotate(vec3(0,1,0), 1.f);

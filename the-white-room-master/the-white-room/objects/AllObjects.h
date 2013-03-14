@@ -36,6 +36,7 @@
 #include "../objects/EastPainting.h"
 #include "../objects/WidePainting.h"
 #include "../objects/WestPainting.h"
+#include "../objects/Box1.h"
 
 #endif	/* ALLOBJECTS_H */
 

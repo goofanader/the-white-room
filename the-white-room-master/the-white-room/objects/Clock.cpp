@@ -132,7 +132,7 @@ void Clock::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 light
         glm::vec3 lightColor, GameConstants* gc) {
     body->drawHighlight(cameraPos, lookAt, lightPos, lightColor, gc);
 }
-void Clock::update(float dt, GameObject* playerCamera) {
+void Clock::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     
     if (isHighlighted) {
         body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);

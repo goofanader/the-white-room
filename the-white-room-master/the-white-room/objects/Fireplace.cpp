@@ -50,7 +50,7 @@ void Fireplace::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 l
     //do nothing, we don't want a highlight for the moosehead. It's not selectable
 }
 
-void Fireplace::update(float dt, GameObject *playerCamera){
+void Fireplace::update(float dt, GameObject *playerCamera, vec3 camLookAt){
 
 }
 

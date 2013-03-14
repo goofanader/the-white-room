@@ -10,6 +10,7 @@
 #include "objects/Knob100.h"
 #include "objects/Knob10.h"
 #include "objects/Safe.h"
+#include "objects/HeartKey.h"
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -264,6 +265,11 @@ void Event::ifObjectSelected(GameObject *curr) {
      * PUZZLE 3 LOGIC
      *==================================================================*/
     if (eventSwitches[BOOK1].isSwitchOn() && eventSwitches[RADIO].isSwitchOn()) {
+        if (curr->className() == "HeartKey") {
+            HeartKey *temp = (HeartKey *)curr;
+            
+            temp->isHeld = true;
+        }
 #if 0
         setIfWon(true);
         //cause the white door to open

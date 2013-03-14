@@ -13,10 +13,12 @@
 
 class HeartKey : public GameObject {
 public:
+    bool isHeld, isInKeyhole;
+    
     HeartKey();
     HeartKey(const HeartKey& orig);
     virtual ~HeartKey();
-    //void update(float dt, GameObject* playerCamera);
+    void update(float dt, GameObject* playerCamera, vec3 camLookAt);
     bool doesCollide(GameObject* other);
     std::string className();
     void onEvent(SoundPlayer *soundPlayer);
