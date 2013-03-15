@@ -140,11 +140,23 @@ Running::~Running() {
 void Running::draw() {
     GameObject *curr, *radio;
     bool hasRadio = false;
-    
+
     // shadow 1st-pass:
     // for loop of the below, BUT ignore highlight code. Change the call of
     // "getGC()" to "getSC()"
-    
+    /*
+      for (std::set<GameObject*>::iterator iter = objects.begin();
+            iter != objects.end(); iter++) {
+        curr = (*iter);
+  
+        vec3 lightDir = vec3(0.0, -1.0, 0.0);
+        // render using light's position and view direction
+        //using uLightColor as code in shadow shader to indicate shadow map
+        if(curr->className() != "Chandelier")
+           curr->draw(getSC()->lightPos, lightDir, getSC()->lightPos,
+                    vec3(1.0, 0.0, 1.0), getSC());    
+      }
+    */
     
     //shadow 2nd-pass:
     // draw objects, use "getGC()". Make sure highlight draw if-else statement
@@ -162,7 +174,7 @@ void Running::draw() {
         float objPoslen = sqrt(objPos.x * objPos.x + objPos.y * objPos.y + objPos.z * objPos.z);
         float lookAtlen = sqrt(lookDir.x * lookDir.x + lookDir.y * lookDir.y + lookDir.z * lookDir.z);
         float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / PI;
-printOpenGLError();
+        printOpenGLError();
 
         //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
         //printf("angle: %lf\n", angle);
@@ -223,12 +235,12 @@ printOpenGLError();
            if(curr->className() == "RoundTable" || curr->className() == "Clock" || curr->className() == "MooseHead") {
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 1.0, 0.0), getSC());
-printOpenGLError();
+              printOpenGLError();
 
            }
            
            // bookcase wall shadow
-           //if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Bookshelf") {
+           //if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Plant0" || curr->className() == "Bookshelf") {
             if(curr->className() == "RoundTable" /*|| curr->className() == "Plant6" || curr->className() == "Plant1"*/ || curr->className() == "Bookshelf") {
 
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
@@ -243,11 +255,12 @@ printOpenGLError();
               printOpenGLError();
            }
               
-            // plants' shadow on table
-           //if(curr->className() == "Plant1" || curr->className() == "Plant6") {
-           //    curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
-           //      vec3(1.0, 1.0, 0.0), getSC());
-           //}
+           // plants' shadow on table
+           if(curr->className() == "Plant1" || curr->className() == "Plant6" || curr->className() == "Plant0") {
+               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
+                 vec3(1.0, 1.0, 0.0), getSC());
+             printOpenGLError();
+           }
               
            // radio's shadow on table
            if(curr->className() == "Radio") {

@@ -24,6 +24,15 @@ varying vec3 vThePosition;
 varying vec2 vTexCoord;
 varying float lDist;
 
+//items for shadow mapping
+//uniform mat4 uLightProjMatrix;
+//uniform mat4 uLightViewMatrix;
+//varying vec4 ShadowCoord;
+const mat4 bias = mat4(0.5, 0.0, 0.0, 0.0,
+                       0.0, 0.5, 0.0, 0.0,
+                       0.0, 0.0, 0.5, 0.0,
+                       0.5, 0.5, 0.5, 1.0);
+
 void main() {
   vec4 vPosition;
 
@@ -41,4 +50,6 @@ void main() {
   gl_Position = uProjMatrix * vPosition;
   if (uTime < 6.0) 
     gl_Position += 1.0/uTime - 1.0/6.0;
+  
+  //ShadowCoord = bias * uLightProjMatrix * uLightViewMatrix * uModelMatrix * vec4(aVertex, 1.0);
 }

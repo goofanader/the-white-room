@@ -97,15 +97,15 @@ int keyDown[128] = {0};
 RenderingHelper ModelTrans;
 
 
-/* 
- * shadow map info 
+ 
+ // shadow map info 
     const int shadowMapSize = 128;
     GLuint shadowMapTexture;
     GLuint shadowMapBuffer;
     GLuint uLightProjMatrix;
     GLuint uLightViewMatrix;
     GLuint uLightDir;
- */   
+    bool setShadowMap = true;
     
 GameConstants* getGC() {
     return &gc; //this is a lot of data being pushed onto the stack...
@@ -285,12 +285,7 @@ void advanceState(State* newState) {
 }
 
 void Initialize() {    
-    /*
-   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
-   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-   // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
     
-
          //create shadow map texture
     glGenTextures(1, &shadowMapTexture);
     glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
@@ -304,6 +299,10 @@ void Initialize() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
  
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+   // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+    
     // GLfloat border[] = {0.0f, 0.0f, 0.0f, 0.0f};
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
     
@@ -327,7 +326,7 @@ void Initialize() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     
-    //set up light matrices
+    //set up matrices for light's POV
     glm::vec3 lightPos = glm::vec3(0, 8, 0);
     glm::vec3 lightDir = glm::vec3(0, 0, 0);
 
@@ -337,7 +336,8 @@ void Initialize() {
 
     safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
     safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
-    */
+    
+    
     
 
     //enable alpha for color
@@ -362,6 +362,22 @@ void Initialize() {
 }
 
 void Draw() {
+
+    if(setShadowMap) {
+        setShadowMap = false;
+        
+       //store depth map, 1 per depth map tex
+       glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
+       glClear(GL_DEPTH_BUFFER_BIT);
+       glViewport(0, 0, shadowMapSize, shadowMapSize);
+    
+       // render into texture using light's POV
+       currState->draw();
+       
+       glViewport(0, 0, windowWidth, windowHeight);
+       glBindFramebuffer(GL_FRAMEBUFFER, 0);   
+    }
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
@@ -373,18 +389,6 @@ void Draw() {
 }
 
 void Shadow() {
-
-    
-    
-    //store depth map, 1 per depth map tex
- //   glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
- //   glClear(GL_DEPTH_BUFFER_BIT);
- //   glViewport(0, 0, shadowMapSize, shadowMapSize);
-    
-    // render into texture using tex size
-    
- //   glViewport(0, 0, windowWidth, windowHeight);
- //  glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
 }
 
@@ -572,6 +576,14 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
     gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
+    
+    gc.uLightProjMatrix = uLightProjMatrix;
+    gc.uLightViewMatrix = uLightViewMatrix;
+    
+    glUseProgram(gc.shader);
+    shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
+    glUseProgram(0);
+    sc.ShadowMap = shadowMapTexture;
 }
 
 void initializeLaplaceShaderVariables() {
@@ -631,10 +643,8 @@ void initializeShadowShaderVariables() {
     sc.h_uUseTex2 = uUseTex2;
     sc.h_uTime = uTime;
     
-    //glUseProgram(gc.shader);
-    //shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
-    //glUseProgram(0);
-    //sc.ShadowMap = shadowMapTexture;
+    sc.uLightProjMatrix = uLightProjMatrix;
+    sc.uLightViewMatrix = uLightViewMatrix;
 }
 
 void initializeShaderConnection(int shader) {

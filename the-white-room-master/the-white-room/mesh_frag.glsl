@@ -17,6 +17,10 @@ varying vec3 vThePosition;
 varying vec2 vTexCoord;
 varying float lDist;
 
+// items for shadow mapping
+// varying vec4 ShadowCoord;
+// uniform sampler2D ShadowMap;
+
 void main() {
     //gl_FragColor = vec4(uColor, 1.0);
     
@@ -80,11 +84,25 @@ else specL = vec3(0.0);
   vec3 finColor =(diffL * 0.9 + specL * 0.7) /
     (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
     finColor += 3.8/uTime/uTime;
+ 
+ /*
+  float epsilon = 0.0; //increasing removes shadow artifacts
+  vec4 shadowCoordPD = ShadowCoord / ShadowCoord.w;
+  
+  //ignores negative projection
+  if(shadowCoordPD >= 0.0) {
+      float shadow = texture2D(ShadowMap, shadowCoordPD.xy).x;
+      
+      if(shadow + epsilon < shadowCoordPD.z)
+          finColor *= 0.5;
+  }
+   */
+    
   gl_FragColor = vec4(
     finColor.r, 
     finColor.g, 
     finColor.b, uUseTex2 != 0 ? texColor.a : uAmbColor.a);
-
+  
   vec4 fogColor = vec4(0.5, 0.5, 0.5, 1.0);
   const float LOG2 = 1.442695;
   float z = 1.0 - (gl_FragCoord.z / gl_FragCoord.w) / 10.0;

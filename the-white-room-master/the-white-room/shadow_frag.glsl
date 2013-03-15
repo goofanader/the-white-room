@@ -61,17 +61,6 @@ else specL = vec3(0.0);
   vec3 finColor =(diffL * 0.7 + specL * 0.7) /
     (.7 + lDist * 0.01 + lDist * lDist * 0.001) + ambL * 0.65;
     finColor += 3.8/uTime/uTime;
-    
-    
-    //vec4 sc = shadowCoord / shadowCoord.w;
-    //float epsilon = 0.0;  //increase to remove artifacts
-    //float depth = texture2D(shadowMap, sc.xy).x;
-    
-    //if(depth + epsilon < sc.z) {
-    //    finColor *= 0.3;
-    //}
-    
-    finColor *= 0.1;
             
   gl_FragColor = vec4(
     finColor.r, 
@@ -85,16 +74,21 @@ else specL = vec3(0.0);
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
     */
-    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0);
+            
+    if(vec3(uLightColor) == vec3(1.0, 0.0, 1.0)) {
+      //depth written automatically (shadow mapping)
+    }
+    else {
+        
+       gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0);
 
-    vec4 fogColor = vec4(0.5, 0.5, 0.5, 1.0);
-    const float LOG2 = 1.442695;
-    float fogDensity = gl_Fog.density * 0.4;
-    float z = 1.0 - (gl_FragCoord.z / gl_FragCoord.w) / 10.0;
-    float fogFactor = exp2( -fogDensity * fogDensity * z *  z *  LOG2 );
-    fogFactor = clamp(fogFactor, 0.0, 1.0);
+       vec4 fogColor = vec4(0.5, 0.5, 0.5, 1.0);
+       const float LOG2 = 1.442695;
+       float fogDensity = gl_Fog.density * 0.4;
+       float z = 1.0 - (gl_FragCoord.z / gl_FragCoord.w) / 10.0;
+       float fogFactor = exp2( -fogDensity * fogDensity * z *  z *  LOG2 );
+       fogFactor = clamp(fogFactor, 0.0, 1.0);
 
-    gl_FragColor = mix(fogColor, gl_FragColor, fogFactor);
-  
-   //depth written automatically (shadow mapping)
+       gl_FragColor = mix(fogColor, gl_FragColor, fogFactor);
+    }
 }

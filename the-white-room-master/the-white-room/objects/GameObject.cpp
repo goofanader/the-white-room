@@ -158,11 +158,12 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
     printOpenGLError();
     
-  //  safe_glUniform1i(gc->ShadowMap, GL_TEXTURE0);
-   // printOpenGLError();
- //   glActiveTexture(GL_TEXTURE0);
-//    printOpenGLError();
-//    glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
+ //   safe_glUniform1i(gc->ShadowMap, 2);
+ //   printOpenGLError();
+ //   glActiveTexture(GL_TEXTURE2);
+ //   printOpenGLError();
+ //   glBindTexture(GL_TEXTURE_2D, ShadowMap);
+ //   printOpenGLError();
 
     glDrawElements(GL_TRIANGLES, IBOlen, GL_UNSIGNED_SHORT, 0);
     printOpenGLError();

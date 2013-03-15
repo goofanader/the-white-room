@@ -49,6 +49,10 @@ typedef struct GameConstants {
     GLuint h_uUseTex;
     GLuint h_uUseTex2;
     GLuint h_uTime;
+    
+    GLuint ShadowMap;
+    GLuint uLightProjMatrix;
+    GLuint uLightViewMatrix;
 } GameConstants;
 
 #include "../Main.h"

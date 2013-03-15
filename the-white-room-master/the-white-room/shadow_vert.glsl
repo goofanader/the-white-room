@@ -27,15 +27,20 @@ varying vec3 vThePosition;
 varying vec2 vTexCoord;
 varying float lDist;
 
-
-const mat4 bias = mat4(0.5, 0.0, 0.0, 0.0,
-                       0.0, 0.5, 0.0, 0.0,
-                       0.0, 0.0, 0.5, 0.0,
-                       0.5, 0.5, 0.5, 1.0);
-
 void main() {
-    
     vec4 vPosition;
+   
+  //shadow mapping
+  if(vec3(uLightColor) == vec3(1.0, 0.0, 1.0)) {
+
+     // First model transforms 
+     vPosition = uModelMatrix * vec4(aPosition, 1.0);
+     vPosition = uLightViewMatrix * vPosition;
+     gl_Position = uLightProjMatrix * vPosition;
+      
+  }
+  else {
+ 
 
   /* First model transforms */
   vPosition = uModelMatrix * vec4(aPosition, 1.0);
@@ -70,7 +75,7 @@ void main() {
       shadowX = ((vPosition.x - uLightPos.x) / (uLightPos.y - vPosition.y)) * (uLightPos.y - shadowY) + uLightPos.x;
   }
   else if(wall == vec3(0.0, 0.0, 1.0)) {  // bookcase wall
-      shadowX = -29.5;
+      shadowX = -29.96;
       
       shadowY = uLightPos.y - ((uLightPos.y - vPosition.y) / (vPosition.x - uLightPos.x)) * shadowX;
       
@@ -85,23 +90,14 @@ void main() {
 
   }
   else if(wall == vec3(1.0, 1.0, 0.0)) {  // plants cast shadow on table
-     shadowY = -3.1f;
+     shadowY = -3.47f;
   
      shadowX = ((vPosition.x - uLightPos.x) / (uLightPos.y - vPosition.y)) * (uLightPos.y - shadowY) + uLightPos.x;
      shadowZ = ((vPosition.z - uLightPos.z) / (uLightPos.y - vPosition.y)) * (uLightPos.y - shadowY) + uLightPos.z;
      
-     /*
      // ignore if shadow falls off table (collapse onto existing shadow??)
-     vec2 center = vec2(0.0, 0.0);
-     vec2 shadow = vec2(shadowX, shadowZ) - center; //shadow position - center of table;
-     // distance from center of table
-     float shadowlen = sqrt(shadow.x * shadow.x + shadow.y * shadow.y);
-     
-     if(shadowlen > 5.0) { // if shadow length > radius of table
-         shadowX = center.x + 5.0;
-         shadowZ = center.y +5.0;
-     }
-      * */
+     if(shadowZ > 25.0)
+         shadowZ = 25.0;
   }
   else if(wall == vec3(0.0, 1.0, 1.0)) {  // radio casts shadow on table
       shadowY = -3.75;
@@ -122,13 +118,7 @@ void main() {
   gl_Position = uProjMatrix * vPosition;
   if (uTime < 6.0) 
     gl_Position += 1.0/uTime - 1.0/6.0;
+  }
   
-  /** for shadow mapping  
-  vec4 vPosition;
-
-  // First model transforms 
-  vPosition = uModelMatrix * vec4(aPosition, 1.0);
-  vPosition = uLightViewMatrix * vPosition;
-  gl_Position = uLightProjMatrix * vPosition;
-  **/
+  
 }
