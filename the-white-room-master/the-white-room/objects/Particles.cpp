@@ -2,7 +2,7 @@
 
 using namespace glm;
 
-void ParticleSystem::update(float dt, GameObject *playerCamera, 
+void ParticleSystem::update(float dt, GameObject *playerCamera,
         vec3 camLookAt) {
     stepParticles(dt);
     addParticles(dt);
@@ -42,8 +42,8 @@ void ParticleSystem::addParticles(float dt) {
 
     for (int a = 0; a < i; a++) {
         add = new Particle();
-        rand1 = (rand() % 200 - 100.0)/1000.0;
-        rand2 = (rand() % 200 - 100.0)/1000.0;
+        rand1 = (rand() % 200 - 100.0) / 1000.0;
+        rand2 = (rand() % 200 - 100.0) / 1000.0;
         add->x = spawnPoint;
         add->x.x += rand1;
         add->x.y -= 0.1;
@@ -65,9 +65,9 @@ void ParticleSystem::applyForces(Particle *p, float dt) {
 
 void SpringForce::applyForce(Particle *p, float dt) {
     if (p->type > 2) {
-        vec3 force = -(ks*(length(p->x - center) - restLength) + 
-                    kd*dot((p->x - center)/length(p->x - center), 
-                    p->v))*(p->x - center)/length(p->x - center);
+        vec3 force = -(ks * (length(p->x - center) - restLength) +
+                kd * dot((p->x - center) / length(p->x - center),
+                p->v))*(p->x - center) / length(p->x - center);
 
         force.x += (rand() % 50 - 25.0) / 20.0;
         force.z += (rand() % 50 - 25.0) / 20.0;
@@ -77,11 +77,10 @@ void SpringForce::applyForce(Particle *p, float dt) {
         p->a = force / p->m;
         p->x += p->a * (dt * dt / 2.f) + p->v * dt;
         p->v += p->a * dt * 0.6f;
-    }
-    else {
-        vec3 force = vec3((rand() % 200 - 100.0)/50.0, 1.0, 
-                (rand() %200 - 100.0)/50.0 );
-        force.y = 1.0/ length(p->v);
+    } else {
+        vec3 force = vec3((rand() % 200 - 100.0) / 50.0, 1.0,
+                (rand() % 200 - 100.0) / 50.0);
+        force.y = 1.0 / length(p->v);
         p->a = force / p->m;
         p->x += p->a * (dt * dt / 2.f) + p->v * dt;
         p->v += p->a * dt * 0.6f;
@@ -95,8 +94,8 @@ std::string ParticleSystem::className() {
 ParticleSystem::ParticleSystem() {
     printf("got here1\n");
     MeshLoader::loadVertexBufferObjectFromMesh(
-                "objects/meshes/particles/Billboard.obj",
-                IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
+            "objects/meshes/particles/Billboard.obj",
+            IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
     printf("got here2\n");
 
     shininess = 2.0f;
@@ -114,21 +113,22 @@ ParticleSystem::ParticleSystem() {
     hasTex = true;
 
     pps = 520;
-    f = new SpringForce(0.6, 0.3, 
+    f = new SpringForce(0.6, 0.3,
             vec3(0.1, getRoomFloorHeight().y + 0.4, -ROOM_SIZE + 0.5), 3.0);
-    spawnPoint = vec3(0.1, getRoomFloorHeight().y + 0.4, 
+    spawnPoint = vec3(0.1, getRoomFloorHeight().y + 0.4,
             -ROOM_SIZE + 0.5);
 
 }
 
 //need camera for billboarding
+
 void ParticleSystem::draw(vec3 cameraPos, vec3 lookAt, vec3 lightPos,
         vec3 lightColor, GameConstants *gc) {
-if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
-            return;
-        }
+    if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
+        return;
+    }
 
-   // glDisable(GL_DEPTH_TEST);
+    // glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glDepthMask(GL_FALSE);
     printOpenGLError();
@@ -141,7 +141,7 @@ if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
     glm::mat4 view = glm::lookAt(cameraPos, lookAt, glm::vec3(0.f, 1.f, 0.f));
     safe_glUniformMatrix4fv(gc->h_uViewMatrix, glm::value_ptr(view));
 
-    
+
     //Do transformations
     safe_glEnableVertexAttribArray(gc->h_aPosition);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -188,25 +188,24 @@ if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
     glUniform4f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z,
             gc->lightAlpha);
 
-        float rotY, rotA;
-        this->rotate = mat4(1.0f);
-        vec3 up = vec3(0.f, 1.f, 0.f);
-        vec3 loc = cameraPos - spawnPoint;
-        vec3 axis = cross(up, loc);
+    float rotY, rotA;
+    this->rotate = mat4(1.0f);
+    vec3 up = vec3(0.f, 1.f, 0.f);
+    vec3 loc = cameraPos - spawnPoint;
+    vec3 axis = cross(up, loc);
 
-        if (loc.z == 0 && loc.x == 0) {
-            rotY = 0;
-        }
-        else rotY = atan2(loc.x, loc.z) * 180.0 / 3.1415926 - 90.0;
+    if (loc.z == 0 && loc.x == 0) {
+        rotY = 0;
+    } else rotY = atan2(loc.x, loc.z) * 180.0 / 3.1415926 - 90.0;
 
-        rotA = 90 - asin(length(axis)/length(loc)) * 180.0 / 3.141592653;
-        if (loc.y > 0) {
-            rotA = -rotA;
-        }
+    rotA = 90 - asin(length(axis) / length(loc)) * 180.0 / 3.141592653;
+    if (loc.y > 0) {
+        rotA = -rotA;
+    }
 
-        doRotate(axis, rotA);
-        doRotate(up, rotY);
-        doRotate(up, 180);
+    doRotate(axis, rotA);
+    doRotate(up, rotY);
+    doRotate(up, 180);
 
 
 
@@ -219,14 +218,14 @@ if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         cur = p.getNext();
         mat4 transMat = translate(glm::mat4(), cur->x);
 
-       
+
         glm::mat4 model = transMat * rotate * scaleMat;
         safe_glUniformMatrix4fv(gc->h_uModelMatrix, glm::value_ptr(model));
         safe_glUniformMatrix4fv(gc->h_uNormalMatrix,
                 glm::value_ptr(glm::transpose(glm::inverse(model))));
         printOpenGLError();
         //end drawParticleLoop
-        
+
         float rotY, rotA;
         this->rotate = mat4(1.0f);
         vec3 up = vec3(0.f, 1.f, 0.f);
@@ -235,10 +234,9 @@ if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
 
         if (loc.z == 0 && loc.x == 0) {
             rotY = 0;
-        }
-        else rotY = atan2(loc.x, loc.z) * 180.0 / 3.1415926 - 90.0;
+        } else rotY = atan2(loc.x, loc.z) * 180.0 / 3.1415926 - 90.0;
 
-        rotA = 90 - asin(length(axis)/length(loc)) * 180.0 / 3.141592653;
+        rotA = 90 - asin(length(axis) / length(loc)) * 180.0 / 3.141592653;
         if (loc.y > 0) {
             rotA = -rotA;
         }
@@ -259,4 +257,17 @@ if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
     //glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glEnable(GL_CULL_FACE);
+}
+
+ParticleSystem::~ParticleSystem() {
+    if (!(p.isEmpty())) {
+        p.reset();
+
+        while (p.hasNext()) {
+            Particle *cur = p.getNext();
+            p.remove();
+            //delete cur;
+        }
+    }
+    delete f;
 }

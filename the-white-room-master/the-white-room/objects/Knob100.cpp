@@ -72,6 +72,7 @@ Knob100::Knob100(const Knob100& orig) {
 }
 
 Knob100::~Knob100() {
+    delete arrow;
 }
 
 int Knob100::getStation() {

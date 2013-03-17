@@ -84,6 +84,8 @@ Safe::Safe(const Safe& orig) {
 }
 
 Safe::~Safe() {
+    delete body;
+    delete door;
 }
 
 void Safe::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,

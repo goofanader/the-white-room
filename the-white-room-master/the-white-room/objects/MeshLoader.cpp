@@ -454,6 +454,11 @@ bool MeshLoader::loadVertexBufferObjectFromMesh(std::string const &fileName,
     AABBmax.y = max.y - buffer;
     AABBmax.z = max.z - buffer;
     
+    mesh->normals.clear();
+    mesh->textures.clear();
+    mesh->vertexFaces.clear();
+    mesh->vertices.clear();
+    delete mesh;
     return true;
 }
 

@@ -118,10 +118,11 @@ SoundPlayer::SoundPlayer(std::string listOfSounds) {
 SoundPlayer::~SoundPlayer() {
     for (std::map<string, SoundObject*>::iterator it = soundMap.begin();
         it != soundMap.end(); ++it) {
-        delete it->second;
+        result = it->second->sound->release();
+        ERRCHECK(result);
     }
     soundMap.clear();
-
+    
     result = soundSystem->close();
     ERRCHECK(result);
     result = soundSystem->release();

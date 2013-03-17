@@ -47,7 +47,7 @@ private:
     float camBeta;
     float prevAlpha, prevBeta;
     glm::vec3 camLookAt;
-    glm::vec3 camPrevTrans;
+    glm::vec3 camPrevTrans, camNextTrans;
     
     int eventNum;
     Event* currEvent;

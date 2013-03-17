@@ -70,6 +70,7 @@ Knob10::Knob10(const Knob10& orig) {
 }
 
 Knob10::~Knob10() {
+    delete arrow;
 }
 
 int Knob10::getStation() {

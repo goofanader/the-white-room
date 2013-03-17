@@ -112,12 +112,18 @@ Clock::Clock() {
     AABBmin = body->getAABBmin();
     AABBmax = body->getAABBmax();
     haveLoadedPlayer = false;
+    
+    timePassed = 5.f;
 }
 
 Clock::Clock(const Clock& orig) {
 }
 
 Clock::~Clock() {
+    delete body;
+    delete weight1;
+    delete weight2;
+    delete weight3;
 }
 
 void Clock::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
@@ -132,7 +138,7 @@ void Clock::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 light
     body->drawHighlight(cameraPos, lookAt, lightPos, lightColor, gc);
 }
 void Clock::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
-    
+    timePassed += dt;
     if (isHighlighted) {
         body->highlightColor = body->highlightColor + vec3(HIGHLIGHT_SPEED);
 
@@ -169,7 +175,10 @@ std::string Clock::className() {
 
 void Clock::onEvent(SoundPlayer *soundPlayer) {
     if (IS_SOUND_ON) {
-    soundPlayer->playSound("BellTones");
+        if (timePassed >= 5) {
+                soundPlayer->playSound("BellTones");
+                timePassed = 0.f;
+        }
     }
     if (!haveLoadedPlayer) {
         if (IS_SOUND_ON) {

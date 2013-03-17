@@ -32,6 +32,7 @@ private:
     GameObject *body, *weight1, *weight2, *weight3;
     SoundPlayer *clockSoundPlayer;
     bool haveLoadedPlayer;
+    float timePassed;
 };
 
 #endif	/* CLOCK_H */

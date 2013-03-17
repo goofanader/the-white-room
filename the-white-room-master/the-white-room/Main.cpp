@@ -39,7 +39,7 @@ using namespace std;
 using namespace glm;
 
 GameConstants gc, lc, sc;
-bool g_hasWon;
+bool g_hasWon, g_hasQuit;
 glm::vec3 roomFloorHeight;
 float roomCeilHeight;
 int const numSquares = 100;
@@ -237,14 +237,19 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     GLuint FS; // handles to frag shader object
     GLint vCompiled, fCompiled, linked; // status of shader
 
+    printOpenGLError();
     VS = glCreateShader(GL_VERTEX_SHADER);
+    printOpenGLError();
     FS = glCreateShader(GL_FRAGMENT_SHADER);
+    printOpenGLError();
 
     // load the source
     char const * vSource = textFileRead(vShaderName);
     char const * fSource = textFileRead(fShaderName);
     glShaderSource(VS, 1, & vSource, NULL);
+    printOpenGLError();
     glShaderSource(FS, 1, & fSource, NULL);
+    printOpenGLError();
 
     // compile shader and print log
     glCompileShader(VS);
@@ -298,7 +303,7 @@ void Initialize() {
     //no border between shadow maps
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
- 
+    printOpenGLError();
    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
    // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
@@ -313,19 +318,19 @@ void Initialize() {
     glGenFramebuffers(1, &shadowMapBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMapTexture, 0);
-    
+    printOpenGLError();
     //no color
     glDrawBuffer(GL_NONE);
-    
+    printOpenGLError();
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         printf("error in framebuffer\n");
         exit(-1);
     }
-
+    printOpenGLError();
     //bind default
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    
+    printOpenGLError();
     //set up matrices for light's POV
     glm::vec3 lightPos = glm::vec3(0, 8, 0);
     glm::vec3 lightDir = glm::vec3(0, 0, 0);
@@ -334,9 +339,9 @@ void Initialize() {
     // glm::mat4 projMat = glm::perspective (FOV_deg, aspect, nearClip, farClip);
     glm::mat4 LightProjMatrix = glm::perspective(90.0f, 1.0f, 1.0f, 15.0f);
 
-    safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
-    safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
-    
+    //safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
+    //safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
+    printOpenGLError();
     
     
 
@@ -453,19 +458,21 @@ void Keyboard(int key, int state) {
             std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;
             // Quit program
         case 'Q':
-            //delete currState;
+            g_hasQuit = true;
+            
 
-            exit(EXIT_SUCCESS);
+            //exit(EXIT_SUCCESS);
             break;
     }
 }
 
-void updateLookAt() {
-    camLookAt = playerCamera->trans - glm::vec3(
+/*void updateLookAt() {
+    //camLookAt = playerCamera->trans - glm::vec3(
+    camLookAt = camNextTrans - glm::vec3(
             cos(camAlpha) * cos(camBeta),
             sin(camAlpha),
             cos(camAlpha) * sin(camBeta));
-}
+}*/
 
 void MouseClick(int button, int action) {
     currState->mouseClicked(button, action);
@@ -509,7 +516,7 @@ void gameLoop() {
     double timeDelta = 1.0 / 60.0;
     double timeAccumulator = 0.0;
 
-    while (running) {
+    while (!g_hasQuit) {
 
         curTime = glfwGetTime();
 
@@ -679,7 +686,7 @@ void initializeShaderConnection(int shader) {
 }
 
 int main(int argc, char *argv[]) {
-    g_hasWon = false;
+    g_hasWon = g_hasQuit = false;
     roomFloorHeight = vec3(0.f);
     roomCeilHeight = 0.f;
 
@@ -697,10 +704,12 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     glfwSetWindowTitle("The White Room");
-
+    
     // OpenGL Setup
     Initialize();
+    printOpenGLError();
     getGLversion();
+    printOpenGLError();
     
     // Shader Setup: Main Shader
     if (!InstallShader(
@@ -746,6 +755,7 @@ int main(int argc, char *argv[]) {
     //begin game loop
     gameLoop();
 
+    delete currState;
     glfwTerminate();
     return 0;
 }

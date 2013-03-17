@@ -64,7 +64,5 @@ public:
 
     ParticleSystem();
 
-    ~ParticleSystem() {
-        delete f;
-    }
+    virtual ~ParticleSystem();
 };

@@ -40,6 +40,7 @@ GLvoid LoadTexture(char* image_file, int texID) {
     GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
   printOpenGLError();
   
+  free(TextureImage->data);
   free(TextureImage);
 }
 
@@ -76,6 +77,7 @@ GLvoid LoadNonMipmap(char* image_file, int texID) {
     0, GL_RGB, GL_UNSIGNED_BYTE, TextureImage->data);
   printOpenGLError();
   
+  free(TextureImage->data);
   free(TextureImage);
    
 }
@@ -113,6 +115,7 @@ GLvoid Load32NonMipmap(char* image_file, int texID) {
     0, GL_RGBA, GL_UNSIGNED_BYTE, TextureImage->data);
   printOpenGLError();
   
+  free(TextureImage->data);
   free(TextureImage);
    
 }

@@ -35,12 +35,15 @@ Box4::Box4() {
     this->ambColor = cube->ambColor;
     
     hasTex = false;
+    
+    delete cubeMesh;
 }
 
 Box4::Box4(const Box4& orig) {
 }
 
 Box4::~Box4() {
+    delete cube;
 }
 
 void Box4::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,

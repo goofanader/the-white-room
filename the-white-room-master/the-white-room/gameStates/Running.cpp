@@ -40,7 +40,7 @@ Running::Running() {
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
-    glfwDisable(GLFW_MOUSE_CURSOR);
+    //glfwDisable(GLFW_MOUSE_CURSOR);
 
     initializeCamera();
     initializeLight();
@@ -73,7 +73,7 @@ void Running::initializeCamera() {
     playerCamera->doTranslate(vec3(0.f,
             getRoomFloorHeight().y - playerCamera->getAABBmin().y, 20.f));
 
-    camPrevTrans = playerCamera->trans;
+    camPrevTrans = camNextTrans = playerCamera->trans;
 
     prevAlpha = camAlpha;
     prevBeta = camBeta;
@@ -91,6 +91,8 @@ void Running::initializeLight() {
     lightPos->AABBmin = glm::vec3(-.5);
     lightPos->AABBmax = glm::vec3(.5);
     lightPos->doTranslate(getGC()->lightPos);
+    
+    delete globe;
 }
 
 void Running::loadObjectsFromEvent() {
@@ -134,7 +136,21 @@ Running::Running(const Running& orig) {
 }
 
 Running::~Running() {
+    //std::cout << "Deleting Running" << std::endl;
+    for (std::set<GameObject*>::iterator iter = objects.begin();
+            iter != objects.end(); iter++) {
+        GameObject* curr = (*iter);
+        //std::cout << "Deleting " << curr->className() << "..." << std::endl;
+        delete curr;
+    }
+    
+    objects.clear();
+    
+    delete playerCamera;
+    delete lightPos;
+    delete currEvent;
     delete soundPlayer;
+    delete footSounds;
 }
 
 void Running::draw() {
@@ -284,6 +300,9 @@ void Running::update(float dt) {
 
         lightPos->trans = getGC()->lightPos;
         GameObject* curr;
+        
+        camPrevTrans = playerCamera->trans;
+        playerCamera->trans = camNextTrans;
 
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
@@ -299,9 +318,9 @@ void Running::update(float dt) {
             curr->update(dt, playerCamera, camLookAt);
 #if 1
             if (curr->doesCollide(playerCamera)) {
-                playerCamera->trans = camPrevTrans;
-                camAlpha = prevAlpha;
-                camBeta = prevBeta;
+                playerCamera->trans = camNextTrans = camPrevTrans;
+                //camAlpha = prevAlpha;
+                //camBeta = prevBeta;
             }
 #endif
         }
@@ -483,13 +502,17 @@ void Running::keyPressed(float dt, int keyDown[]) {
         forward = glm::vec3(forward.x, 0, forward.z);
 
         if (keyDown['W'])
-            playerCamera->trans += MOVE_SPEED * forward * dt;
+            //playerCamera->trans += MOVE_SPEED * forward * dt;
+            camNextTrans += MOVE_SPEED * forward * dt;
         if (keyDown['S'])
-            playerCamera->trans -= MOVE_SPEED * forward * dt;
+            //playerCamera->trans -= MOVE_SPEED * forward * dt;
+            camNextTrans -= MOVE_SPEED * forward * dt;
         if (keyDown['D'])
-            playerCamera->trans += MOVE_SPEED * right * dt;
+            //playerCamera->trans += MOVE_SPEED * right * dt;
+            camNextTrans += MOVE_SPEED * right * dt;
         if (keyDown['A'])
-            playerCamera->trans -= MOVE_SPEED * right * dt;
+            //playerCamera->trans -= MOVE_SPEED * right * dt;
+            camNextTrans -= MOVE_SPEED * right * dt;
 
         //make feet-walking sounds (uncomment the code below if you wanna hear)
         if (IS_SOUND_ON && (keyDown['W'] || keyDown['S'] || keyDown['D'] || keyDown['A'])) {
@@ -528,7 +551,8 @@ void Running::resume() {
 }
 
 void Running::updateLookAt() {
-    camLookAt = playerCamera->trans - glm::vec3(
+    //camLookAt = playerCamera->trans - glm::vec3(
+    camLookAt = camNextTrans - glm::vec3(
             cos(camAlpha) * cos(camBeta),
             sin(camAlpha),
             cos(camAlpha) * sin(camBeta));

@@ -17,7 +17,7 @@ class Room : public GameObject {
 public:
     Room();
     Room(const Room& orig);
-    virtual ~Room();
+    ~Room();
 
     void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);

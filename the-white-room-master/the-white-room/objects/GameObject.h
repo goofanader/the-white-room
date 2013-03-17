@@ -62,7 +62,7 @@ public:
     //static float roomHeight = 0.f;
     GameObject(GLuint VBO, GLuint IBO, int IBOlen);
     GameObject();
-    ~GameObject();
+    virtual ~GameObject();
     virtual void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
     virtual void drawHighlight(glm::vec3 cameraPs, glm::vec3 lookAt,

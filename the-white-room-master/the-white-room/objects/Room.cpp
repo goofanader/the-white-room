@@ -19,7 +19,6 @@ Room::Room() {
     //Mesh *tile = GeometryCreator::CreateCube(vec3(2.f, 0.1f, 2.f));
 
     //Get the ceiling mesh, set it to room 0
-    GLuint faceNBO;
     MeshLoader::loadVertexBufferObjectFromMesh("objects/meshes/room/RoomCeilingNew.obj",
             room[0].IBOlen, room[0].VBO, room[0].IBO, room[0].NBO, room[0].TBO,
             room[0].AABBmin, room[0].AABBmax);
