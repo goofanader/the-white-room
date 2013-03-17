@@ -180,7 +180,8 @@ void Running::draw() {
         //printf("angle: %lf\n", angle);
 
         if (curr->isVisible && (angle < 90.0f || curr->className() == "Room" ||
-                curr->className() == "Bookshelf")) {
+                curr->className() == "Bookshelf" || 
+                curr->className() == "ParticleSystem")) {
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
                     getGC()->lightColor, getGC());
             
@@ -215,7 +216,8 @@ void Running::draw() {
         curr = (*iter);
         printOpenGLError();
 
-        if(curr->className() != "Room" && curr->className() != "Chandelier") {
+        if(curr->className() != "Room" && curr->className() != "Chandelier" &&
+                curr->className() != "ParticleSystem") {
             printOpenGLError();
 
            // floor shadow

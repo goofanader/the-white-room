@@ -31,8 +31,15 @@ void main() {
   float NDotL = max(dot(nNormal, nLightDir), 0.0);
 
 if (uUseTex != 0) {
+    if (uUseTex == 2) {
+        texColor = vec4(texture2D(uTexUnit, vTexCoord));
+        //texColor.a = length(texColor);
+    }
+    else {
         texColor = vec4(texture2D(uTexUnit, vTexCoord));
     }
+}
+
 
 if (uUseTex2 != 0) {
     float T = mod(uTime, 24);
@@ -102,6 +109,7 @@ else specL = vec3(0.0);
     finColor.r, 
     finColor.g, 
     finColor.b, uUseTex2 != 0 ? texColor.a : uAmbColor.a);
+
   
   vec4 fogColor = vec4(0.5, 0.5, 0.5, 1.0);
   const float LOG2 = 1.442695;
@@ -112,10 +120,23 @@ else specL = vec3(0.0);
 
   gl_FragColor = mix(fogColor, gl_FragColor, fogFactor);
   
-    gl_FragColor.a = uAmbColor.a;
+  if (uUseTex != 2) gl_FragColor.a = uAmbColor.a;
     
     if (gl_FragCoord.x >= 397.0 && gl_FragCoord.x <= 403.0 &&
         gl_FragCoord.y >= 297.0 && gl_FragCoord.y <= 303.0) {
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
+/*if (uUseTex == 2) {
+    gl_FragColor = vec4(
+        texColor.r, texColor.g, texColor.b,
+        length(texColor));
+}*/
+if (uUseTex == 2) {
+    gl_FragColor = vec4(
+        texColor.r,
+        texColor.g,
+        texColor.b,
+        texColor.a);
+}
+
 }

@@ -51,6 +51,8 @@ GameObject* createEastPainting() { return new EastPainting(); }
 GameObject* createWidePainting() { return new WidePainting(); }
 GameObject* createWestPainting() { return new WestPainting(); }
 
+GameObject* createParticleSystem() { return new ParticleSystem(); }
+
 struct {
     GameObject* (*fn)();
     const char* key;
@@ -89,6 +91,7 @@ functionLookupTable[] = {
     { &createBox2, "Box2"},
     { &createBox3, "Box3"},
     { &createBox4, "Box4"},
+    { &createParticleSystem, "ParticleSystem" },
     { NULL, NULL}
 };
 

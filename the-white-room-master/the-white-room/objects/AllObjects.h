@@ -41,6 +41,7 @@
 #include "../objects/Box2.h"
 #include "../objects/Box3.h"
 #include "../objects/Box4.h"
+#include "../objects/Particles.h"
 
 #endif	/* ALLOBJECTS_H */
 

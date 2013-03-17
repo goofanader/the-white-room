@@ -1,4 +1,4 @@
-numItems: 32
+numItems: 33
 # list of items to be created
 create Room
 create WhiteDoor
@@ -32,3 +32,4 @@ create Box1
 create Box2
 create Box3
 create Box4
+create ParticleSystem
