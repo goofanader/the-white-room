@@ -488,9 +488,10 @@ void Running::mouseClicked(int button, int action) {
         const float roomDimZ = ROOM_SIZE * ARRAYMULTIPLIER * ARRAYDIVISOR; 
 
 
-        while(currentPos.x < ROOM_SIZE && currentPos.x > -ROOM_SIZE
-            && currentPos.y < (ROOM_SIZE / ROOM_HEIGHT_DIVISION) && currentPos.y > -(ROOM_SIZE / ROOM_HEIGHT_DIVISION)
-            && currentPos.z < ROOM_SIZE && currentPos.z > -ROOM_SIZE){
+        //while(currentPos.x < ROOM_SIZE && currentPos.x > -ROOM_SIZE
+            //&& currentPos.y < (ROOM_SIZE / ROOM_HEIGHT_DIVISION) && currentPos.y > -(ROOM_SIZE / ROOM_HEIGHT_DIVISION)
+            //&& currentPos.z < ROOM_SIZE && currentPos.z > -ROOM_SIZE){
+        for(int i = 0; i < (int) MAX_CLICK_DISTANCE - 1; i++){
            
             //printf("currentPos = %f %f %f, %d %d %d for indices\n", currentPos.x, currentPos.y, currentPos.z, (int) floor(2 * currentPos.x + roomDimX), (int) floor(2 * currentPos.y + roomDimY), (int) floor(2 * currentPos.z + roomDimZ));
 
