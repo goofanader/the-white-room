@@ -2,10 +2,10 @@ numItems: 33
 # list of items to be created
 create Room
 create WhiteDoor
+create Bookshelf
 create Book1
 create Book2
 create Book3
-create Bookshelf
 create Clock
 create Safe
 create Armchair
@@ -21,13 +21,13 @@ create Knob100
 create Knob10
 create RoundTable
 create Fireplace
+create EastPainting
+create WestPainting
+create WidePainting
 create HeartKey
 create SpadeKey
 create ClubKey
 create DiamondKey
-create EastPainting
-create WidePainting
-create WestPainting
 create Box1
 create Box2
 create Box3

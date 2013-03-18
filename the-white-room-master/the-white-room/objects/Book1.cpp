@@ -28,6 +28,7 @@ Book1::Book1() {
     specAlpha = 1.f;
     
     isClicked = false;
+    ignore = false;
     
     doScale(glm::vec3(1.25f));
     //doScale(glm::vec3(ROOM_SIZE / 5.f));

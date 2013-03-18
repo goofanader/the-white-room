@@ -38,6 +38,7 @@ SpadeKey::SpadeKey() {
     glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/keys/Key_SpadeUV.bmp", texNum);
     hasTex = true;
+    ignore = false;
 }
 
 SpadeKey::SpadeKey(const SpadeKey& orig) {

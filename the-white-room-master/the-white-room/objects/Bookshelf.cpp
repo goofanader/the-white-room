@@ -26,6 +26,7 @@ Bookshelf::Bookshelf() {
     scale = glm::vec3(1.f);
     
     isClicked = false;
+    ignore = true;
     
     //doScale(glm::vec3(8.f));
     doScale(glm::vec3(ROOM_SIZE / 5.f));

@@ -35,6 +35,7 @@ WestPainting::WestPainting() {
     glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/paintings/TallPaintingUV2.bmp", texNum);
     hasTex = true;
+    ignore = false;
 }
 
 WestPainting::WestPainting(const WestPainting& orig) {

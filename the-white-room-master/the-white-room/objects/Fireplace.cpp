@@ -35,6 +35,7 @@ Fireplace::Fireplace() {
     glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/fireplace/marbleUV.bmp", texNum);
     hasTex = true;
+    ignore = true;
     //printf("%d\n", texNum);
 }
 

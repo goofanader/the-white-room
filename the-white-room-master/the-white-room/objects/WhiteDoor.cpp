@@ -45,6 +45,7 @@ WhiteDoor::WhiteDoor() {
     glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/door/DoorUV.bmp", texNum);
     hasTex = true;
+    ignore = false;
     setNewBounds = false;
 }
 

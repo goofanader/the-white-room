@@ -35,6 +35,7 @@ Box3::Box3() {
     this->ambColor = cube->ambColor;
     
     hasTex = false;
+    ignore = false;
     
     delete cubeMesh;
 }

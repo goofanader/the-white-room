@@ -35,6 +35,7 @@ WidePainting::WidePainting() {
     glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/paintings/WidePaintingUV.bmp", texNum);
     hasTex = true;
+    ignore = false;
     //printf("%d\n", texNum);
 }
 

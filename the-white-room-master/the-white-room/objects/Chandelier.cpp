@@ -33,6 +33,7 @@ Chandelier::Chandelier() {
     glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/chandelier/chandUV.bmp", texNum);
     hasTex = true;
+    ignore = false;
 
     printf("%d\n", texNum);
     printf("finished Chandelier\n");

@@ -25,6 +25,7 @@ Plant1::Plant1() {
     LoadTexture((char *)"objects/meshes/plants/Plant1UV.bmp", texNum);
     printOpenGLError();
     hasTex = true;
+    ignore = false;
     
     rotating = 90.f;
     

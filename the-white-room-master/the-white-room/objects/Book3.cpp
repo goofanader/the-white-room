@@ -28,6 +28,8 @@ Book3::Book3() {
     diffAlpha = 1.f;
     specAlpha = 1.f;
     isClicked = false;
+
+    ignore = false;
     
     doScale(glm::vec3(1.25f));
 

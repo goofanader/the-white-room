@@ -21,6 +21,9 @@
 #include "../events/EventSwitch.h"
 #include "../audio/audio.h"
 
+#define ARRAYMULTIPLIER 4.f
+#define ARRAYDIVISOR 0.5f
+
 class Running : public State {
 public:
     Running();
@@ -55,7 +58,7 @@ private:
     double timeSpent;
     bool isFoot1;
    
-    GameObject* objectArray[(int) ROOM_SIZE * 2][(int) ROOM_SIZE * 2][(int) ROOM_HEIGHT_DIVISION * 2];
+    GameObject* objectArray[(int) (ROOM_SIZE * ARRAYMULTIPLIER)][(int) ((ROOM_SIZE/ROOM_HEIGHT_DIVISION) * ARRAYMULTIPLIER)][(int) (ROOM_SIZE * ARRAYMULTIPLIER)];
 
     void initializeCamera();
     void initializeLight();

@@ -29,6 +29,7 @@ Knob100::Knob100() {
     LoadTexture((char *) "objects/meshes/radio/KnobUVbrass.bmp", texNum);
     printOpenGLError();
     hasTex = true;
+    ignore = false;
 
     rotating = 18.f;
     rotAnim = 0.f;

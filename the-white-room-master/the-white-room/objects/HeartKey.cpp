@@ -37,7 +37,7 @@ HeartKey::HeartKey() {
     LoadTexture((char *)"objects/meshes/keys/Key_HeartUV.bmp", texNum);
     hasTex = true;
     
-    isHeld = isInKeyhole = false;
+    isHeld = isInKeyhole = ignore = false;
 }
 
 HeartKey::HeartKey(const HeartKey& orig) {

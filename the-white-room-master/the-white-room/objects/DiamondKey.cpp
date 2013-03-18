@@ -39,7 +39,7 @@ DiamondKey::DiamondKey() {
     LoadTexture((char *) "objects/meshes/keys/Key_DiamondUV.bmp", texNum);
     hasTex = true;
 
-    isVisible = isHeld = isInKeyhole = false;
+    isVisible = isHeld = isInKeyhole = ignore = false;
 }
 
 DiamondKey::DiamondKey(const DiamondKey& orig) {

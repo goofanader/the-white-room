@@ -126,7 +126,7 @@ public:
     glm::vec3 trans;
     //glm::mat4 trans;
 
-    bool isClicked, isHighlighted, isHighlightDisappearing, isVisible;
+    bool isClicked, isHighlighted, isHighlightDisappearing, isVisible, ignore;
     float depthMin, depthMax;
 
     void printTrans();

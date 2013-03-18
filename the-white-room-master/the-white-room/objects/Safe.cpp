@@ -13,6 +13,7 @@
 Safe::Safe() {
     isOpen = false;
     timeSpent = 0.f;
+    ignore = false;
 
     body = new GameObject();
     door = new GameObject();

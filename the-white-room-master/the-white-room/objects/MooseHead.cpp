@@ -36,6 +36,7 @@ MooseHead::MooseHead() {
     glGenTextures(1, &texNum);
     LoadTexture((char *) "objects/meshes/moosehead/MooseUV2.bmp", texNum);
     hasTex = true;
+    ignore = true;
     //printf("%d\n", texNum);
 }
 

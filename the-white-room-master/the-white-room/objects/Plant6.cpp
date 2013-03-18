@@ -26,6 +26,7 @@ Plant6::Plant6() {
     LoadTexture((char *)"objects/meshes/plants/Plant6UV.bmp", texNum);
     printOpenGLError();
     hasTex = true;
+    ignore = false;
     
     rotating = 90.f;
     

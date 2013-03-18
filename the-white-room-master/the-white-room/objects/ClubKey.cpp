@@ -37,7 +37,7 @@ ClubKey::ClubKey() {
     LoadTexture((char *) "objects/meshes/keys/Key_ClubUV.bmp", texNum);
     hasTex = true;
 
-    isVisible = isHeld = isInKeyhole = false;
+    isVisible = isHeld = isInKeyhole = ignore = false;
 }
 
 ClubKey::ClubKey(const ClubKey& orig) {

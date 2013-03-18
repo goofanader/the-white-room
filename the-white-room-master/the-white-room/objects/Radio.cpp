@@ -37,6 +37,7 @@ Radio::Radio() {
     LoadTexture((char *) "objects/meshes/radio/RadioUVSmall.bmp", texNum);
     printOpenGLError();
     hasTex = true;
+    ignore = false;
 
 }
 

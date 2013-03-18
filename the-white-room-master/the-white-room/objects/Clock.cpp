@@ -8,6 +8,8 @@
 #include "Clock.h"
 
 Clock::Clock() {
+    ignore = false;
+
     body = new GameObject();
     weight1 = new GameObject();
     weight2 = new GameObject();

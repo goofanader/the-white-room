@@ -28,6 +28,7 @@ Table::Table() {
     glGenTextures(1, &texNum);
     LoadTexture((char *)"objects/meshes/table/Table2.bmp", texNum);
     hasTex = true;
+    ignore = false;
 
     isClicked = false;
     doRotate(glm::vec3(0,1,0), 90);

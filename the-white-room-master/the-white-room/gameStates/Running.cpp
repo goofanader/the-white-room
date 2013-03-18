@@ -36,24 +36,26 @@ Running::Running() {
         printf("loaded foot sounds\n");
     }
 
-    currEvent = new Event(eventNum, soundPlayer);
-    loadObjectsFromEvent();
-
-    //set mouse cursor to invisible
-    //glfwDisable(GLFW_MOUSE_CURSOR);
-
-    initializeCamera();
-    initializeLight();
 
     //initialize uniform spatial subdivision values
 
-    for(int i = 0; i < (int) ROOM_SIZE * 2; i++){
-        for(int j = 0; j < (int) ROOM_SIZE * 2; j++){
-            for(int k = 0; k < (int) ROOM_HEIGHT_DIVISION *2; k++){
+    for(int i = 0; i < (int) ROOM_SIZE * ARRAYMULTIPLIER; i++){
+        for(int j = 0; j < (int) (ROOM_SIZE/ROOM_HEIGHT_DIVISION) * ARRAYMULTIPLIER; j++){
+            for(int k = 0; k < (int) ROOM_SIZE * ARRAYMULTIPLIER; k++){
                 objectArray[i][j][k] = NULL;
             }      
         }
     }
+
+
+    currEvent = new Event(eventNum, soundPlayer);
+    loadObjectsFromEvent();
+
+    //set mouse cursor to invisible
+    glfwDisable(GLFW_MOUSE_CURSOR);
+
+    initializeCamera();
+    initializeLight();
 
 }
 
@@ -99,6 +101,10 @@ void Running::loadObjectsFromEvent() {
     GameObject *clockSound;
     EventSwitch *arr = currEvent->getSwitches();
 
+    const float xDimAdjustment = ARRAYMULTIPLIER * ARRAYDIVISOR * ROOM_SIZE; 
+    const float yDimAdjustment = ARRAYMULTIPLIER * ARRAYDIVISOR * (ROOM_SIZE / ROOM_HEIGHT_DIVISION);
+    const float zDimAdjustment = ARRAYMULTIPLIER * ARRAYDIVISOR * ROOM_SIZE; 
+
     for (int i = 0; i < currEvent->getSwitchNum(); i++, arr++) {
         GameObject* newObject = lookupAndCall(arr->getClassName());
         if (newObject) {
@@ -109,20 +115,35 @@ void Running::loadObjectsFromEvent() {
                 clockSound = newObject;
             }
 
-            if(newObject->className() == "Bookcase"){
+            /*if(newObject->className() == "Bookshelf" || newObject->className() == "Safe" 
+                    || newObject->className() == "Armchair" || newObject->className() == "MooseHead" 
+                    || newObject->className() == "Fireplace" || newObject->className() == "EastPainting" ){
                 //special case
-            }else{
+            }else{*/
                 //objectArray[(int) math.floor(newObject->trans.x)][(int) math.floor(newObject->trans.y)][(int) math.floor(newObject->trans.z)] = newObject;
 
-                for(int j = (int) floor(newObject->getAABBmin().x); j < (int) floor(newObject->getAABBmax().x); j++){
-                    for(int k = (int) floor(newObject->getAABBmin().y); k < (int) floor(newObject->getAABBmax().y); k++){
-                        for(int l = (int) floor(newObject->getAABBmin().z); l < (int) floor(newObject->getAABBmax().z); l++){
-                            //std::cout << newObject->className() << " j = " << j << " k = " << k << " l = " << l << "\n";
-                            objectArray[j + (int) ROOM_SIZE][k + (int) ROOM_SIZE][l + (int) ROOM_SIZE] = newObject;
+                for(int j = (int) floor(2 * newObject->getAABBmin().x); 
+                        j < (int) ceil(2 * newObject->getAABBmax().x); j++){
+                    for(int k = (int) floor(2 * newObject->getAABBmin().y); 
+                            k < (int) ceil(2 * newObject->getAABBmax().y); k++){
+                        for(int l = (int) floor(2 * newObject->getAABBmin().z); 
+                                l < (int) ceil(2 * newObject->getAABBmax().z); l++){
+                            //std::cout << newObject->className() << " j = " << j + xDimAdjustment << " k = " << k + yDimAdjustment << " l = " << l + zDimAdjustment << "\n";
+                            objectArray[j + (int) xDimAdjustment][k + (int) yDimAdjustment][l + (int) zDimAdjustment] = newObject;
                         }
                     }
                 }
-            }
+
+                /*
+                for(int j = (int) floor(newObject->getAABBmin().x); j < (int) floor(newObject->getAABBmax().x); j++){
+                    for(int k = (int) floor(newObject->getAABBmin().y); k < (int) floor(newObject->getAABBmax().y); k++){
+                        for(int l = (int) floor(newObject->getAABBmin().z); l < (int) floor(newObject->getAABBmax().z); l++){
+                            std::cout << newObject->className() << " j = " << j + 30 << " k = " << k + 10 << " l = " << l + 30 << "\n";
+                            objectArray[j + (int) ROOM_SIZE][k + (int) (ROOM_SIZE/ROOM_HEIGHT_DIVISION)][l + (int) ROOM_SIZE] = newObject;
+                        }
+                    }
+                }*/
+            //}
 
         }
     }
@@ -459,6 +480,42 @@ void Running::mouseClicked(int button, int action) {
     GameObject* curr;
 
     if (action == GLFW_RELEASE) {
+        glm::vec3 currentPos = playerCamera->trans;
+        glm::vec3 normalizedCam = camLookAt - playerCamera->trans;
+
+        const float roomDimX = ROOM_SIZE * ARRAYMULTIPLIER * ARRAYDIVISOR; 
+        const float roomDimY = (ROOM_SIZE / ROOM_HEIGHT_DIVISION) * ARRAYMULTIPLIER * ARRAYDIVISOR;  
+        const float roomDimZ = ROOM_SIZE * ARRAYMULTIPLIER * ARRAYDIVISOR; 
+
+
+        while(currentPos.x < ROOM_SIZE && currentPos.x > -ROOM_SIZE
+            && currentPos.y < (ROOM_SIZE / ROOM_HEIGHT_DIVISION) && currentPos.y > -(ROOM_SIZE / ROOM_HEIGHT_DIVISION)
+            && currentPos.z < ROOM_SIZE && currentPos.z > -ROOM_SIZE){
+           
+            //printf("currentPos = %f %f %f, %d %d %d for indices\n", currentPos.x, currentPos.y, currentPos.z, (int) floor(2 * currentPos.x + roomDimX), (int) floor(2 * currentPos.y + roomDimY), (int) floor(2 * currentPos.z + roomDimZ));
+
+            if(objectArray[(int) floor(2 * currentPos.x + roomDimX)][(int) floor(2 * currentPos.y + roomDimY)][(int) floor(2 * currentPos.z + roomDimZ)] != NULL && !objectArray[(int) floor(2 * currentPos.x + roomDimX)][(int) floor(2 * currentPos.y + roomDimY)][(int) floor(2 * currentPos.z + roomDimZ)]->ignore){
+
+                curr = objectArray[(int) floor(2 * currentPos.x + roomDimX)][(int) floor(2 * currentPos.y + roomDimY)][(int) floor(2 * currentPos.z + roomDimZ)];
+              //print out what got clicked on
+                std::cout << "clicked on... " << curr->className();
+                std::cout << ". AABBmin=" << printVec3(curr->getAABBmin());
+                std::cout << ", AABBmax=" << printVec3(curr->getAABBmax());
+                std::cout << std::endl;
+
+                currEvent->ifObjectSelected(curr);
+
+                break;
+            }
+
+            currentPos += normalizedCam;
+        }
+
+
+    }
+
+    /*
+    if (action == GLFW_RELEASE) {
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
             curr = (*iter);
@@ -474,6 +531,7 @@ void Running::mouseClicked(int button, int action) {
             }
         }
     }
+    */
 }
 
 void Running::mouseMoved(int x, int y, float prevX, float prevY) {

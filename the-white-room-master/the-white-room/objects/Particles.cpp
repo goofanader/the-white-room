@@ -105,6 +105,7 @@ ParticleSystem::ParticleSystem() {
     specColor = vec3(0.f);
     ambAlpha = diffAlpha = specAlpha = 1.f;
     isClicked = false;
+    ignore = false;
 
     glGenTextures(1, &texNum);
     printOpenGLError();
