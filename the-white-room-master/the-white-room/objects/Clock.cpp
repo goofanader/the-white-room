@@ -60,7 +60,7 @@ Clock::Clock() {
     weight1->scale = glm::vec3(1.f);
     weight1->ambColor = glm::vec3(0.94f, .90f, .55f)/ 5.f;
     weight1->specColor = glm::vec3(.94f, 0.90f, 0.55f);
-    weight1->diffColor = glm::vec3(0.94f, 0.90f, 0.55f);
+    weight1->diffColor = glm::vec3(0.32f, 0.16f, 0.00f);
     weight1->ambAlpha = 1.f;
     weight1->diffAlpha = 1.f;
     weight1->specAlpha = 1.f;
