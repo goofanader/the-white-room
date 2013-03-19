@@ -140,6 +140,7 @@ void SpadeKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         this->rotate = glm::mat4(1.f);
+        doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
         doTranslate(vec3(-4.1f,-.45f,-ROOM_SIZE - getAABBmin().z + 2.5f));
     }
 }

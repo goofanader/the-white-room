@@ -64,6 +64,9 @@ void DiamondKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     if (isHeld) {
         //move key to in front of player
         trans = vec3(0.f);
+        this->rotate = glm::mat4(1.f);
+        doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
+
         doTranslate((camLookAt - playerCamera->trans) * vec3(KEY_DISTANCE) + playerCamera->trans);
 
         //make it so it always faces the player
@@ -140,6 +143,7 @@ void DiamondKey::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     } else if (isInKeyhole) {
         trans = vec3(0.f);
         this->rotate = glm::mat4(1.f);
+        doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
         doTranslate(vec3(-2.1f,-.45f,-ROOM_SIZE - getAABBmin().z + 2.5f));
     }
 }

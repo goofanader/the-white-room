@@ -339,6 +339,13 @@ void Event::ifObjectSelected(GameObject *curr) {
         if (tempHeart->isInKeyhole && tempDiamond->isInKeyhole &&
                 tempSpade->isInKeyhole && tempClub->isInKeyhole) {
             setIfWon(true);
+            /*
+            tempClub->doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
+            tempDiamond->doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
+            tempHeart->doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
+            tempSpade->doRotate(glm::vec3(0.f, 0.f, 1.f), 90.f);
+            */
+
             //cause the white door to open
             if (!eventSwitches[WHITE_DOOR].isSwitchOn()) {
                 eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
