@@ -111,7 +111,7 @@ else specL = vec3(0.0);
     finColor.b, uUseTex2 != 0 ? texColor.a : uAmbColor.a);
 
   
-  vec4 fogColor = vec4(0.5, 0.5, 0.5, 1.0);
+  vec4 fogColor = vec4(0.2, 0.2, 0.2, 1.0);
   const float LOG2 = 1.442695;
   float z = 1.0 - (gl_FragCoord.z / gl_FragCoord.w) / 10.0;
   float fogDensity = gl_Fog.density * 0.4;

@@ -210,11 +210,9 @@ void Running::draw() {
 
         float objPoslen = sqrt(objPos.x * objPos.x + objPos.y * objPos.y + objPos.z * objPos.z);
         float lookAtlen = sqrt(lookDir.x * lookDir.x + lookDir.y * lookDir.y + lookDir.z * lookDir.z);
+        //angle between look direction and vector to center of object's AABB
         float angle = acos(glm::dot(objPos, lookDir) / (objPoslen * lookAtlen)) * 180.0f / PI;
         printOpenGLError();
-
-        //printf("lookAt: %lf %lf, %lf\n", lookAt.x - cameraPos.x, lookAt.y - cameraPos.y, lookAt.z - cameraPos.z);
-        //printf("angle: %lf\n", angle);
 
         if (curr->isVisible && (angle < 90.0f || curr->className() == "Room" ||
                 curr->className() == "Bookshelf" || 
@@ -254,7 +252,8 @@ void Running::draw() {
         printOpenGLError();
 
         if(curr->className() != "Room" && curr->className() != "Chandelier" &&
-                curr->className() != "ParticleSystem") {
+                curr->className() != "ParticleSystem" //) {
+                && curr->className() != "DiamondKey" && curr->className() != "HeartKey" & curr->className() != "SpadeKey" && curr->className() != "ClubKey" ) {
             printOpenGLError();
 
            // floor shadow
@@ -278,9 +277,8 @@ void Running::draw() {
 
            }
            
-           // bookcase wall shadow
-           //if(curr->className() == "RoundTable" || curr->className() == "Plant6" || curr->className() == "Plant1" || curr->className() == "Plant0" || curr->className() == "Bookshelf") {
-            if(curr->className() == "RoundTable" /*|| curr->className() == "Plant6" || curr->className() == "Plant1"*/ || curr->className() == "Bookshelf") {
+           // bookcase wall shadow (plants dont cast shadow since it interferes with number identification)
+            if(curr->className() == "RoundTable"  || curr->className() == "Bookshelf") {
 
               curr->draw(playerCamera->trans, camLookAt, getSC()->lightPos,
                     vec3(0.0, 0.0, 1.0), getSC());
