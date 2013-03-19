@@ -26,7 +26,7 @@ Armchair::Armchair() {
     scale = glm::vec3(1.f);
 
     isClicked = false;
-    ignore = false;
+    ignore = true;
     
     doScale(glm::vec3(6.f));
     doRotate(glm::vec3(0.f, 1.f, 0.f), -90.f);
