@@ -1,4 +1,3 @@
-GameStart:audio/gameStart.wav
 TryDoor:audio/tryDoor.wav
 OpenDoor:audio/openDoor.wav
 TrySafe:audio/trySafe.wav
