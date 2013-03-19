@@ -1,3 +1,6 @@
+#ifndef TEXTURE_H
+#define TEXTURE_H
+
 #include <GL/glfw.h>
 
 #include <stdio.h>
@@ -27,3 +30,5 @@ GLvoid Load32NonMipmap(char *image_file, int texID);
 
 int ImageLoad(char *filename, Image *image);
 int ImageLoad32(char *filename, Image *image);
+
+#endif

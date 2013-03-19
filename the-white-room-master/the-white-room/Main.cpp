@@ -25,8 +25,10 @@
 #include "GeometryCreator.h"
 
 #include "objects/GameObject.h"
+#include "objects/mainMenu/MenuObjects.h"
 #include "gameStates/State.h"
 #include "gameStates/Running.h"
+#include "gameStates/MainMenu.h"
 #include "Main.h"
 
 #define DRAW_BRIAN_FLOOR 0
@@ -39,20 +41,18 @@ using namespace std;
 using namespace glm;
 
 GameConstants gc, lc, sc;
-bool g_hasWon, g_hasQuit;
+DeferredShadingConstants drc, dsc;
+bool g_hasWon, g_hasQuit, g_moveMouse;
 glm::vec3 roomFloorHeight;
 float roomCeilHeight;
-int const numSquares = 100;
 
-GameObject cubes[numSquares];
-GameObject room[6];
+GLuint quad_vertexbuffer;
+GLuint FramebufferName = 0;
+GLuint renderedTexture;
 
-//linked list of meshes 
-GameObject *root;
-GameObject *current;
-GameObject *traverser;
-
-GameObject *playerCamera;
+GLuint m_diffuseRT, m_positionRT, m_normalsRT, m_depthBuffer;
+GLuint m_diffuseTexture, m_positionTexture, m_normalsTexture;
+GLuint m_diffuseID, m_positionID, m_normalsID;
 
 int numObjects = 0;
 
@@ -97,26 +97,34 @@ int keyDown[128] = {0};
 RenderingHelper ModelTrans;
 
 
- 
- // shadow map info 
-    const int shadowMapSize = 128;
-    GLuint shadowMapTexture;
-    GLuint shadowMapBuffer;
-    GLuint uLightProjMatrix;
-    GLuint uLightViewMatrix;
-    GLuint uLightDir;
-    bool setShadowMap = true;
-    
+
+// shadow map info 
+const int shadowMapSize = 128;
+GLuint shadowMapTexture;
+GLuint shadowMapBuffer;
+GLuint uLightProjMatrix;
+GLuint uLightViewMatrix;
+GLuint uLightDir;
+bool setShadowMap = true;
+
 GameConstants* getGC() {
-    return &gc; //this is a lot of data being pushed onto the stack...
+    return &gc;
 }
 
 GameConstants* getLC() {
-    return &lc; //this is a lot of data being pushed onto the stack...
+    return &lc;
 }
 
 GameConstants* getSC() {
-    return &sc; //this is a lot of data being pushed onto the stack...
+    return &sc;
+}
+
+DeferredShadingConstants* getDRC() {
+    return &drc;
+}
+
+DeferredShadingConstants* getDSC() {
+    return &dsc;
 }
 
 unsigned int getWindowWidth() {
@@ -157,10 +165,10 @@ void SetProjectionMatrix() {
     safe_glUniformMatrix4fv(uProjMatrix, glm::value_ptr(Projection));
 }
 
-void SetView() {
+/*void SetView() {
     glm::mat4 View = glm::lookAt(playerCamera->trans, camLookAt, vec3(0.f, 1.f, 0.f));
     safe_glUniformMatrix4fv(uViewMatrix, glm::value_ptr(View));
-}
+}*/
 
 void SetModel() {
     safe_glUniformMatrix4fv(uModelMatrix,
@@ -226,10 +234,10 @@ bool InstallComplexShader(
     printOpenGLError();
     glGetProgramiv(ShadeProg[shader], GL_LINK_STATUS, &linked);
     printProgramInfoLog(ShadeProg[shader]);
-    
+
     return true;
 
-}    
+}
 
 bool InstallShader(std::string const & vShaderName, std::string const & fShaderName,
         int shader) {
@@ -280,7 +288,7 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     printOpenGLError();
     glGetProgramiv(ShadeProg[shader], GL_LINK_STATUS, &linked);
     printProgramInfoLog(ShadeProg[shader]);
-    
+
     return true;
 }
 
@@ -289,9 +297,9 @@ void advanceState(State* newState) {
     currState = newState;
 }
 
-void Initialize() {    
-    
-         //create shadow map texture
+void Initialize() {
+
+    //create shadow map texture
     glGenTextures(1, &shadowMapTexture);
     glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapSize,
@@ -304,16 +312,16 @@ void Initialize() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     printOpenGLError();
-   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
-   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-   // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-    
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+    // glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+
     // GLfloat border[] = {0.0f, 0.0f, 0.0f, 0.0f};
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
-    
+
     //bind default
     glBindTexture(GL_TEXTURE_2D, 0);
-    
+
     //create depth buffer
     glGenFramebuffers(1, &shadowMapBuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
@@ -322,7 +330,7 @@ void Initialize() {
     //no color
     glDrawBuffer(GL_NONE);
     printOpenGLError();
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         printf("error in framebuffer\n");
         exit(-1);
     }
@@ -342,13 +350,13 @@ void Initialize() {
     //safe_glUniformMatrix4fv(uLightProjMatrix, glm::value_ptr(LightProjMatrix));
     //safe_glUniformMatrix4fv(uLightViewMatrix, glm::value_ptr(LightViewMatrix));
     printOpenGLError();
-    
-    
+
+
 
     //enable alpha for color
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    
+
     glClearColor(0.f, 0.f, 0.0f, 1.0f);
 
     glClearDepth(1.0f);
@@ -364,25 +372,119 @@ void Initialize() {
 
     ModelTrans.useModelViewMatrix();
     ModelTrans.loadIdentity();
+
+    //======Framebuffer Initialization======//
+    glGenFramebuffers(1, &FramebufferName);
+    glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+
+    glGenRenderbuffers(1, &m_diffuseRT);
+    glGenRenderbuffers(1, &m_positionRT);
+    glGenRenderbuffers(1, &m_normalsRT);
+    glGenRenderbuffers(1, &m_depthBuffer);
+
+    //bind the diffuse render target
+    glBindRenderbuffer(GL_RENDERBUFFER, m_diffuseRT);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, windowWidth, windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRT);
+
+    //bind the position render target
+    glBindRenderbuffer(GL_RENDERBUFFER, m_positionRT);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA32F, windowWidth, windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_diffuseRT);
+
+    //bind the normal render target
+    glBindRenderbuffer(GL_RENDERBUFFER, m_normalsRT);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA16F, windowWidth, windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_diffuseRT);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depthBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBuffer);
+
+    //Generate and bind the OGL texture for diffuse
+    glGenTextures(1, &m_diffuseTexture);
+    glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+            m_diffuseTexture, 0);
+
+    //Generate and bind the OGL texture for positions
+    glGenTextures(1, &m_positionTexture);
+    glBindTexture(GL_TEXTURE_2D, m_positionTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, windowWidth, windowHeight, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
+            m_positionTexture, 0);
+
+    //Generate and bind the OGL texture for normals
+    glGenTextures(1, &m_normalsTexture);
+    glBindTexture(GL_TEXTURE_2D, m_normalsTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, windowWidth, windowHeight, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,
+            m_normalsTexture, 0);
+
+    // Always check that our framebuffer is ok
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "FramebufferStatus yucky :<" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // The fullscreen quad's FBO
+    static const GLfloat g_QuadVBOdata[] = {
+        /*-1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,*/
+        0.0f, 0.0f, 0.0f,
+        (float)windowWidth, 0.0f, 0.0f,
+        (float)windowWidth, (float)windowHeight, 0.f,
+        0.0f, (float)windowHeight, 0.0f
+    };
+
+    glGenBuffers(1, &quad_vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof (g_QuadVBOdata),
+            g_QuadVBOdata, GL_STATIC_DRAW);
+
+    //go back to the usual screen framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Draw() {
-
-    if(setShadowMap) {
+    if (setShadowMap) {
         setShadowMap = false;
-        
-       //store depth map, 1 per depth map tex
-       glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
-       glClear(GL_DEPTH_BUFFER_BIT);
-       glViewport(0, 0, shadowMapSize, shadowMapSize);
-    
-       // render into texture using light's POV
-       currState->draw();
-       
-       glViewport(0, 0, windowWidth, windowHeight);
-       glBindFramebuffer(GL_FRAMEBUFFER, 0);   
+
+        //store depth map, 1 per depth map tex
+        glBindFramebuffer(GL_FRAMEBUFFER, shadowMapBuffer);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, shadowMapSize, shadowMapSize);
+
+        // render into texture using light's POV
+        currState->draw();
+
+        glViewport(0, 0, windowWidth, windowHeight);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
@@ -394,7 +496,7 @@ void Draw() {
 }
 
 void Shadow() {
-    
+
 }
 
 std::string printVec3(glm::vec3 coordinates) {
@@ -459,7 +561,7 @@ void Keyboard(int key, int state) {
             // Quit program
         case 'Q':
             g_hasQuit = true;
-            
+
 
             //exit(EXIT_SUCCESS);
             break;
@@ -478,12 +580,22 @@ void MouseClick(int button, int action) {
     currState->mouseClicked(button, action);
 }
 
+bool canMoveMouse() {
+    return g_moveMouse;
+}
+
+void setCanMoveMouse(bool moving) {
+    g_moveMouse = moving;
+}
+
 void MouseMove(int x, int y) {
     glm::vec2 newPos = glm::vec2(x, y);
     currState->mouseMoved(newPos.x, newPos.y, mousePos.x, mousePos.y);
 
-    glfwSetMousePos(windowWidth / 2, windowHeight / 2);
-    mousePos = glm::vec2(windowWidth / 2, windowHeight / 2);
+    if (!g_moveMouse) {
+        glfwSetMousePos(windowWidth / 2, windowHeight / 2);
+        mousePos = glm::vec2(windowWidth / 2, windowHeight / 2);
+    }
 }
 
 int getScreenSize() {
@@ -583,10 +695,10 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
     gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
-    
+
     gc.uLightProjMatrix = uLightProjMatrix;
     gc.uLightViewMatrix = uLightViewMatrix;
-    
+
     glUseProgram(gc.shader);
     shadowMapTexture = safe_glGetUniformLocation(gc.shader, "ShadowMap");
     glUseProgram(0);
@@ -649,9 +761,77 @@ void initializeShadowShaderVariables() {
     sc.h_uUseTex = uUseTex;
     sc.h_uUseTex2 = uUseTex2;
     sc.h_uTime = uTime;
-    
+
     sc.uLightProjMatrix = uLightProjMatrix;
     sc.uLightViewMatrix = uLightViewMatrix;
+}
+
+void initializeDeferredShadingVariables() {
+    //initialize openGL and shader variables
+    drc.shader = ShadeProg[3];
+    drc.aspectRatio = (float) windowWidth / windowHeight;
+    drc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
+    drc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
+    drc.lightAlpha = 1.f;
+    drc.h_aPosition = aPosition;
+    drc.h_aNormal = aNormal;
+    drc.h_uAmbColor = uAmbColor;
+    drc.h_uDiffColor = uDiffColor;
+    drc.h_uSpecColor = uSpecColor;
+    drc.h_uProjMatrix = uProjMatrix;
+    drc.h_uViewMatrix = uViewMatrix;
+    drc.h_uModelMatrix = uModelMatrix;
+    drc.h_uNormalMatrix = uNormalMatrix;
+    drc.h_uLightPos = uLightPos;
+    drc.h_uLightColor = uLightColor;
+    drc.h_uShininess = uShininess;
+    drc.h_uSpecStrength = uSpecStrength;
+    drc.h_uCamTrans = uCamTrans;
+    drc.h_aTexCoord = aTexCoord;
+    drc.h_uTexUnit = uTexUnit;
+    drc.h_uTexUnit2 = uTexUnit2;
+    drc.h_uUseTex = uUseTex;
+    drc.h_uUseTex2 = uUseTex2;
+    drc.h_uTime = uTime;
+    
+    drc.FramebufferName = FramebufferName;
+}
+
+void initializePassThroughShaderVariables() {
+    //initialize openGL and shader variables
+    dsc.shader = ShadeProg[4];
+    dsc.aspectRatio = (float) windowWidth / windowHeight;
+    dsc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
+    dsc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
+    dsc.lightAlpha = 1.f;
+    dsc.h_aPosition = aPosition;
+    dsc.h_aNormal = aNormal;
+    dsc.h_uAmbColor = uAmbColor;
+    dsc.h_uDiffColor = uDiffColor;
+    dsc.h_uSpecColor = uSpecColor;
+    dsc.h_uProjMatrix = uProjMatrix;
+    dsc.h_uViewMatrix = uViewMatrix;
+    dsc.h_uModelMatrix = uModelMatrix;
+    dsc.h_uNormalMatrix = uNormalMatrix;
+    dsc.h_uLightPos = uLightPos;
+    dsc.h_uLightColor = uLightColor;
+    dsc.h_uShininess = uShininess;
+    dsc.h_uSpecStrength = uSpecStrength;
+    dsc.h_uCamTrans = uCamTrans;
+    dsc.h_aTexCoord = aTexCoord;
+    dsc.h_uTexUnit = uTexUnit;
+    dsc.h_uTexUnit2 = uTexUnit2;
+    dsc.h_uUseTex = uUseTex;
+    dsc.h_uUseTex2 = uUseTex2;
+    dsc.h_uTime = uTime;
+    
+    dsc.diffuseTexture = m_diffuseTexture;
+    dsc.PositionTexture = m_positionTexture;
+    dsc.NormalsTexture = m_normalsTexture;
+    dsc.m_diffuseID = m_diffuseID;
+    dsc.m_positionID = m_positionID;
+    dsc.m_normalsID = m_normalsID;
+    dsc.quad_vertexbuffer = quad_vertexbuffer;
 }
 
 void initializeShaderConnection(int shader) {
@@ -681,12 +861,49 @@ void initializeShaderConnection(int shader) {
     uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
     uUseTex2 = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex2");
     uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
+
+    std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
+}
+
+void initializeDeferredShaderConnection(int shader) {
+    glUseProgram(ShadeProg[shader]);
+
+    // get handles to attribute data
+    aPosition = safe_glGetAttribLocation(ShadeProg[shader], "aPosition");
+    aNormal = safe_glGetAttribLocation(ShadeProg[shader], "aNormal");
+
+    uAmbColor = safe_glGetUniformLocation(ShadeProg[shader], "uAmbColor");
+    uSpecColor = safe_glGetUniformLocation(ShadeProg[shader], "uSpecColor");
+    uDiffColor = safe_glGetUniformLocation(ShadeProg[shader], "uDiffColor");
+    uProjMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uProjMatrix");
+    uViewMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uViewMatrix");
+    uModelMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uModelMatrix");
+    uNormalMatrix = safe_glGetUniformLocation(ShadeProg[shader], "uNormalMatrix");
+
+    uLightPos = safe_glGetUniformLocation(ShadeProg[shader], "uLightPos");
+    uLightColor = safe_glGetUniformLocation(ShadeProg[shader], "uLightColor");
+    uShininess = safe_glGetUniformLocation(ShadeProg[shader], "uShininess");
+    uSpecStrength = safe_glGetUniformLocation(ShadeProg[shader], "uSpecStrength");
+    uCamTrans = safe_glGetUniformLocation(ShadeProg[shader], "uCamTrans");
+
+    aTexCoord = safe_glGetAttribLocation(ShadeProg[shader], "aTexCoord");
+    uTexUnit = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit");
+    uTexUnit2 = safe_glGetUniformLocation(ShadeProg[shader], "uTexUnit2");
+    uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
+    uUseTex2 = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex2");
+    uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
+
+    m_diffuseID = safe_glGetUniformLocation(ShadeProg[shader], "tDiffuse");
+    m_positionID = safe_glGetUniformLocation(ShadeProg[shader], "tPosition");
+    m_normalsID = safe_glGetUniformLocation(ShadeProg[shader], "tNormals");
     
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
 }
 
 int main(int argc, char *argv[]) {
     g_hasWon = g_hasQuit = false;
+    g_moveMouse = false;//true;
+
     roomFloorHeight = vec3(0.f);
     roomCeilHeight = 0.f;
 
@@ -704,48 +921,67 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     glfwSetWindowTitle("The White Room");
-    
+
     // OpenGL Setup
     Initialize();
     printOpenGLError();
     getGLversion();
     printOpenGLError();
-    
+
     // Shader Setup: Main Shader
     if (!InstallShader(
-                "mesh_vert.glsl", 
-                "mesh_frag.glsl", 0)) {
-        printf("Error installing shader!\n");
+            "mesh_vert.glsl",
+            "mesh_frag.glsl", 0)) {
+        printf("Error installing main shader!\n");
         return 1;
     }
-    
+
     initializeShaderConnection(0);
     initializeShaderVariables();
-    
-    //laplace shader
+
+    //highlight shader
     if (!InstallShader("laplacian_vert.glsl", "laplacian_frag.glsl", 1)) {
-        printf("Error installing shader!\n");
+        printf("Error installing highlight shader!\n");
         return 1;
     }
-    
+
     initializeShaderConnection(1);
     initializeLaplaceShaderVariables();
 
     //shadow shader
     if (!InstallShader("shadow_vert.glsl", "shadow_frag.glsl", 2)) {
-        printf("Error installing shader!\n");
+        printf("Error installing shadow shader!\n");
         return 1;
     }
-    
+
     initializeShaderConnection(2);
     initializeShadowShaderVariables();
-    
+
+    //deferred rendering shader
+    if (!InstallShader("deferredShader_vert.glsl", "deferredShader_frag.glsl", 3)) {
+        printf("Error installing deferred render shader!\n");
+        return 1;
+    }
+
+    initializeDeferredShaderConnection(3);
+    initializeDeferredShadingVariables();
+
+    //deferred shading shader
+    if (!InstallShader("passThrough_vert.glsl", "passThrough_frag.glsl", 4)) {
+        printf("Error installing deferred shading shader!\n");
+        return 1;
+    }
+
+    initializeDeferredShaderConnection(4);
+    initializePassThroughShaderVariables();
+
+
     //start the random counter
     srand(time(NULL));
 
     //set input callback functions
     glfwSetMousePos(windowWidth / 2, windowHeight / 2);
-    currState = new Running();
+    currState =  new Running(); //new MainMenu(); 
     glfwSetKeyCallback(Keyboard);
     glfwSetMousePosCallback(MouseMove);
     glfwSetMouseButtonCallback(MouseClick);
