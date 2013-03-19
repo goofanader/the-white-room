@@ -2,8 +2,6 @@ GameStart:audio/gameStart.wav
 TryDoor:audio/tryDoor.wav
 OpenDoor:audio/openDoor.wav
 TrySafe:audio/trySafe.wav
-TryBook:audio/tryBook.wav
-RadioAppear:audio/radioAppear.wav
 RadioAppear2:audio/radioAppear2.wav
 TryRadio:audio/tryRadio.wav
 RadioStatic:audio/radioStatic.wav
