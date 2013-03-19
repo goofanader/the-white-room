@@ -79,6 +79,8 @@ void Running::initializeCamera() {
 
     prevAlpha = camAlpha;
     prevBeta = camBeta;
+    
+    updateLookAt();
 }
 
 void Running::initializeLight() {
@@ -352,7 +354,8 @@ void Running::update(float dt) {
             playerCamera->trans.z > ROOM_SIZE || playerCamera->trans.z < -ROOM_SIZE) {
         printf("====\nYou exited the white room and won the game!\n");
 
-        exit(EXIT_SUCCESS);
+        setIsNextState("Running");
+        //exit(EXIT_SUCCESS);
     }
 }
 

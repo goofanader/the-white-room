@@ -27,11 +27,14 @@ public:
     void update(float dt);
     
     void mouseClicked(int button, int action);
+    void keyPressed(float dt, int keyDown[]);
 
     void pause();
     void resume();
 private:
     DeferredShadingObject* playerCamera, *lightPos;
+    FrameBuffer* frameBuffer;
+    KeyboardKeys* wasdKeys;
     std::set<DeferredShadingObject*> objects;
     SoundPlayer *soundPlayer;
     

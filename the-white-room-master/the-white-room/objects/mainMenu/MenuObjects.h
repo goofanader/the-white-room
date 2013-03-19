@@ -11,6 +11,7 @@
 #include "DeferredShadingObject.h"
 #include "Mouse.h"
 #include "KeyboardKeys.h"
+#include "FrameBuffer.h"
 
 #endif	/* MENUOBJECTS_H */
 

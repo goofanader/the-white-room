@@ -29,6 +29,12 @@ bool hasWon();
 void setIfWon(bool winning);
 bool canMoveMouse();
 void setCanMoveMouse(bool moving);
+void MouseMove(int x, int y);
+
+float getStartRunning();
+void setStartRunning(float newTime);
+
+void setIsNextState(std::string stateName);
 
 glm::vec3 getRoomFloorHeight();
 void setRoomFloorHeight(glm::vec3 newHeight);

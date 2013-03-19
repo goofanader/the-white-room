@@ -1,0 +1,2 @@
+MenuSong:audio/Masanori_Takumi-Kokoro_no_Kizuato.wav
+CreditsSong:audio/Yuki_Kajiura-Unhallowed.wav

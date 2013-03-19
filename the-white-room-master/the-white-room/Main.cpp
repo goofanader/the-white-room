@@ -29,6 +29,8 @@
 #include "gameStates/State.h"
 #include "gameStates/Running.h"
 #include "gameStates/MainMenu.h"
+#include "gameStates/FakeMainMenu.h"
+#include "gameStates/Credits.h"
 #include "Main.h"
 
 #define DRAW_BRIAN_FLOOR 0
@@ -44,7 +46,7 @@ GameConstants gc, lc, sc;
 DeferredShadingConstants drc, dsc;
 bool g_hasWon, g_hasQuit, g_moveMouse;
 glm::vec3 roomFloorHeight;
-float roomCeilHeight;
+float roomCeilHeight, runningStarted;
 
 GLuint quad_vertexbuffer;
 GLuint FramebufferName = 0;
@@ -133,6 +135,14 @@ unsigned int getWindowWidth() {
 
 unsigned int getWindowHeight() {
     return windowHeight;
+}
+
+float getStartRunning() {
+    return runningStarted;
+}
+
+void setStartRunning(float newTime) {
+    runningStarted = newTime;
 }
 
 bool hasWon() {
@@ -292,9 +302,21 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
     return true;
 }
 
-void advanceState(State* newState) {
+void setIsNextState(std::string stateName) {
     delete currState;
-    currState = newState;
+    
+    if (stateName == "FakeMainMenu" || stateName == "MainMenu") {
+        g_moveMouse = false;
+        currState = new Running();
+        runningStarted = glfwGetTime();
+        MouseMove(windowWidth / 2, windowHeight / 2);
+    } else if (stateName == "Running") {
+        currState = new Credits();
+    } else if (stateName == "Credits") {
+        currState = new FakeMainMenu(); //if get FBO working, change to MainMenu
+    }
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void Initialize() {
@@ -377,7 +399,7 @@ void Initialize() {
     glGenFramebuffers(1, &FramebufferName);
     glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
 
-    glGenRenderbuffers(1, &m_diffuseRT);
+    /*glGenRenderbuffers(1, &m_diffuseRT);
     glGenRenderbuffers(1, &m_positionRT);
     glGenRenderbuffers(1, &m_normalsRT);
     glGenRenderbuffers(1, &m_depthBuffer);
@@ -395,7 +417,7 @@ void Initialize() {
     //bind the normal render target
     glBindRenderbuffer(GL_RENDERBUFFER, m_normalsRT);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA16F, windowWidth, windowHeight);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_diffuseRT);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_diffuseRT);*/
 
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
@@ -464,6 +486,13 @@ void Initialize() {
     glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof (g_QuadVBOdata),
             g_QuadVBOdata, GL_STATIC_DRAW);
+    
+    static const GLfloat g_QuadTBOdata[] = {
+        0,0,
+        1,0,
+        1,1,
+        0,1
+    };
 
     //go back to the usual screen framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -523,7 +552,7 @@ void Keyboard(int key, int state) {
         keyDown[key] = 0;
     switch (key) {
             // Toggle wireframe
-        case 'N':
+        /*case 'N':
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDisable(GL_CULL_FACE);
             break;
@@ -557,7 +586,7 @@ void Keyboard(int key, int state) {
             break;
         case 'R':
             gc.lightPos = glm::vec3(0, 9, 0);
-            std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;
+            std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;*/
             // Quit program
         case 'Q':
             g_hasQuit = true;
@@ -766,9 +795,9 @@ void initializeShadowShaderVariables() {
     sc.uLightViewMatrix = uLightViewMatrix;
 }
 
-void initializeDeferredShadingVariables() {
+void initializeDRCVariables() {
     //initialize openGL and shader variables
-    drc.shader = ShadeProg[3];
+    drc.shader = ShadeProg[4];
     drc.aspectRatio = (float) windowWidth / windowHeight;
     drc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
     drc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
@@ -797,9 +826,9 @@ void initializeDeferredShadingVariables() {
     drc.FramebufferName = FramebufferName;
 }
 
-void initializePassThroughShaderVariables() {
+void initializeDSCVariables() {
     //initialize openGL and shader variables
-    dsc.shader = ShadeProg[4];
+    dsc.shader = ShadeProg[3];
     dsc.aspectRatio = (float) windowWidth / windowHeight;
     dsc.lightPos = glm::vec3(0.0f, 7.2f, 0.0f);
     dsc.lightColor = glm::vec3(.75f, 0.75f, 0.75f);
@@ -902,7 +931,9 @@ void initializeDeferredShaderConnection(int shader) {
 
 int main(int argc, char *argv[]) {
     g_hasWon = g_hasQuit = false;
-    g_moveMouse = false;//true;
+    g_moveMouse = true;
+    
+    runningStarted = 0.f;
 
     roomFloorHeight = vec3(0.f);
     roomCeilHeight = 0.f;
@@ -964,7 +995,8 @@ int main(int argc, char *argv[]) {
     }
 
     initializeDeferredShaderConnection(3);
-    initializeDeferredShadingVariables();
+    //initializeDeferredShadingVariables();
+    initializeDSCVariables();
 
     //deferred shading shader
     if (!InstallShader("passThrough_vert.glsl", "passThrough_frag.glsl", 4)) {
@@ -973,7 +1005,8 @@ int main(int argc, char *argv[]) {
     }
 
     initializeDeferredShaderConnection(4);
-    initializePassThroughShaderVariables();
+    //initializePassThroughShaderVariables();
+    initializeDRCVariables();
 
 
     //start the random counter
@@ -981,7 +1014,7 @@ int main(int argc, char *argv[]) {
 
     //set input callback functions
     glfwSetMousePos(windowWidth / 2, windowHeight / 2);
-    currState =  new Running(); //new MainMenu(); 
+    currState = new FakeMainMenu();
     glfwSetKeyCallback(Keyboard);
     glfwSetMousePosCallback(MouseMove);
     glfwSetMouseButtonCallback(MouseClick);

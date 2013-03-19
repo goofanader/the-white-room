@@ -73,7 +73,7 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     glm::mat4 projection = glm::perspective(80.0f, gc->aspectRatio, 0.1f, 100.f);
     safe_glUniformMatrix4fv(gc->h_uProjMatrix, glm::value_ptr(projection));
     
-    safe_glUniform1f(gc->h_uTime, glfwGetTime());
+    safe_glUniform1f(gc->h_uTime, abs(glfwGetTime() - getStartRunning()));
 
     glm::mat4 view = glm::lookAt(cameraPos, lookAt, glm::vec3(0.f, 1.f, 0.f));
     safe_glUniformMatrix4fv(gc->h_uViewMatrix, glm::value_ptr(view));

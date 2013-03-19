@@ -78,10 +78,12 @@ void DeferredShadingObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
             glm::value_ptr(glm::transpose(glm::inverse(model))));
 
     //Do transformations
+    glActiveTexture(GL_TEXTURE1);
     safe_glEnableVertexAttribArray(gc->h_aPosition);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     safe_glVertexAttribPointer(gc->h_aPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+    glActiveTexture(GL_TEXTURE2);
     safe_glEnableVertexAttribArray(gc->h_aNormal);
     glBindBuffer(GL_ARRAY_BUFFER, NBO);
     safe_glVertexAttribPointer(gc->h_aNormal, 3, GL_FLOAT, GL_TRUE, 0, 0);
