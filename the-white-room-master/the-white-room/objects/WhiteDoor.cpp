@@ -57,13 +57,13 @@ WhiteDoor::~WhiteDoor() {
 
 void WhiteDoor::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
     if (!isClosed) {
-        if (timeSpent < 1.f) {
+        if (timeSpent < 90) {
             //doTranslate(glm::vec3(2.f, 0.f, -2.f));
             doRotate(glm::vec3(0, 1, 0), 1.f);
             float xMove = -.075f;
             float zMove = -.065f; //-.3f;
             doTranslate(glm::vec3(xMove, 0.f, zMove));
-            timeSpent += (double) dt;
+            timeSpent ++;
             //setNewBounds = true;
         } else if (setNewBounds) {
             setNewBounds = false;

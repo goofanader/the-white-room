@@ -10,6 +10,10 @@
 
 GameObject* createRoom() { return new Room(); }
 GameObject* createDoor() { return new WhiteDoor(); }
+GameObject* createLetter1() { return new Letter1(); }
+GameObject* createLetter2() { return new Letter2(); }
+GameObject* createLetter3() { return new Letter3(); }
+GameObject* createLetter4() { return new Letter4(); }
 
 GameObject* createSafe() { return new Safe(); }
 
@@ -60,6 +64,10 @@ struct {
 
 functionLookupTable[] = {
     { &createDoor, "WhiteDoor"},
+    { &createLetter1, "Letter1"},
+    { &createLetter2, "Letter2"},
+    { &createLetter3, "Letter3"},
+    { &createLetter4, "Letter4"},
     { &createSafe, "Safe"},
     { &createRoom, "Room"},
     { &createArmchair, "Armchair"},

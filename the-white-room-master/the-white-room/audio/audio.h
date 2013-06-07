@@ -24,7 +24,7 @@ class SoundPlayer {
         map<string, SoundObject*> soundMap;
 
         FMOD::System *soundSystem;
-        FMOD::Channel *channel;
+        FMOD::Channel *channel, *channelContinuous;
         SoundObject *object;
 
         vector<string> tokenize(const string &str, const string &delim);

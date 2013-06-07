@@ -58,7 +58,7 @@ private:
     double timeSpent;
     bool isFoot1;
    
-    GameObject* objectArray[(int) (ROOM_SIZE * ARRAYMULTIPLIER)][(int) ((ROOM_SIZE/ROOM_HEIGHT_DIVISION) * ARRAYMULTIPLIER)][(int) (ROOM_SIZE * ARRAYMULTIPLIER)];
+    //GameObject* objectArray[(int) (ROOM_SIZE * ARRAYDIVISOR * ARRAYMULTIPLIER)][(int) ((ROOM_SIZE/ROOM_HEIGHT_DIVISION) * ARRAYDIVISOR * ARRAYMULTIPLIER)][(int) (ROOM_SIZE * ARRAYDIVISOR * ARRAYMULTIPLIER)];
 
     void initializeCamera();
     void initializeLight();

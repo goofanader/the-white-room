@@ -116,17 +116,29 @@ SoundPlayer::SoundPlayer(std::string listOfSounds) {
 }
 
 SoundPlayer::~SoundPlayer() {
+   printf("woof0\n");
+   channel->stop();
+   printf("woof1\n");
+   channelContinuous->stop();
+   printf("woof2\n");
     for (std::map<string, SoundObject*>::iterator it = soundMap.begin();
         it != soundMap.end(); ++it) {
         result = it->second->sound->release();
+        printf("woof...");
         ERRCHECK(result);
-    }
-    soundMap.clear();
+    } //SWITCH TO only one SoundPlayer used in the whole game
+    printf("\n");
+    //soundMap.clear();
+    printf("woof4\n");
     
     result = soundSystem->close();
+    printf("woof3\n");
     ERRCHECK(result);
+    printf("woof4\n");
     result = soundSystem->release();
+    printf("woof5\n");
     ERRCHECK(result);
+    printf("woof6\n");
 }
 
 
@@ -145,9 +157,9 @@ void SoundPlayer::playContinuous(string sName) {
     if(soundMap.find(sName) != soundMap.end()) {
         soundMap[sName]->sound->setMode(FMOD_LOOP_NORMAL);
         result = soundSystem->playSound(FMOD_CHANNEL_FREE, 
-                soundMap[sName]->sound, true, &channel);
+                soundMap[sName]->sound, true, &channelContinuous);
         ERRCHECK(result);
-        ERRCHECK(channel->setPaused(false));
+        ERRCHECK(channelContinuous->setPaused(false));
     }
 }
 

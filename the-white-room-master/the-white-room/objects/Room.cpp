@@ -155,12 +155,16 @@ void Room::update(float dt, GameObject* playerCamera, vec3 camLookAt) {
 bool Room::doesCollide(GameObject* other) {
 #if 1
     for (int i = 2; i < NUM_WALLS; i++) {
+        //std::cout << "i=" << i << std::endl;
         if (!hasWon() || (hasWon() && i != 4)) {
+            //printf("room i=%d\n", i);
             if (room[i].doesCollide(other)) {
-                //printf("nya\n");
+                //printf("nya %d\n", i);
                 return true;
             }
+            //std::cout << "room " << i << " didn't collide" << std::endl;
         } else {
+            //std::cout << "checking if player's colliding with north wall" << std::endl;
             if (northBoundLeftMin.x <= other->getAABBmax().x &&
                     //this->northBoundLeftMin.y <= other->AABBmax.y &&
                     this->northBoundLeftMin.z <= other->getAABBmax().z &&

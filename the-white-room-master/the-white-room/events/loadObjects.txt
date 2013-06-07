@@ -1,6 +1,7 @@
-numItems: 33
+numItems: 36
 # list of items to be created
 create Room
+create Chandelier
 create WhiteDoor
 create Bookshelf
 create Book1
@@ -10,16 +11,15 @@ create Clock
 create Safe
 create Armchair
 create Armchair2
-create Chandelier
 create MooseHead
 create Table
+create RoundTable
 create Plant1
 create Plant6
 create Plant0
 create Radio
 create Knob100
 create Knob10
-create RoundTable
 create Fireplace
 create EastPainting
 create WestPainting
@@ -32,4 +32,8 @@ create Box1
 create Box2
 create Box3
 create Box4
-create ParticleSystem
+#create ParticleSystem
+create Letter4
+create Letter1
+create Letter2
+create Letter3

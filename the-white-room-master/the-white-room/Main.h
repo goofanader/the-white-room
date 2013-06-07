@@ -8,12 +8,22 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
+#include "ft2build.h"
+#include FT_FREETYPE_H
+
 #include "glm/glm.hpp"
 #include "objects/GameObject.h"
 #include "objects/mainMenu/DeferredShadingObject.h"
 
 #define IS_SOUND_ON true
-#define MAX_SHADERS 6
+#define MAX_SHADERS 7
+
+struct point {
+	GLfloat x;
+	GLfloat y;
+	GLfloat s;
+	GLfloat t;
+};
 
 GameConstants* getGC();
 GameConstants* getLC();

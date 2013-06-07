@@ -295,6 +295,7 @@ void GameObject::doScale(glm::vec3 scale) {
 }
 
 bool GameObject::doesCollide(GameObject *other) {
+    //std::cout << "generic doesCollide method..." << std::endl;
     vec3 thisMin = getAABBmin();
     vec3 thisMax = getAABBmax();
     vec3 otherMin = other->getAABBmin();

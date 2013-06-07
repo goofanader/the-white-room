@@ -30,5 +30,5 @@ void main( void )
 	gl_FragColor = max(dot(normal.xyz,lightDir),0.0) * image +
             pow(max(dot(normal.xyz,vHalfVector),0.0), 1.0) * 1.5;
         gl_FragColor.a = 1.0;
-        gl_FragColor = vec4(normal.xyz, 1.0);//vec4(1.0, 1.0, 1.0, 1.0);
+        //gl_FragColor = vec4(normal.xyz, 1.0);//vec4(1.0, 1.0, 1.0, 1.0);
 }

@@ -53,7 +53,7 @@ void FakeMainMenu::initializeCamera() {
     playerCamera->rotate = glm::mat4(1.f);
 
     playerCamera->doTranslate(vec3(0.f,
-            getRoomFloorHeight().y - playerCamera->getAABBmin().y, 20.f));
+            0.f - playerCamera->getAABBmin().y, 20.f));
 
     camPrevTrans = camNextTrans = playerCamera->trans;
 
@@ -100,7 +100,8 @@ FakeMainMenu::~FakeMainMenu() {
 }
 
 void FakeMainMenu::draw() {
-    frame->draw(playerCamera->trans, camLookAt, getGC()->lightPos, 
+   vec3 lightPosition = vec3(0.f,5.f,20.f);
+    frame->draw(playerCamera->trans, camLookAt, lightPosition, 
             getGC()->lightColor, getGC());
     
     if (frame->isItLoading() && waitCounter < 1) {
@@ -147,7 +148,7 @@ void FakeMainMenu::mouseClicked(int button, int action) {
         //switch to the loading screen, and then start Running.cpp
         frame->setIsLoading(true);
         setCanMoveMouse(false);
-        glfwDisable(GLFW_MOUSE_CURSOR);
+        //glfwDisable(GLFW_MOUSE_CURSOR);
         glDepthFunc(GL_LEQUAL);
     }
 }
@@ -155,7 +156,7 @@ void FakeMainMenu::mouseClicked(int button, int action) {
 void FakeMainMenu::keyPressed(float dt, int keyDown[]) {
     float frameBuffMoveSpeed = .3f;
 
-    if (keyDown[GLFW_KEY_LEFT]) {
+    /*if (keyDown[GLFW_KEY_LEFT]) {
         frame->doTranslate(vec3(-frameBuffMoveSpeed, 0.f, 0.f));
     }
     if (keyDown[GLFW_KEY_RIGHT]) {
@@ -172,9 +173,9 @@ void FakeMainMenu::keyPressed(float dt, int keyDown[]) {
     }
     if (keyDown['K']) {
         frame->doTranslate(vec3(0.f, 0.f, -frameBuffMoveSpeed));
-    }
+    }*/
     
-    std::cout << "Frame Trans: " << printVec3(frame->trans) << std::endl;
+    //std::cout << "Frame Trans: " << printVec3(frame->trans) << std::endl;
 }
 
 void FakeMainMenu::pause() {

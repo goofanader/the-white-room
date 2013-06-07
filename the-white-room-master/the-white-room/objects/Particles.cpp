@@ -92,11 +92,9 @@ std::string ParticleSystem::className() {
 }
 
 ParticleSystem::ParticleSystem() {
-    printf("got here1\n");
     MeshLoader::loadVertexBufferObjectFromMesh(
             "objects/meshes/particles/Billboard.obj",
             IBOlen, VBO, IBO, NBO, TBO, AABBmin, AABBmax);
-    printf("got here2\n");
 
     shininess = 2.0f;
     specStrength = 1.0f;

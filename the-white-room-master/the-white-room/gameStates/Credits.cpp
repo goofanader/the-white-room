@@ -53,7 +53,7 @@ void Credits::initializeCamera() {
     playerCamera->rotate = glm::mat4(1.f);
 
     playerCamera->doTranslate(vec3(0.f,
-            getRoomFloorHeight().y - playerCamera->getAABBmin().y, 20.f));
+            0.f - playerCamera->getAABBmin().y, 20.f));
 
     camPrevTrans = camNextTrans = playerCamera->trans;
 
@@ -161,7 +161,7 @@ void Credits::mouseClicked(int button, int action) {
 void Credits::keyPressed(float dt, int keyDown[]) {
     float frameBuffMoveSpeed = .3f;
 
-    if (keyDown[GLFW_KEY_LEFT]) {
+    /*if (keyDown[GLFW_KEY_LEFT]) {
         frame->doTranslate(vec3(-frameBuffMoveSpeed, 0.f, 0.f));
     }
     if (keyDown[GLFW_KEY_RIGHT]) {
@@ -178,9 +178,9 @@ void Credits::keyPressed(float dt, int keyDown[]) {
     }
     if (keyDown['K']) {
         frame->doTranslate(vec3(0.f, 0.f, -frameBuffMoveSpeed));
-    }
+    }*/
     
-    std::cout << "Frame Trans: " << printVec3(frame->trans) << std::endl;
+    //std::cout << "Frame Trans: " << printVec3(frame->trans) << std::endl;
 }
 
 void Credits::pause() {

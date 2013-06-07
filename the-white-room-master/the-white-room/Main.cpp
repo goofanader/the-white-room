@@ -42,6 +42,17 @@
 using namespace std;
 using namespace glm;
 
+//text library stuff
+FT_Library ft;
+FT_Face face;
+GLint attribute_coord;
+GLint uniform_tex;
+GLint uniform_color;
+GLuint vbo;
+bool isDisplayingFramerate;
+
+int blah[2];
+
 GameConstants gc, lc, sc;
 DeferredShadingConstants drc, dsc;
 bool g_hasWon, g_hasQuit, g_moveMouse;
@@ -304,19 +315,28 @@ bool InstallShader(std::string const & vShaderName, std::string const & fShaderN
 
 void setIsNextState(std::string stateName) {
     delete currState;
-    
+
     if (stateName == "FakeMainMenu" || stateName == "MainMenu") {
+        printf("switching to Running\n");
         g_moveMouse = false;
+        //glfwDisable(GLFW_MOUSE_CURSOR);
         currState = new Running();
         runningStarted = glfwGetTime();
         MouseMove(windowWidth / 2, windowHeight / 2);
     } else if (stateName == "Running") {
+        printf("switching to credits\n");
+        glfwEnable(GLFW_MOUSE_CURSOR);
+        g_moveMouse = true;
         currState = new Credits();
+        MouseMove(windowWidth / 2, windowHeight / 2);
     } else if (stateName == "Credits") {
+        glfwEnable(GLFW_MOUSE_CURSOR);
+        printf("switching to menu\n");
         currState = new FakeMainMenu(); //if get FBO working, change to MainMenu
     }
-    
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    std::cout << "finished loading new state" << std::endl;
 }
 
 void Initialize() {
@@ -477,21 +497,21 @@ void Initialize() {
         1.0f, -1.0f, 0.0f,
         1.0f, 1.0f, 0.0f,*/
         0.0f, 0.0f, 0.0f,
-        (float)windowWidth, 0.0f, 0.0f,
-        (float)windowWidth, (float)windowHeight, 0.f,
-        0.0f, (float)windowHeight, 0.0f
+        (float) windowWidth, 0.0f, 0.0f,
+        (float) windowWidth, (float) windowHeight, 0.f,
+        0.0f, (float) windowHeight, 0.0f
     };
 
     glGenBuffers(1, &quad_vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof (g_QuadVBOdata),
             g_QuadVBOdata, GL_STATIC_DRAW);
-    
+
     static const GLfloat g_QuadTBOdata[] = {
-        0,0,
-        1,0,
-        1,1,
-        0,1
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1
     };
 
     //go back to the usual screen framebuffer
@@ -518,9 +538,6 @@ void Draw() {
 
     //draw what the current state wants (atm, draw the scene in "Running.cpp")
     currState->draw();
-    printOpenGLError();
-
-    glfwSwapBuffers();
     printOpenGLError();
 }
 
@@ -550,60 +567,78 @@ void Keyboard(int key, int state) {
         keyDown[key] = 1;
     else
         keyDown[key] = 0;
-    switch (key) {
-            // Toggle wireframe
-        /*case 'N':
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            glDisable(GL_CULL_FACE);
-            break;
-        case 'M':
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            glEnable(GL_CULL_FACE);
-            break;
-        case GLFW_KEY_LEFT:
-            gc.lightPos = glm::vec3(gc.lightPos.x - .1, gc.lightPos.y, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case GLFW_KEY_RIGHT:
-            gc.lightPos = glm::vec3(gc.lightPos.x + .1, gc.lightPos.y, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case GLFW_KEY_UP:
-            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y + .1, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case GLFW_KEY_DOWN:
-            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y - .1, gc.lightPos.z);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case 'I':
-            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z + .1);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case 'K':
-            gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z - .1);
-            std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
-            break;
-        case 'R':
-            gc.lightPos = glm::vec3(0, 9, 0);
-            std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;*/
-            // Quit program
-        case 'Q':
-            g_hasQuit = true;
+    if (state == GLFW_PRESS) {
+        switch (key) {
+                // Toggle wireframe
+                /*case 'N':
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    glDisable(GL_CULL_FACE);
+                    break;
+                case 'M':
+                    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                    glEnable(GL_CULL_FACE);
+                    break;
+                case GLFW_KEY_LEFT:
+                    gc.lightPos = glm::vec3(gc.lightPos.x - .1, gc.lightPos.y, gc.lightPos.z);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case GLFW_KEY_RIGHT:
+                    gc.lightPos = glm::vec3(gc.lightPos.x + .1, gc.lightPos.y, gc.lightPos.z);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case GLFW_KEY_UP:
+                    gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y + .1, gc.lightPos.z);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case GLFW_KEY_DOWN:
+                    gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y - .1, gc.lightPos.z);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case 'I':
+                    gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z + .1);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case 'K':
+                    gc.lightPos = glm::vec3(gc.lightPos.x, gc.lightPos.y, gc.lightPos.z - .1);
+                    std::cout << "lightPos: " << printVec3(gc.lightPos) << std::endl;
+                    break;
+                case 'R':
+                    gc.lightPos = glm::vec3(0, 9, 0);
+                    std::cout << "Reset lightPos to " << printVec3(gc.lightPos) << std::endl;*/
+                // Quit program
+            case GLFW_KEY_LEFT:
+                blah[0] -= 1;
+                std::cout << "words: (" << blah[0] << ", " << blah[1] << ")" << std::endl;
+                break;
+            case GLFW_KEY_RIGHT:
+                blah[0] += 1;
+                std::cout << "words: (" << blah[0] << ", " << blah[1] << ")" << std::endl;
+                break;
+            case GLFW_KEY_UP:
+                blah[1] += 1;
+                std::cout << "words: (" << blah[0] << ", " << blah[1] << ")" << std::endl;
+                break;
+            case GLFW_KEY_DOWN:
+                blah[1] -= 1;
+                std::cout << "words: (" << blah[0] << ", " << blah[1] << ")" << std::endl;
+                break;
+            case 'F':
+                if (isDisplayingFramerate) {
+                    isDisplayingFramerate = false;
+                } else {
+                    isDisplayingFramerate = true;
+                }
+                break;
+            case 'Q':
+            case GLFW_KEY_ESC:
+                g_hasQuit = true;
 
 
-            //exit(EXIT_SUCCESS);
-            break;
+                //exit(EXIT_SUCCESS);
+                break;
+        }
     }
 }
-
-/*void updateLookAt() {
-    //camLookAt = playerCamera->trans - glm::vec3(
-    camLookAt = camNextTrans - glm::vec3(
-            cos(camAlpha) * cos(camBeta),
-            sin(camAlpha),
-            cos(camAlpha) * sin(camBeta));
-}*/
 
 void MouseClick(int button, int action) {
     currState->mouseClicked(button, action);
@@ -650,6 +685,164 @@ int getScreenSize() {
     return 0;
 }
 
+/**
+ * Render text using the currently loaded font and currently set font size.
+ * Rendering starts at coordinates (x, y), z is always 0.
+ * The pixel coordinates that the FreeType2 library uses are scaled by (sx, sy).
+ */
+void render_text(const char *text, float x, float y, float sx, float sy) {
+    glUseProgram(ShadeProg[5]);
+    printOpenGLError();
+
+    glDisable(GL_CULL_FACE);
+
+    const char *p;
+    FT_GlyphSlot g = face->glyph;
+
+    /* Create a texture that will be used to hold one "glyph" */
+    GLuint tex;
+
+    glActiveTexture(GL_TEXTURE0);
+    printOpenGLError();
+    glGenTextures(1, &tex);
+    printOpenGLError();
+    glBindTexture(GL_TEXTURE_2D, tex);
+    printOpenGLError();
+    glUniform1i(uniform_tex, 0);
+    printOpenGLError();
+
+    /* We require 1 byte alignment when uploading texture data */
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    printOpenGLError();
+
+    /* Clamping to edges is important to prevent artifacts when scaling */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    printOpenGLError();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    printOpenGLError();
+
+    /* Linear filtering usually looks best for text */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    printOpenGLError();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    printOpenGLError();
+
+    /* Set up the VBO for our vertex data */
+    glEnableVertexAttribArray(attribute_coord);
+    printOpenGLError();
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    printOpenGLError();
+    glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    printOpenGLError();
+
+    /* Loop through all characters */
+    for (p = text; *p; p++) {
+        /* Try to load and render the character */
+        if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
+            std::cout << "loaded character" << std::endl;
+            continue;
+        }
+
+        /* Upload the "bitmap", which contains an 8-bit grayscale image, as an alpha texture */
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, g->bitmap.width,
+                g->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, g->bitmap.buffer);
+        printOpenGLError();
+
+
+
+        /* Calculate the vertex and texture coordinates */
+        float x2 = x + g->bitmap_left * sx;
+        float y2 = -y - g->bitmap_top * sy;
+        float w = g->bitmap.width * sx;
+        float h = g->bitmap.rows * sy;
+
+        point box[4] = {
+            {x2, -y2, 0, 0},
+            {x2 + w, -y2, 1, 0},
+            {x2, -y2 - h, 0, 1},
+            {x2 + w, -y2 - h, 1, 1},
+        };
+
+        /* Draw the character on the screen */
+        glBufferData(GL_ARRAY_BUFFER, sizeof (box), box, GL_DYNAMIC_DRAW);
+        printOpenGLError();
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        printOpenGLError();
+
+        /* Advance the cursor to the start of the next character */
+        x += (g->advance.x >> 6) * sx;
+        y += (g->advance.y >> 6) * sy;
+    }
+    //std::cout << "printed text" << std::endl;
+
+    glDisableVertexAttribArray(attribute_coord);
+    printOpenGLError();
+    glDeleteTextures(1, &tex);
+    printOpenGLError();
+    glUseProgram(0);
+    glEnable(GL_CULL_FACE);
+}
+
+double calcFPS(double theTimeInterval = 1.0, std::string theWindowTitle = "NONE")
+{
+	// Static values which only get initialised the first time the function runs
+	static double t0Value       = glfwGetTime(); // Set the initial time to now
+	static int    fpsFrameCount = 0;             // Set the initial FPS frame count to 0
+	static double fps           = 0.0;           // Set the initial FPS value to 0.0
+ 
+	// Get the current time in seconds since the program started (non-static, so executed every time)
+	double currentTime = glfwGetTime();
+ 
+	// Ensure the time interval between FPS checks is sane (low cap = 0.1s, high-cap = 10.0s)
+	// Negative numbers are invalid, 10 fps checks per second at most, 1 every 10 secs at least.
+	if (theTimeInterval < 0.1)
+	{
+		theTimeInterval = 0.1;
+	}
+	if (theTimeInterval > 10.0)
+	{
+		theTimeInterval = 10.0;
+	}
+ 
+	// Calculate and display the FPS every specified time interval
+	if ((currentTime - t0Value) > theTimeInterval)
+	{
+		// Calculate the FPS as the number of frames divided by the interval in seconds
+		fps = (double)fpsFrameCount / (currentTime - t0Value);
+ 
+		// If the user specified a window title to append the FPS value to...
+		if (theWindowTitle != "NONE")
+		{
+			// Convert the fps value into a string using an output stringstream
+			std::ostringstream stream;
+			stream << fps;
+			std::string fpsString = stream.str();
+ 
+			// Append the FPS value to the window title details
+			theWindowTitle += " | FPS: " + fpsString;
+ 
+			// Convert the new window title to a c_str and set it
+			const char* pszConstString = theWindowTitle.c_str();
+			glfwSetWindowTitle(pszConstString);
+		}
+		else // If the user didn't specify a window to append the FPS to then output the FPS to the console
+		{
+			//std::cout << "FPS: " << fps << std::endl;
+		}
+ 
+		// Reset the FPS frame counter and set the initial time to be now
+		fpsFrameCount = 0;
+		t0Value = glfwGetTime();
+	}
+	else // FPS calculation time interval hasn't elapsed yet? Simply increment the FPS frame counter
+	{
+		fpsFrameCount++;
+	}
+ 
+	// Return the current FPS - doesn't have to be used if you don't want it!
+	return fps;
+}
+
 void gameLoop() {
     int running = GL_TRUE;
     double oldTime = glfwGetTime();
@@ -658,10 +851,7 @@ void gameLoop() {
     double timeAccumulator = 0.0;
 
     while (!g_hasQuit) {
-
         curTime = glfwGetTime();
-
-
         currState->keyPressed(timeAccumulator, keyDown);
 
         //timeAccumulator is the amount of time we spent on the last frame
@@ -670,7 +860,6 @@ void gameLoop() {
         //happening
 
         while (timeAccumulator >= timeDelta) {
-            currState->update(timeDelta);
             timeAccumulator -= timeDelta;
         }
 
@@ -685,6 +874,33 @@ void gameLoop() {
 
         Draw();
         //DrawParticles(particleSystem);
+
+        //print the framerate to the screen
+        if (isDisplayingFramerate) {
+            glUseProgram(ShadeProg[5]);
+            //glClearColor(1, 1, 1, 1);
+            //glClear(GL_COLOR_BUFFER_BIT);
+            float sx = 2.0 / 600.0;
+            float sy = 2.0 / 800.0;
+
+            GLfloat black[4] = {0, 0, 0, 1};
+            GLfloat red[4] = {1, 0, 0, 1};
+            GLfloat transparent_green[4] = {0, 1, 0, 0.5};
+
+
+            printOpenGLError();
+            FT_Set_Pixel_Sizes(face, 0, 32);
+            glUniform4fv(uniform_color, 1, red);
+            printOpenGLError();
+            
+            std::ostringstream framerateString;
+            framerateString << "Framerate: " << calcFPS();
+            
+            render_text(framerateString.str().c_str(), blah[0] + 8 * sx, blah[1] - 50 * sy, sx, sy);
+        }
+
+        glfwSwapBuffers();
+        printOpenGLError();
         oldTime = curTime;
         //don't calculate time based off of how long we slept
         //base it off of when the next loop starts
@@ -822,7 +1038,7 @@ void initializeDRCVariables() {
     drc.h_uUseTex = uUseTex;
     drc.h_uUseTex2 = uUseTex2;
     drc.h_uTime = uTime;
-    
+
     drc.FramebufferName = FramebufferName;
 }
 
@@ -853,7 +1069,7 @@ void initializeDSCVariables() {
     dsc.h_uUseTex = uUseTex;
     dsc.h_uUseTex2 = uUseTex2;
     dsc.h_uTime = uTime;
-    
+
     dsc.diffuseTexture = m_diffuseTexture;
     dsc.PositionTexture = m_positionTexture;
     dsc.NormalsTexture = m_normalsTexture;
@@ -925,14 +1141,19 @@ void initializeDeferredShaderConnection(int shader) {
     m_diffuseID = safe_glGetUniformLocation(ShadeProg[shader], "tDiffuse");
     m_positionID = safe_glGetUniformLocation(ShadeProg[shader], "tPosition");
     m_normalsID = safe_glGetUniformLocation(ShadeProg[shader], "tNormals");
-    
+
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
 }
 
 int main(int argc, char *argv[]) {
+    calcFPS();
     g_hasWon = g_hasQuit = false;
-    g_moveMouse = true;
-    
+    g_moveMouse = isDisplayingFramerate = true;
+    setShadowMap = false;
+
+    blah[0] = -1;
+    blah[1] = 1;
+
     runningStarted = 0.f;
 
     roomFloorHeight = vec3(0.f);
@@ -953,12 +1174,24 @@ int main(int argc, char *argv[]) {
     }
     glfwSetWindowTitle("The White Room");
 
+    //Freetype Setup
+    if (FT_Init_FreeType(&ft)) {
+        std::cerr << "Could not init freetype library\n";
+        return 1;
+    }
+
+    if (FT_New_Face(ft, "UbuntuMono-R.ttf", 0, &face)) {
+        std::cerr << "Could not open font\n";
+        return 1;
+    }
+
     // OpenGL Setup
     Initialize();
     printOpenGLError();
     getGLversion();
     printOpenGLError();
 
+#if 1
     // Shader Setup: Main Shader
     if (!InstallShader(
             "mesh_vert.glsl",
@@ -1007,7 +1240,19 @@ int main(int argc, char *argv[]) {
     initializeDeferredShaderConnection(4);
     //initializePassThroughShaderVariables();
     initializeDRCVariables();
+#endif
 
+    //font shader
+    if (!InstallShader("font_vert.glsl", "font_frag.glsl", 5)) {
+        printf("Error installing font shader!\n");
+        return 1;
+    }
+
+    glUseProgram(ShadeProg[5]);
+    attribute_coord = safe_glGetAttribLocation(ShadeProg[5], "coord");
+    uniform_tex = safe_glGetUniformLocation(ShadeProg[5], "tex");
+    uniform_color = safe_glGetUniformLocation(ShadeProg[5], "color");
+    glGenBuffers(1, &vbo);
 
     //start the random counter
     srand(time(NULL));
@@ -1015,6 +1260,7 @@ int main(int argc, char *argv[]) {
     //set input callback functions
     glfwSetMousePos(windowWidth / 2, windowHeight / 2);
     currState = new FakeMainMenu();
+    //g_moveMouse = false;
     glfwSetKeyCallback(Keyboard);
     glfwSetMousePosCallback(MouseMove);
     glfwSetMouseButtonCallback(MouseClick);
@@ -1026,5 +1272,5 @@ int main(int argc, char *argv[]) {
 
     delete currState;
     glfwTerminate();
-    return 0;
+    exit(EXIT_SUCCESS);
 }

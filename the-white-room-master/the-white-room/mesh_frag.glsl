@@ -139,4 +139,8 @@ if (uUseTex == 2) {
         texColor.a);
 }
 
+if (texColor.r == 202.0 / 255.0 && texColor.g == 142.0 / 255.0 && texColor.b == 94.0 / 255.0) {
+    gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+}
+
 }
