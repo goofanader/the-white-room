@@ -186,9 +186,14 @@ void Running::draw() {
     GameObject *curr, *radio;
     bool hasRadio = false;
     
+    bool isReading = false;
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    int shouldDarkenScreen = 0;
+    if (isPaused() || isReading) {
+        shouldDarkenScreen = 1;
+    }
 
     for (std::set<GameObject*>::iterator iter = objects.begin();
             iter != objects.end(); iter++) {
@@ -209,7 +214,7 @@ void Running::draw() {
                 curr->className() == "Bookshelf" || 
                 curr->className() == "ParticleSystem")) {
             curr->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-                    getGC()->lightColor, getGC());
+                    getGC()->lightColor, getGC(), shouldDarkenScreen);
             
             if (curr->isHighlighted || curr->isHighlightDisappearing) {
                 //Draw the highlight, so turn things off

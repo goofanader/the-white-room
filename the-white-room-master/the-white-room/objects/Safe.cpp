@@ -90,9 +90,9 @@ Safe::~Safe() {
 }
 
 void Safe::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
-        glm::vec3 lightColor, GameConstants* gc) {
-    body->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    door->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        glm::vec3 lightColor, GameConstants* gc, int shouldDarkenScreen) {
+    body->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
+    door->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
 }
 
 void Safe::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,

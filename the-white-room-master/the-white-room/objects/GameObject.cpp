@@ -61,7 +61,7 @@ GameObject::~GameObject() {
 }
 
 void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-        glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc) {
+        glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc, int shouldDarkenScreen) {
     if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
         return;
     }
@@ -156,6 +156,9 @@ void GameObject::draw(glm::vec3 cameraPos, glm::vec3 lookAt,
     glUniform3f(gc->h_uLightPos, lightPos.x, lightPos.y, lightPos.z);
     glUniform4f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z, gc->lightAlpha);
     glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
+    printOpenGLError();
+    
+    safe_glUniform1i(gc->h_uIsPaused, shouldDarkenScreen);
     printOpenGLError();
     
  //   safe_glUniform1i(gc->ShadowMap, 2);

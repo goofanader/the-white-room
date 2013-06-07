@@ -139,9 +139,9 @@ Room::~Room() {
 }
 
 void Room::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
-        glm::vec3 lightColor, GameConstants *gc) {
+        glm::vec3 lightColor, GameConstants *gc, int shouldDarkenScreen) {
     for (int i = 0; i < NUM_WALLS; i++) {
-        room[i].draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        room[i].draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
     }
 }
 

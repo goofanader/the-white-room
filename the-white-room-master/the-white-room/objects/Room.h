@@ -20,7 +20,7 @@ public:
     ~Room();
 
     void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
+            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc, int shouldDarkenScreen);
     void update(float dt, GameObject* playerCamera, vec3 camLookAt);
     bool doesCollide(GameObject* other);
     std::string className();

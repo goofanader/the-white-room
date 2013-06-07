@@ -102,7 +102,7 @@ FakeMainMenu::~FakeMainMenu() {
 void FakeMainMenu::draw() {
    vec3 lightPosition = vec3(0.f,5.f,20.f);
     frame->draw(playerCamera->trans, camLookAt, lightPosition, 
-            getGC()->lightColor, getGC());
+            getGC()->lightColor, getGC(), 0);
     
     if (frame->isItLoading() && waitCounter < 1) {
         waitCounter++;

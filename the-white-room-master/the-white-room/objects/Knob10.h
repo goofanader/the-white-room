@@ -21,7 +21,7 @@ public:
     virtual void onEvent(SoundPlayer *soundPlayer);
     int getStation();
     void draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos, 
-        glm::vec3 lightColor, GameConstants* gc);
+        glm::vec3 lightColor, GameConstants* gc, int shouldDarkenScreen);
 
 private:
     float rotating;

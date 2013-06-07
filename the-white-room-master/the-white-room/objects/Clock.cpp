@@ -129,11 +129,11 @@ Clock::~Clock() {
 }
 
 void Clock::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
-        glm::vec3 lightColor, GameConstants* gc) {
-    body->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    weight1->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    weight2->draw(cameraPos, lookAt, lightPos, lightColor, gc);
-    weight3->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        glm::vec3 lightColor, GameConstants* gc, int shouldDarkenScreen) {
+    body->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
+    weight1->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
+    weight2->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
+    weight3->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
 }
 void Clock::drawHighlight(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glm::vec3 lightColor, GameConstants* gc) {

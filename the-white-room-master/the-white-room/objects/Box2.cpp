@@ -48,9 +48,9 @@ Box2::~Box2() {
 }
 
 void Box2::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
-        glm::vec3 lightColor, GameConstants* gc) {
+        glm::vec3 lightColor, GameConstants* gc, int shouldDarkenScreen) {
     if (false)
-        cube->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        cube->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
 }
 
 void Box2::update(float dt, GameObject* playerCamera, vec3 camLookAt){

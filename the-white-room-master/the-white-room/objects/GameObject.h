@@ -48,7 +48,7 @@ typedef struct GameConstants {
     GLuint h_uCamTrans;
     GLuint h_uUseTex;
     GLuint h_uUseTex2;
-    GLuint h_uTime;
+    GLuint h_uTime, h_uIsPaused;
     
     GLuint ShadowMap;
     GLuint uLightProjMatrix;
@@ -64,7 +64,7 @@ public:
     GameObject();
     virtual ~GameObject();
     virtual void draw(glm::vec3 cameraPos, glm::vec3 lookAt,
-            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
+            glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc, int shouldDarkenScreen);
     virtual void drawHighlight(glm::vec3 cameraPs, glm::vec3 lookAt,
             glm::vec3 lightPos, glm::vec3 lightColor, GameConstants *gc);
     virtual void update(float dt, GameObject* playerCamera, vec3 camLookAt);

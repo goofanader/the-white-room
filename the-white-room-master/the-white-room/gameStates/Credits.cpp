@@ -101,7 +101,7 @@ Credits::~Credits() {
 
 void Credits::draw() {
     frame->draw(playerCamera->trans, camLookAt, getGC()->lightPos, 
-            getGC()->lightColor, getGC());
+            getGC()->lightColor, getGC(), 0);
     
     /*if (frame->isItLoading() && waitCounter < 1) {
         waitCounter++;

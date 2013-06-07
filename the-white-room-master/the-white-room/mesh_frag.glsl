@@ -6,6 +6,7 @@ uniform vec4 uAmbColor;
 uniform vec4 uSpecColor;
 uniform vec4 uDiffColor;
 uniform int uUseTex, uUseTex2;
+uniform int uIsPaused;
 uniform sampler2D uTexUnit, uTexUnit2;
 uniform float uTime;
 
@@ -141,6 +142,10 @@ if (uUseTex == 2) {
 
 if (texColor.r == 202.0 / 255.0 && texColor.g == 142.0 / 255.0 && texColor.b == 94.0 / 255.0) {
     gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+}
+
+if (uIsPaused == 1) {
+    gl_FragColor = mix(vec4(0.0, 0.0, 0.0, 1.0), gl_FragColor, .5); //change last number for the factor
 }
 
 }

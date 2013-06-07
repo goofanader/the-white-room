@@ -92,7 +92,7 @@ GLuint uSpecStrength;
 GLuint uCamTrans;
 GLuint uUseTex;
 GLuint uUseTex2;
-GLuint uTime;
+GLuint uTime, uIsPaused;
 
 // Shader Handle
 GLuint ShadeProg[MAX_SHADERS];
@@ -940,6 +940,7 @@ void initializeShaderVariables() {
     gc.h_uUseTex = uUseTex;
     gc.h_uUseTex2 = uUseTex2;
     gc.h_uTime = uTime;
+    gc.h_uIsPaused = uIsPaused;
 
     gc.uLightProjMatrix = uLightProjMatrix;
     gc.uLightViewMatrix = uLightViewMatrix;
@@ -977,6 +978,7 @@ void initializeLaplaceShaderVariables() {
     lc.h_uUseTex = uUseTex;
     lc.h_uUseTex2 = uUseTex2;
     lc.h_uTime = uTime;
+    lc.h_uIsPaused = uIsPaused;
 }
 
 void initializeShadowShaderVariables() {
@@ -1106,6 +1108,7 @@ void initializeShaderConnection(int shader) {
     uUseTex = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex");
     uUseTex2 = safe_glGetUniformLocation(ShadeProg[shader], "uUseTex2");
     uTime = safe_glGetUniformLocation(ShadeProg[shader], "uTime");
+    uIsPaused = safe_glGetUniformLocation(ShadeProg[shader], "uIsPaused");
 
     std::cout << "Successfully installed shader " << ShadeProg[shader] << std::endl;
 }

@@ -185,9 +185,9 @@ std::string Knob100::className() {
 }
 
 void Knob100::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
-        glm::vec3 lightColor, GameConstants* gc) {
+        glm::vec3 lightColor, GameConstants* gc, int shouldDarkenScreen) {
     if (isClicked || (!isClicked && ambAlpha > 0.f)) {
-        arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc);
+        arrow->draw(cameraPos, lookAt, lightPos, lightColor, gc, shouldDarkenScreen);
         
         if (VBO == -1 || IBO == -1 || IBOlen <= 0 || NBO == -1) {
             return;
@@ -260,6 +260,8 @@ void Knob100::draw(glm::vec3 cameraPos, glm::vec3 lookAt, glm::vec3 lightPos,
         glUniform4f(gc->h_uLightColor, lightColor.x, lightColor.y, lightColor.z, gc->lightAlpha);
         glUniform3f(gc->h_uCamTrans, cameraPos.x, cameraPos.y, cameraPos.z);
         printOpenGLError();
+        
+        safe_glUniform1i(gc->h_uIsPaused, shouldDarkenScreen);
 
         glDrawElements(GL_TRIANGLES, IBOlen, GL_UNSIGNED_SHORT, 0);
 
