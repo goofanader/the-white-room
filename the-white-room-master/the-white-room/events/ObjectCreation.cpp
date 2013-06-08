@@ -114,6 +114,7 @@ GameObject* lookupAndCall(const string& name) {
 int door, book1, book2, book3;
 int plant1, plant6, radio, knob10, knob100;
 int clubKey, spadeKey, diamondKey, heartKey, safe;
+int letter1, letter2, letter3, letter4;
 
 void initializeIndices() {
     door = -1;
@@ -126,6 +127,8 @@ void initializeIndices() {
     clubKey = spadeKey = diamondKey = heartKey = -1;
     
     safe = -1;
+    
+    letter1 = letter2 = letter3 = letter4 = -1;
 }
 
 int getDoorNum() { return door; }
@@ -142,6 +145,10 @@ int getSpadeKeyNum() { return spadeKey; }
 int getDiamondKeyNum() { return diamondKey; }
 int getHeartKeyNum() { return heartKey; }
 int getSafeNum() { return safe; }
+int getLetter1Num() { return letter1; }
+int getLetter2Num() { return letter2; }
+int getLetter3Num() { return letter3; }
+int getLetter4Num() { return letter4; }
 
 void setDoorNum(int index) {
     door = index;
@@ -169,6 +176,10 @@ void setDiamondKeyNum(int index) { diamondKey = index; }
 void setClubKeyNum(int index) { clubKey = index; }
 void setSpadeKeyNum(int index) { spadeKey = index; }
 void setSafeNum(int index) { safe = index; }
+void setLetter1Num(int index) { letter1 = index; }
+void setLetter2Num(int index) { letter2 = index; }
+void setLetter3Num(int index) { letter3 = index; }
+void setLetter4Num(int index) { letter4 = index; }
 
 struct {
     void (*fn)(int);
@@ -192,6 +203,11 @@ indexLookupTable[] = {
     { &setSpadeKeyNum, "SpadeKey"},
     { &setClubKeyNum, "ClubKey"},
     { &setSafeNum, "Safe"},
+    
+    { &setLetter1Num, "Letter1"},
+    { &setLetter2Num, "Letter2"},
+    { &setLetter3Num, "Letter3"},
+    { &setLetter4Num, "Letter4"},
     { NULL, NULL}
 };
 

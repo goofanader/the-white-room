@@ -298,6 +298,7 @@ void GameObject::doScale(glm::vec3 scale) {
 }
 
 bool GameObject::doesCollide(GameObject *other) {
+    if (isVisible) {
     //std::cout << "generic doesCollide method..." << std::endl;
     vec3 thisMin = getAABBmin();
     vec3 thisMax = getAABBmax();
@@ -310,6 +311,9 @@ bool GameObject::doesCollide(GameObject *other) {
             thisMax.x >= otherMin.x &&
             thisMax.y >= otherMin.y &&
             thisMax.z >= otherMin.z);
+    } else {
+        return false;
+    }
 }
 
 void GameObject::setTrans(glm::vec3 t) {

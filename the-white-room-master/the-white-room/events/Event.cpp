@@ -208,6 +208,8 @@ void Event::ifObjectSelected(GameObject *curr) {
         eventSwitches[KNOB100].getGameObject()->isClicked = true;
         eventSwitches[KNOB100].getGameObject()->isVisible = true;
         eventSwitches[RADIO].getGameObject()->isClicked = true;
+        
+        eventSwitches[LETTER3].getGameObject()->isVisible = true;
     }//Got the book order wrong, reset.
     else if ((name == "Book2" && !eventSwitches[BOOK3].isSwitchOn()) ||
             (name == "Book1" && !(eventSwitches[BOOK3].isSwitchOn() &&
@@ -242,6 +244,8 @@ void Event::ifObjectSelected(GameObject *curr) {
                 eventSwitches[SPADE].getGameObject()->isVisible = true;
                 eventSwitches[DIAMOND].getGameObject()->isVisible = true;
                 eventSwitches[CLUB].getGameObject()->isVisible = true;
+                
+                eventSwitches[LETTER2].getGameObject()->isVisible = true;
 
                 Safe *temp = (Safe*) (eventSwitches[SAFE].getGameObject());
                 temp->isOpen = true;
@@ -351,6 +355,11 @@ void Event::ifObjectSelected(GameObject *curr) {
                 eventSwitches[WHITE_DOOR].getGameObject()->onEvent(soundPlayer);
                 eventSwitches[WHITE_DOOR].setSwitch(true);
             }
+            
+            eventSwitches[LETTER1].getGameObject()->isVisible = false;
+            eventSwitches[LETTER2].getGameObject()->isVisible = false;
+            eventSwitches[LETTER3].getGameObject()->isVisible = false;
+            eventSwitches[LETTER4].getGameObject()->isVisible = false;
         }
 #endif
     }

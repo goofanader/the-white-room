@@ -73,6 +73,9 @@ int numObjects = 0;
 unsigned int windowWidth = 800, windowHeight = 600;
 State* currState;
 
+bool g_isReading;
+int g_letterNum;
+
 // Variable Handles
 GLuint aPosition;
 GLuint aNormal;
@@ -178,6 +181,15 @@ float getRoomCeilHeight() {
 
 void setRoomCeilHeight(float newHeight) {
     roomCeilHeight = newHeight;
+}
+
+void setIsReading(bool newReading, int letterNum) {
+    g_isReading = newReading;
+    g_letterNum = letterNum;
+}
+
+bool isReading() {
+    return g_isReading;
 }
 
 void SetProjectionMatrix() {
@@ -622,6 +634,11 @@ void Keyboard(int key, int state) {
                 blah[1] -= 1;
                 std::cout << "words: (" << blah[0] << ", " << blah[1] << ")" << std::endl;
                 break;
+            case GLFW_KEY_ENTER:
+                if (g_isReading) {
+                    g_isReading = false;
+                }
+                break;
             case 'F':
                 if (isDisplayingFramerate) {
                     isDisplayingFramerate = false;
@@ -783,64 +800,73 @@ void render_text(const char *text, float x, float y, float sx, float sy) {
     glEnable(GL_CULL_FACE);
 }
 
-double calcFPS(double theTimeInterval = 1.0, std::string theWindowTitle = "NONE")
-{
-	// Static values which only get initialised the first time the function runs
-	static double t0Value       = glfwGetTime(); // Set the initial time to now
-	static int    fpsFrameCount = 0;             // Set the initial FPS frame count to 0
-	static double fps           = 0.0;           // Set the initial FPS value to 0.0
- 
-	// Get the current time in seconds since the program started (non-static, so executed every time)
-	double currentTime = glfwGetTime();
- 
-	// Ensure the time interval between FPS checks is sane (low cap = 0.1s, high-cap = 10.0s)
-	// Negative numbers are invalid, 10 fps checks per second at most, 1 every 10 secs at least.
-	if (theTimeInterval < 0.1)
-	{
-		theTimeInterval = 0.1;
-	}
-	if (theTimeInterval > 10.0)
-	{
-		theTimeInterval = 10.0;
-	}
- 
-	// Calculate and display the FPS every specified time interval
-	if ((currentTime - t0Value) > theTimeInterval)
-	{
-		// Calculate the FPS as the number of frames divided by the interval in seconds
-		fps = (double)fpsFrameCount / (currentTime - t0Value);
- 
-		// If the user specified a window title to append the FPS value to...
-		if (theWindowTitle != "NONE")
-		{
-			// Convert the fps value into a string using an output stringstream
-			std::ostringstream stream;
-			stream << fps;
-			std::string fpsString = stream.str();
- 
-			// Append the FPS value to the window title details
-			theWindowTitle += " | FPS: " + fpsString;
- 
-			// Convert the new window title to a c_str and set it
-			const char* pszConstString = theWindowTitle.c_str();
-			glfwSetWindowTitle(pszConstString);
-		}
-		else // If the user didn't specify a window to append the FPS to then output the FPS to the console
-		{
-			//std::cout << "FPS: " << fps << std::endl;
-		}
- 
-		// Reset the FPS frame counter and set the initial time to be now
-		fpsFrameCount = 0;
-		t0Value = glfwGetTime();
-	}
-	else // FPS calculation time interval hasn't elapsed yet? Simply increment the FPS frame counter
-	{
-		fpsFrameCount++;
-	}
- 
-	// Return the current FPS - doesn't have to be used if you don't want it!
-	return fps;
+double calcFPS(double theTimeInterval = 1.0, std::string theWindowTitle = "NONE") {
+    // Static values which only get initialised the first time the function runs
+    static double t0Value = glfwGetTime(); // Set the initial time to now
+    static int fpsFrameCount = 0; // Set the initial FPS frame count to 0
+    static double fps = 0.0; // Set the initial FPS value to 0.0
+
+    // Get the current time in seconds since the program started (non-static, so executed every time)
+    double currentTime = glfwGetTime();
+
+    // Ensure the time interval between FPS checks is sane (low cap = 0.1s, high-cap = 10.0s)
+    // Negative numbers are invalid, 10 fps checks per second at most, 1 every 10 secs at least.
+    if (theTimeInterval < 0.1) {
+        theTimeInterval = 0.1;
+    }
+    if (theTimeInterval > 10.0) {
+        theTimeInterval = 10.0;
+    }
+
+    // Calculate and display the FPS every specified time interval
+    if ((currentTime - t0Value) > theTimeInterval) {
+        // Calculate the FPS as the number of frames divided by the interval in seconds
+        fps = (double) fpsFrameCount / (currentTime - t0Value);
+
+        // If the user specified a window title to append the FPS value to...
+        if (theWindowTitle != "NONE") {
+            // Convert the fps value into a string using an output stringstream
+            std::ostringstream stream;
+            stream << fps;
+            std::string fpsString = stream.str();
+
+            // Append the FPS value to the window title details
+            theWindowTitle += " | FPS: " + fpsString;
+
+            // Convert the new window title to a c_str and set it
+            const char* pszConstString = theWindowTitle.c_str();
+            glfwSetWindowTitle(pszConstString);
+        } else // If the user didn't specify a window to append the FPS to then output the FPS to the console
+        {
+            //std::cout << "FPS: " << fps << std::endl;
+        }
+
+        // Reset the FPS frame counter and set the initial time to be now
+        fpsFrameCount = 0;
+        t0Value = glfwGetTime();
+    } else // FPS calculation time interval hasn't elapsed yet? Simply increment the FPS frame counter
+    {
+        fpsFrameCount++;
+    }
+
+    // Return the current FPS - doesn't have to be used if you don't want it!
+    return fps;
+}
+
+int textStartX, textStartY, fontSize;
+
+void writeByLine(std::string toWrite) {
+    glUseProgram(ShadeProg[5]);
+    
+    float sx = 2.0 / 600.0;
+    float sy = 2.0 / 800.0;
+    std::ostringstream textString;
+
+    textString << toWrite;
+    render_text(textString.str().c_str(), blah[0] + textStartX * sx,
+            blah[1] - textStartY * sy, sx, sy);
+
+    textStartY += fontSize + 5;
 }
 
 void gameLoop() {
@@ -892,11 +918,99 @@ void gameLoop() {
             FT_Set_Pixel_Sizes(face, 0, 32);
             glUniform4fv(uniform_color, 1, red);
             printOpenGLError();
-            
+
             std::ostringstream framerateString;
             framerateString << "Framerate: " << calcFPS();
-            
+
             render_text(framerateString.str().c_str(), blah[0] + 8 * sx, blah[1] - 50 * sy, sx, sy);
+        }
+
+        if (g_isReading) {
+            glUseProgram(ShadeProg[5]);
+
+            float sx = 2.0 / 600.0;
+            float sy = 2.0 / 800.0;
+
+            GLfloat white[4] = {1, 1, 1, 1};
+
+            printOpenGLError();
+            FT_Set_Pixel_Sizes(face, 0, 32);
+            glUniform4fv(uniform_color, 1, white);
+            printOpenGLError();
+
+            textStartX = 50;
+            textStartY = 125;
+            fontSize = 32;
+
+            if (g_letterNum == 1) {
+                writeByLine("the good times we had in that");
+                writeByLine("tiny, tiny room. Do you");
+                writeByLine("remember? How we rummaged");
+                writeByLine("through the bookshelf, reading");
+                writeByLine("our favorite books, as the");
+                writeByLine("chime of the grandfather clock");
+                writeByLine("sounded off at every hour. It");
+                writeByLine("was odd how the chime sounded");
+                writeByLine("like the beginning of \"Mary");
+                writeByLine("Had a Little Lamb\" - I always");
+                writeByLine("thought that strange.");
+                writeByLine("   Of course, we weren't merely");
+                writeByLine("reading those books, correct?");
+                writeByLine("We were always looking for a");
+            } else if (g_letterNum == 2) {
+                writeByLine("way out, trying to search the");
+                writeByLine("room for those blasted keys.");
+                writeByLine("Ah - I guess I should correct");
+                writeByLine("myself - I forced you to find");
+                writeByLine("them for me is what you would");
+                writeByLine("like to say, isn't it? But it");
+                writeByLine("was all in good fun, Alex. You");
+                writeByLine("know, like that game of Poker");
+                writeByLine("we played every so often. Oh,");
+                writeByLine("but I guess that would make");
+                writeByLine("you remember that I tossed");
+                writeByLine("those cards into the");
+                writeByLine("fireplace... I'm quite bad at");
+                writeByLine("writing happy letters! I keep");
+                writeByLine("reminding you of all those");
+                writeByLine("terrible, terrible times.");
+            } else if (g_letterNum == 3) {
+                writeByLine("   Here, how about this? What");
+                writeByLine("about the time you thought");
+                writeByLine("music would help the plants");
+                writeByLine("grow, but instead it turned");
+                writeByLine("them into rather... disfigured");
+                writeByLine("shapes. Hah! But you didn't");
+                writeByLine("even use regular music, did");
+                writeByLine("you? It was some silly news");
+                writeByLine("radio station in hopes that");
+                writeByLine("you would know what was");
+                writeByLine("happening outside. And yet, it");
+                writeByLine("told us nothing. Nothing about");
+                writeByLine("mom or dad, about that stupid");
+                writeByLine("room we were in, nothing! So,");
+                writeByLine("remember what I told you? What");
+                writeByLine("if you burned down the place,");
+            } else {
+                writeByLine("dear Alex!");
+                writeByLine("   Instead of choosing that,");
+                writeByLine("you decided to leave it to me.");
+                writeByLine("That's why it's not safe where");
+                writeByLine("you are now. I can only leave");
+                writeByLine("you in that white cell of");
+                writeByLine("yours for so long before you");
+                writeByLine("start spouting crazy talk. You");
+                writeByLine("need to escape that room now.");
+                writeByLine("Come back to me, and I promise");
+                writeByLine("everything will be much better");
+                writeByLine("than before.");
+                writeByLine("         Love,");
+                writeByLine("            Your Sister Anna");
+            }
+
+            textStartX = 50;
+            textStartY = 750;
+            writeByLine("(Press \"Enter\" to continue.)");
         }
 
         glfwSwapBuffers();
@@ -1151,7 +1265,7 @@ void initializeDeferredShaderConnection(int shader) {
 int main(int argc, char *argv[]) {
     calcFPS();
     g_hasWon = g_hasQuit = false;
-    g_moveMouse = isDisplayingFramerate = true;
+    g_moveMouse = true; isDisplayingFramerate = false;
     setShadowMap = false;
 
     blah[0] = -1;
@@ -1161,6 +1275,9 @@ int main(int argc, char *argv[]) {
 
     roomFloorHeight = vec3(0.f);
     roomCeilHeight = 0.f;
+
+    g_isReading = false;
+    g_letterNum = 0;
 
     if (!glfwInit()) {
         exit(EXIT_FAILURE);

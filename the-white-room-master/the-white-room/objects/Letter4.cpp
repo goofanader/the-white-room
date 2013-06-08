@@ -47,3 +47,8 @@ Letter4::~Letter4() {
 std::string Letter4::className() {
     return "Letter4";
 }
+
+void Letter4::onEvent(SoundPlayer* soundPlayer) {
+    if (isVisible)
+        setIsReading(true, 4);
+}

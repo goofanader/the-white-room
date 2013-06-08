@@ -186,12 +186,10 @@ void Running::draw() {
     GameObject *curr, *radio;
     bool hasRadio = false;
     
-    bool isReading = false;
-    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     int shouldDarkenScreen = 0;
-    if (isPaused() || isReading) {
+    if (isPaused() || isReading()) {
         shouldDarkenScreen = 1;
     }
 
@@ -314,7 +312,7 @@ void Running::draw() {
 
 void Running::update(float dt) {
 //std::cout << "updating running..." << std::endl;
-    if (!isPaused()) {
+    if (!isPaused() && !isReading()) {
         timeSpent += dt;
 
         lightPos->trans = getGC()->lightPos;
@@ -519,7 +517,7 @@ void Running::mouseClicked(int button, int action) {
     }
 #else
     
-    if (action == GLFW_RELEASE) {
+    if (action == GLFW_RELEASE && !isPaused() && !isReading()) {
         for (std::set<GameObject*>::iterator iter = objects.begin();
                 iter != objects.end(); iter++) {
             curr = (*iter);
@@ -540,7 +538,7 @@ void Running::mouseClicked(int button, int action) {
 }
 
 void Running::mouseMoved(int x, int y, float prevX, float prevY) {
-    if (!isPaused()) {
+    if (!isPaused() && !isReading()) {
         camAlpha += (float) (y - prevY) / getWindowHeight() * 1;
         const float threshold = 3.14159f / 2.f;
         if (camAlpha < -threshold)
@@ -554,7 +552,7 @@ void Running::mouseMoved(int x, int y, float prevX, float prevY) {
 }
 
 void Running::keyPressed(float dt, int keyDown[]) {
-    if (!keyDown['P'] && !isPaused()) {
+    if (!keyDown['P'] && !isPaused() && !isReading()) {
         // Camera movement
         glm::vec3 up = glm::vec3(0, 1, 0);
         glm::vec3 forward = glm::normalize(vec3(camLookAt.x - playerCamera->trans.x, 0.0,

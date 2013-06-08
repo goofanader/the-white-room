@@ -32,6 +32,7 @@ Letter2::Letter2() {
     LoadTexture((char *)"objects/meshes/letter/Letter2A.bmp", texNum);
     hasTex = true;
     ignore = false;
+    isVisible = false;
     
     //doRotate(glm::vec3(1,0,0), -90);
     //doRotate(glm::vec3(0,1,0), 90);
@@ -47,4 +48,8 @@ Letter2::~Letter2() {
 
 std::string Letter2::className() {
     return "Letter2";
+}
+
+void Letter2::onEvent(SoundPlayer* soundPlayer) {
+    if (isVisible) setIsReading(true, 2);
 }

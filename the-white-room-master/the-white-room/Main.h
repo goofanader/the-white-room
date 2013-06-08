@@ -50,5 +50,8 @@ glm::vec3 getRoomFloorHeight();
 void setRoomFloorHeight(glm::vec3 newHeight);
 float getRoomCeilHeight();
 void setRoomCeilHeight(float newHeight);
+
+void setIsReading(bool newReading, int letterNum);
+bool isReading();
 #endif	/* MAIN_H */
 

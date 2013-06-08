@@ -28,6 +28,10 @@
 #define CLUB getClubKeyNum()
 #define DIAMOND getDiamondKeyNum()
 #define SAFE getSafeNum()
+#define LETTER1 getLetter1Num()
+#define LETTER2 getLetter2Num()
+#define LETTER3 getLetter3Num()
+#define LETTER4 getLetter4Num()
 
 using namespace std;
 
@@ -49,6 +53,10 @@ int getDiamondKeyNum();
 int getClubKeyNum();
 int getSpadeKeyNum();
 int getSafeNum();
+int getLetter1Num();
+int getLetter2Num();
+int getLetter3Num();
+int getLetter4Num();
 
 #endif	/* OBJECTCREATION_H */
 

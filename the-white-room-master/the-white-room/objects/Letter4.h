@@ -18,6 +18,7 @@ public:
     virtual ~Letter4();
     
     std::string className();
+    void onEvent(SoundPlayer *soundPlayer);
 private:
 
 };

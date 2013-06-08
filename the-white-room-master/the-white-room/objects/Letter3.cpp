@@ -25,6 +25,8 @@ Letter3::Letter3() {
     scale = glm::vec3(1.f);
     rotate = glm::mat4(1.f);
     
+    isVisible = false;
+    
     //depthMin = 0;
     //depthMax = 1;
     
@@ -48,4 +50,8 @@ Letter3::~Letter3() {
 
 std::string Letter3::className() {
     return "Letter3";
+}
+
+void Letter3::onEvent(SoundPlayer* soundPlayer) {
+    if (isVisible) setIsReading(true, 3);
 }
