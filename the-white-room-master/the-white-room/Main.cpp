@@ -991,7 +991,7 @@ void gameLoop() {
                 writeByLine("room we were in, nothing! So,");
                 writeByLine("remember what I told you? What");
                 writeByLine("if you burned down the place,");
-            } else {
+            } else if (g_letterNum == 4) {
                 writeByLine("dear Alex!");
                 writeByLine("   Instead of choosing that,");
                 writeByLine("you decided to leave it to me.");
@@ -1006,6 +1006,107 @@ void gameLoop() {
                 writeByLine("than before.");
                 writeByLine("         Love,");
                 writeByLine("            Your Sister Anna");
+            } else if (g_letterNum == 0) {
+                FT_Set_Pixel_Sizes(face, 0, 20);
+                fontSize = 20; textStartY -= 50; textStartX += 50;
+                
+                writeByLine("Dear Alex,");
+                writeByLine("   I hope this letter arrives");
+                writeByLine("safely to your... humble abode.");
+                writeByLine("I realize that we no longer live");
+                writeByLine("together, but I do hope you");
+                writeByLine("still keep me in your thoughts");
+                writeByLine("and well-wishes.");
+                writeByLine("   Unless, of course, you still");
+                writeByLine("remember what happened that");
+                writeByLine("night, the exact layout of the");
+                writeByLine("room, the defamation we placed");
+                writeByLine("upon that house. Well, when");
+                writeByLine("I say \"we\", I truly mean \"you\",");
+                writeByLine("or perhaps that other \"you\".");
+                writeByLine("   You must remember the promise");
+                writeByLine("we made. Do not break it.");
+                writeByLine("   The swap. The mirroring of the");
+                writeByLine("other.");
+                writeByLine("   I took your place, you took");
+                writeByLine("mine. The life of being identical");
+                writeByLine("twins brings conveniences, no?");
+                writeByLine("   But I digress. I planned for this");
+                writeByLine("letter to be a happy one,");
+                writeByLine("one where I convince you of");
+                
+                FT_Set_Pixel_Sizes(face, 0, 32);
+                fontSize = 32;
+                //----------------------------------
+                
+#if 0
+                writeByLine("the good times we had in that");
+                writeByLine("tiny, tiny room. Do you");
+                writeByLine("remember? How we rummaged");
+                writeByLine("through the bookshelf, reading");
+                
+                textStartX = 350; textStartY = 125 - 50;
+                
+                writeByLine("our favorite books, as the");
+                writeByLine("chime of the grandfather clock");
+                writeByLine("sounded off at every hour. It");
+                writeByLine("was odd how the chime sounded");
+                writeByLine("like the beginning of \"Mary");
+                writeByLine("Had a Little Lamb\" - I always");
+                writeByLine("thought that strange.");
+                writeByLine("   Of course, we weren't merely");
+                writeByLine("reading those books, correct?");
+                writeByLine("We were always looking for a");
+                //----------------------------
+                writeByLine("way out, trying to search the");
+                writeByLine("room for those blasted keys.");
+                writeByLine("Ah - I guess I should correct");
+                writeByLine("myself - I forced you to find");
+                writeByLine("them for me is what you would");
+                writeByLine("like to say, isn't it? But it");
+                writeByLine("was all in good fun, Alex. You");
+                writeByLine("know, like that game of Poker");
+                writeByLine("we played every so often. Oh,");
+                writeByLine("but I guess that would make");
+                writeByLine("you remember that I tossed");
+                writeByLine("those cards into the");
+                writeByLine("fireplace... I'm quite bad at");
+                writeByLine("writing happy letters! I keep");
+                writeByLine("reminding you of all those");
+                writeByLine("terrible, terrible times.");
+                //--------------------------------
+                writeByLine("   Here, how about this? What");
+                writeByLine("about the time you thought");
+                writeByLine("music would help the plants");
+                writeByLine("grow, but instead it turned");
+                writeByLine("them into rather... disfigured");
+                writeByLine("shapes. Hah! But you didn't");
+                writeByLine("even use regular music, did");
+                writeByLine("you? It was some silly news");
+                writeByLine("radio station in hopes that");
+                writeByLine("you would know what was");
+                writeByLine("happening outside. And yet, it");
+                writeByLine("told us nothing. Nothing about");
+                writeByLine("mom or dad, about that stupid");
+                writeByLine("room we were in, nothing! So,");
+                writeByLine("remember what I told you? What");
+                writeByLine("if you burned down the place,");
+                //--------------------------------
+                writeByLine("dear Alex!");
+                writeByLine("   Instead of choosing that,");
+                writeByLine("you decided to leave it to me.");
+                writeByLine("That's why it's not safe where");
+                writeByLine("you are now. I can only leave");
+                writeByLine("you in that white cell of");
+                writeByLine("yours for so long before you");
+                writeByLine("start spouting crazy talk. You");
+                writeByLine("need to escape that room now.");
+                writeByLine("Come back to me, and I promise");
+                writeByLine("everything will be much better");
+                writeByLine("than before.");
+                writeByLine("         Love,");
+                writeByLine("            Your Sister Anna");
+#endif
             }
 
             textStartX = 50;

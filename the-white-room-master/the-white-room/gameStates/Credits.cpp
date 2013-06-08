@@ -31,11 +31,15 @@ Credits::Credits() {
     //objects.insert(new Mouse());
     //objects.insert();
     frame = new Ending();
-    
+
     soundPlayer->playContinuous("CreditsSong");
-    
+
     waitCounter = 0;
-    
+
+    isReadingStory = true;
+    storyCounter = 0;
+    setIsReading(true, storyCounter);
+
     setStartRunning(1000);
 }
 
@@ -59,7 +63,7 @@ void Credits::initializeCamera() {
 
     prevAlpha = camAlpha;
     prevBeta = camBeta;
-    
+
     //updateLookAt();
 }
 
@@ -100,25 +104,34 @@ Credits::~Credits() {
 }
 
 void Credits::draw() {
-    frame->draw(playerCamera->trans, camLookAt, getGC()->lightPos, 
-            getGC()->lightColor, getGC(), 0);
-    
-    /*if (frame->isItLoading() && waitCounter < 1) {
-        waitCounter++;
-        glfwSetMousePos(getWindowWidth() / 2, getWindowHeight() / 2);
-        //setIsNextState("FakeMainMenu");
-    } else if (waitCounter >= 1) {
-        setIsNextState("Credits");
-    }*/
-    if (frame->isItLoading()) {
-        waitCounter++;
-        //setIsNextState("Credits");
-    } else if (!frame->isItLoading() && waitCounter > 0) {
-        setIsNextState("Credits");
+    if (isReadingStory) {
+        if (!isReading() && storyCounter != 4) {
+            setIsReading(true, ++storyCounter);
+        } else if (!isReading() && storyCounter >= 4) {
+            isReadingStory = false;
+        }
     }
-    //====if you want to draw where the light is, uncomment code below.====//
-    //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
-    //      getGC()->lightColor, getGC());
+    else {
+        frame->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+                getGC()->lightColor, getGC(), 0);
+
+        /*if (frame->isItLoading() && waitCounter < 1) {
+            waitCounter++;
+            glfwSetMousePos(getWindowWidth() / 2, getWindowHeight() / 2);
+            //setIsNextState("FakeMainMenu");
+        } else if (waitCounter >= 1) {
+            setIsNextState("Credits");
+        }*/
+        if (frame->isItLoading()) {
+            waitCounter++;
+            //setIsNextState("Credits");
+        } else if (!frame->isItLoading() && waitCounter > 0) {
+            setIsNextState("Credits");
+        }
+        //====if you want to draw where the light is, uncomment code below.====//
+        //lightPos->draw(playerCamera->trans, camLookAt, getGC()->lightPos,
+        //      getGC()->lightColor, getGC());
+    }
 }
 
 void Credits::update(float dt) {
@@ -137,9 +150,9 @@ void Credits::update(float dt) {
 
             curr->update(dt, playerCamera, camLookAt);
         }*/
-        
+
         frame->update(dt, playerCamera, camLookAt);
-        
+
         camPrevTrans = playerCamera->trans;
         prevAlpha = camAlpha;
         prevBeta = camBeta;
@@ -149,7 +162,7 @@ void Credits::update(float dt) {
 void Credits::mouseClicked(int button, int action) {
     //GameObject* curr;
 
-    if (action == GLFW_RELEASE) {
+    if (action == GLFW_RELEASE && !isReadingStory) {
         //switch to the loading screen, and then start Running.cpp
         frame->setIsLoading(true);
         //setCanMoveMouse(false);
@@ -179,7 +192,7 @@ void Credits::keyPressed(float dt, int keyDown[]) {
     if (keyDown['K']) {
         frame->doTranslate(vec3(0.f, 0.f, -frameBuffMoveSpeed));
     }*/
-    
+
     //std::cout << "Frame Trans: " << printVec3(frame->trans) << std::endl;
 }
 

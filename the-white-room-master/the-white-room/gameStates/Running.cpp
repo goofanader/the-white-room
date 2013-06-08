@@ -57,7 +57,7 @@ Running::Running() {
     loadObjectsFromEvent();
 
     //set mouse cursor to invisible
-    //glfwDisable(GLFW_MOUSE_CURSOR);
+    glfwDisable(GLFW_MOUSE_CURSOR);
 
     initializeCamera();
     initializeLight();

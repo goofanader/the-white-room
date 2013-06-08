@@ -38,6 +38,9 @@ private:
     SoundPlayer *soundPlayer;
     int waitCounter;
     
+    bool isReadingStory;
+    int storyCounter;
+    
     float camAlpha, camBeta;
     float prevAlpha, prevBeta;
     glm::vec3 camLookAt;
